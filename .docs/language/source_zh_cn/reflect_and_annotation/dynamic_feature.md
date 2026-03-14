@@ -82,7 +82,7 @@ let t3: TypeInfo = TypeInfo.get("net.http.ServerBuilder")
 
 采用这种方式时无法获取一个未实例化的泛型类型。
 
-<!-- check:run -->
+<!-- check:runtime_error -->
 
 ```cangjie
 import std.collection.*

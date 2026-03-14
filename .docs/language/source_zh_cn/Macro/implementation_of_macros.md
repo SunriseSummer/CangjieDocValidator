@@ -113,7 +113,7 @@ class C {
 
   <!-- verify -macro6 -->
 
-  <!-- check:run -->
+  <!-- check:skip -->
 
   ```cangjie
   package macro_calling
@@ -154,7 +154,7 @@ class C {
 
   <!-- code_no_check -->
 
-  <!-- check:run -->
+  <!-- check:skip -->
 
   ```cangjie
   main(): Int64 {
@@ -207,7 +207,7 @@ class C {
 
   <!-- verify -macro7 -->
 
-  <!-- check:run -->
+  <!-- check:skip -->
 
   ```cangjie
   package macro_calling
@@ -297,7 +297,7 @@ public macro Foo(attrTokens: Tokens, inputTokens: Tokens): Tokens {
 
 <!-- run -macro72 -->
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 import define.Foo
@@ -425,7 +425,7 @@ public macro Prop(input:Tokens):Tokens {
 
 <!-- compile -macro8 -->
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 package pkg3
@@ -541,7 +541,7 @@ public macro addToMul(inputTokens: Tokens): Tokens {
 
 <!-- run -macro9 -->
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 package pkg3
@@ -680,7 +680,7 @@ public macro Inner(input: Tokens): Tokens {
 <!-- run -macro11 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 import define.*

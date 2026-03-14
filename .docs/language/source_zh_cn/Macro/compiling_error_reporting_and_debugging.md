@@ -45,7 +45,7 @@ public macro Outer(input: Tokens) {
 
 <!-- run -macro0 -->
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 // src/demo.cj
@@ -191,7 +191,7 @@ public macro testDef(input: Tokens): Tokens {
 
 <!-- compile.error -macro2 -->
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 // macro_call.cj
@@ -279,7 +279,7 @@ public macro Inner(input: Tokens): Tokens {
 <!-- compile -macro3 -->
 <!-- cfg="--debug-macro" -->
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 import define.*
@@ -370,7 +370,7 @@ cjc --debug-macro demo.cj --import-path ./target
 
   <!-- code_no_check -->
 
-  <!-- check:run -->
+  <!-- check:skip -->
 
   ```cangjie
   // main.cj

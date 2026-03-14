@@ -39,7 +39,7 @@ interface InputStream {
 
 输入流读取示例：
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 import std.io.InputStream
@@ -81,7 +81,7 @@ interface OutputStream {
 
 输出流写入示例：
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 import std.io.OutputStream

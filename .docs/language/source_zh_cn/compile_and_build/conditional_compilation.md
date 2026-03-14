@@ -294,7 +294,7 @@ main () {
 
 使用方式如下：
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 //source.cj

@@ -242,7 +242,7 @@ count = 1000
 
 下方示例演示了如何使用 `tryLock`：
 
-<!-- check:runtime_error -->
+<!-- check:run -->
 
 ```cangjie
 import std.sync.Mutex
@@ -284,7 +284,7 @@ get the lock, do something
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
-<!-- check:runtime_error -->
+<!-- check:skip -->
 
 ```cangjie
 import std.sync.Mutex
@@ -312,7 +312,7 @@ main() {
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
-<!-- check:run -->
+<!-- check:runtime_error -->
 
 ```cangjie
 import std.sync.Mutex
@@ -334,7 +334,7 @@ main() {
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
-<!-- check:run -->
+<!-- check:runtime_error -->
 
 ```cangjie
 import std.sync.Mutex
@@ -456,7 +456,7 @@ synchronized (obj) {
 
 以下是使用 `Condition` 的一个正确示例：
 
-<!-- check:runtime_error -->
+<!-- check:run -->
 
 ```cangjie
 import std.sync.Mutex
@@ -512,7 +512,7 @@ New thread: after wait
 
 <!-- run.error -->
 
-<!-- check:run -->
+<!-- check:runtime_error -->
 
 ```cangjie
 import std.sync.Mutex

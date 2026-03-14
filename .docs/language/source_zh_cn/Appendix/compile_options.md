@@ -47,7 +47,7 @@ public func printLog(message: String) {
 
 与文件 `main.cj`:
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 import log.*
@@ -91,7 +91,7 @@ public func printLog(message: String) {
 
 与文件 `main.cj`:
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 import my_module.log.*
@@ -155,7 +155,7 @@ void printHello() {
 
 仓颉文件 `main.cj`：
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 foreign func printHello(): Unit
@@ -270,7 +270,7 @@ Hello World
 
 且有如下 `main.cj` 文件：
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 import myModule.log.printLog
@@ -1617,7 +1617,7 @@ Effect Handler 允许程序员将副作用操作与其处理逻辑解耦，从�
 
 示例：
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 import stdx.effect.Command

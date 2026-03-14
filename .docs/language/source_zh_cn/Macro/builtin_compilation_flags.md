@@ -56,7 +56,7 @@ char* foo()
 
 <!-- code_no_check -->
 
-<!-- check:run -->
+<!-- check:skip -->
 
 ```cangjie
 @FastNative

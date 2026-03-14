@@ -8,7 +8,7 @@
 
 1. 抛出异常（throwing）：当整数运算溢出时，抛出异常。
 
-    <!-- check:run -->
+    <!-- check:runtime_error -->
 
     ```cangjie
     @OverflowThrowing

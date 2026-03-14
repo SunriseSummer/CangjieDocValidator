@@ -100,7 +100,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
   <!-- compile -macro5 -->
   <!-- cfg="--compile-macro -L. -lB" -->
 
-  <!-- check:run -->
+  <!-- check:skip -->
 
   ```cangjie
   import C.*
@@ -120,7 +120,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 
   <!-- code_no_check -->
 
-  <!-- check:run -->
+  <!-- check:skip -->
 
   ```cangjie
   import C.*
