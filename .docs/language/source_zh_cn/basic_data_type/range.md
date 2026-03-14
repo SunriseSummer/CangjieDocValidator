@@ -6,8 +6,7 @@
 
 下面的例子给出了区间类型的实例化方式（关于区间类型定义和其中的属性，详见《仓颉编程语言库 API》）：
 
-<!-- compile -->
-
+<!-- check:ast -->
 ```cangjie
 // Range<T>(start: T, end: T, step: Int64, hasStart: Bool, hasEnd: Bool, isClosed: Bool)
 let r1 = Range<Int64>(0, 10, 1, true, true, true) // r1 contains 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
@@ -24,8 +23,7 @@ let r3 = Range<Int64>(10, 0, -2, true, true, false) // r3 contains 10, 8, 6, 4, 
 
 下面的例子定义了若干区间类型的变量：
 
-<!-- compile -->
-
+<!-- check:ast -->
 ```cangjie
 let n = 10
 let r1 = 0..10 : 1   // r1 contains 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
@@ -35,8 +33,7 @@ let r4 = 10..=0 : -2 // r4 contains 10, 8, 6, 4, 2, 0
 ```
 
 区间字面量中，可以不写 `step`，此时 `step` 默认等于 `1`，但是`step` 的值不能等于 `0`。另外，区间也有可能是空的（即不包含任何元素的空序列），举例如下：
-<!-- compile.error -->
-
+<!-- check:compile_error -->
 ```cangjie
 let r5 = 0..10   // the step of r5 is 1, and r5 contains 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
 let r6 = 0..10 : 0 // Error, step cannot be 0
