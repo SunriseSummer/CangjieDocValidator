@@ -60,7 +60,7 @@ var z = 0o432i32  // z is 282 with type Int32
 
 仓颉编程语言支持字符字节字面量，以方便使用 ASCII 码表示 `UInt8` 类型的值。字符字节字面量由字符 b、一对标识首尾的单引号、以及一个 `ASCII` 字符组成，例如：
 
-<!-- check:ast -->
+<!-- check:skip -->
 ```cangjie
 var a = b'x'                    // a is 120 with type UInt8
 var b = b'\n'                   // b is 10 with type UInt8

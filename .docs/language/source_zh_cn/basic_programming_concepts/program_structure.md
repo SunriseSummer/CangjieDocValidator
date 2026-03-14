@@ -10,7 +10,7 @@
 
 例如，在以下程序中，在顶层作用域定义了全局变量 `a` 和全局函数 `b`，还有自定义类型 `C`、`D` 和 `E`，以及作为程序入口的 `main` 函数。
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 // example.cj
@@ -33,7 +33,7 @@ main() {
 
 例如，在以下程序中，在顶层作用域定义了全局函数 `a` 和自定义类型 `A`，在函数 `a` 中定义了局部变量 `b` 和局部函数 `c`，在自定义类型 `A` 中定义了成员变量 `b` 和成员函数 `c`。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 // example.cj
@@ -92,7 +92,7 @@ main() {
 
 例如，下列程序定义了三个 `Int64` 类型的变量（分别为不可变变量 `a` 、可变变量 `b` 和 const 变量 `c` ）。随后修改了变量 `b` 的值，同时将 `b` 的值赋值给 `a`，并调用 `println` 函数打印 `a`， `b` 和 `c` 的值。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -113,7 +113,7 @@ main() {
 
 如果尝试修改不可变变量，编译时会报错，例如：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 main() {
@@ -124,7 +124,7 @@ main() {
 
 当初始值具有明确类型时，可以省略变量类型标注，例如：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -142,7 +142,7 @@ a - b = 0
 
 在定义局部变量时，可以不进行初始化，但一定要在变量被引用前赋予初值，例如：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -160,7 +160,7 @@ main() {
 
 在定义全局变量和静态成员变量时必须初始化，否则编译会报错，例如：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 let global: Int64 // Error, variable in top-level scope must be initialized
@@ -170,7 +170,7 @@ main(): Unit{
 }
 ```
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class Player {
@@ -180,7 +180,7 @@ class Player {
 
 需要注意的是，当编译器无法判断某些场景是否一定会被初始化或无法判断是否重复初始化了不可变变量时，会倾向于保守策略进行编译报错，见如下示例：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 func calc(a: Int32){
@@ -197,7 +197,7 @@ main() {
 ```
 
 此外，对于 [try-catch](../error_handle/handle.md#普通-try-表达式) 场景，编译器会假设 try 块总是全部被执行，且总是抛异常，从而进行相关报错，见如下示例：
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 main() {
@@ -214,7 +214,7 @@ main() {
 
 `const` 变量是一种特殊的变量，它以关键字 `const` 修饰，定义在编译时完成求值，并且在运行时不可改变的变量。例如，下面的例子定义了万有引力常数 `G`：
 
-<!-- verify -const -->
+<!-- check:run project=const_gravity -->
 
 ```cangjie
 const G = 6.674e-11
@@ -224,7 +224,7 @@ const G = 6.674e-11
 
 下例定义了一个 `struct`，记录行星的质量和半径，同时定义了一个 `const` 成员函数 `gravity` 用来计算该行星对距离为 `r` 质量为 `m` 的物体的万有引力：
 
-<!-- verify -const -->
+<!-- check:run project=const_gravity -->
 
 ```cangjie
 struct Planet {
@@ -244,15 +244,13 @@ main() {
 
 编译执行得到地球对地面上一个质量为 71 kg 的成年人的万有引力：
 
-<!-- verify -const -->
-
 ```text
 695.657257
 ```
 
 `const` 变量初始化后该类型实例的所有成员都是 `const` 的（深度 `const`，包含成员的成员），因此不能被用于左值。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 main() {
@@ -276,7 +274,7 @@ main() {
 
 例如，以下程序演示了 `struct` 和 `class` 类型变量的行为差异：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 struct Copy {
@@ -311,7 +309,7 @@ main() {
 
 如果将以上程序中的 `var c2 = c1` 改成 `let c2 = c1`，则编译会报错，例如：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 struct Copy {
@@ -349,7 +347,7 @@ main() {
 
 例如在以下名为 `test.cj` 的仓颉源文件里，在顶层作用域中定义了名字 `element`，它和字符串“仓颉”绑定，而 `main` 和 `if` 引导的代码块中也定义了名字 `element`，分别对应整数 9 和整数 2023。由上述作用域规则，在第 4 行，`element` 的值为“仓颉”，在第 8 行，`element` 的值为 2023，在第 10 行，`element` 的值为 9。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 // test.cj

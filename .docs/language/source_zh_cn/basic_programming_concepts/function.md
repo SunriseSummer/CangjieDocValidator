@@ -4,7 +4,7 @@
 
 函数定义举例：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func add(a: Int64, b: Int64): Int64 {

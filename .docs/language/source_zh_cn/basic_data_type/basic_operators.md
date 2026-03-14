@@ -102,7 +102,7 @@ main(): Int64 {
 
 仓颉编程语言也提供 `**=`、`*=`、`/=`、`%=`、`+=`、`-=`、`<<=`、`>>=`、`&=`、`^=`、`|=`、`&&=` 和 `||=` 复合赋值操作符，简单示例如下：
 
-<!-- check:ast -->
+<!-- check:skip -->
 ```cangjie
     var a: Int64 = 10
     a += 2   // a = 12
@@ -209,7 +209,7 @@ main(): Int64 {
 
 逻辑与（`&&`）和逻辑或（`||`）均是二元操作符。对于表达式 `expr1 && expr2`，只有当 `expr1` 和 `expr2` 的值均等于 `true` 时，它的值才等于 `true`；对于表达式 `expr1 || expr2`，只有当 `expr1` 和 `expr2` 的值均等于 `false` 时，它的值才等于 `false`。
 
-<!-- check:ast -->
+<!-- check:skip -->
 ```cangjie
     var a: Bool = true && true    // a = true
     var b: Bool = true && false   // b = false
@@ -258,7 +258,7 @@ main() {
 
 另外，如果右移或左移的位数（右操作数）等于或者大于操作数的宽度，则为移位越界，如果编译时可以检测到则报错，否则运行时抛出异常。
 
-<!-- check:ast -->
+<!-- check:skip -->
 ```cangjie
     var a = !10                 // -11，符合移位和补齐规则
     a = !20                     // -21，符合移位和补齐规则

@@ -47,7 +47,7 @@ if (条件) {
 
 如下程序演示了 `if` 表达式的基本用法：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.random.Random
@@ -67,7 +67,7 @@ main() {
 
 仓颉编程语言是强类型的，`if` 表达式的条件只能是布尔类型，不能使用整数或浮点数等类型，和 C 语言等不同，仓颉不以条件取值是否为 0 作为分支选择依据，例如以下程序将编译报错（此外，后文的[错误的表达式示例](#错误的表达式示例)补充了更多错误的表达式用例场景，可对比参照）：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 main() {
@@ -80,7 +80,7 @@ main() {
 
 在许多场景中，当一个条件不成立时，可能还要判断另一个或多个条件，再执行对应的动作。仓颉允许在 `else` 之后跟随新的 `if` 表达式，由此支持多级条件判断和分支执行，例如：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.random.Random
@@ -106,7 +106,7 @@ main() {
 
     - 如果上下文明确要求值类型为 `T`，则 `if` 表达式各分支代码块的类型必须是 `T` 的子类型，这时 `if` 表达式的类型被确定为 `T`，如果不满足子类型约束，编译会报错。具体示例如下，由于变量 `b` 的类型 Int64 与各分支代码块的类型不满足子类型约束，因此编译报错：
 
-        <!-- compile.error -->
+        <!-- check:compile_error -->
 
         ```cangjie
         var a = 10
@@ -119,7 +119,7 @@ main() {
 
     - 如果上下文没有明确的类型要求，则 `if` 表达式的类型是其各分支代码块类型的最小公共父类型，如果最小公共父类型不存在，编译会报错。具体示例如下，由于字符串和数值类型不存在最小公共父类型，因此编译报错：
 
-        <!-- compile.error -->
+        <!-- check:compile_error -->
 
         ```cangjie
         var a = 10
@@ -137,7 +137,7 @@ main() {
 
 例如，以下程序基于 `if` 表达式求值，模拟一次简单的模数转换过程：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -165,6 +165,8 @@ main() {
 此处介绍“条件”是两个 “let pattern” 进行逻辑与或逻辑或操作以及 “let pattern” 与其他表达式进行逻辑与或逻辑或操作的示例。
 
 <!-- run -expression_example5 -->
+
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -203,7 +205,7 @@ main() {
 
 “let pattern” 中表达式部分运算符优先级不能低于 `..` 运算符，此处介绍对应的错误和正确示例。其中， [`Option` 类型](../enum_and_pattern_match/option_type.md)的相关介绍在后文给出。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 if (let Some(a) <- fun() as Option<Int64>) {}   // 解析错误，`as` 的优先级低于  `..`
@@ -216,7 +218,7 @@ if (let m <- 0..generateSomeInt()) {}           // 正确
 
 此处介绍错误的“条件”示例。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 if (let Some(a) <- b || a > 1) {} // 由 `||` 连接的条件不能使用会绑定变量的 enum 模式
@@ -248,7 +250,7 @@ while (条件) {
 
 例如，以下程序使用 `while` 表达式，基于二分法，近似计算数字 2 的平方根：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -295,7 +297,7 @@ do {
 
 例如，以下程序使用 `do-while` 表达式，基于蒙特卡洛算法，近似计算圆周率的值：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.random.Random
@@ -354,7 +356,7 @@ for (迭代变量 in 序列) {
 
 例如，以下程序使用 `for-in` 表达式，遍历中国地支字符构成的[数组](../basic_data_type/array.md) `noumenonArray`，输出农历 2024 年各月的干支纪法：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -386,7 +388,7 @@ main() {
 
 `for-in` 表达式可以遍历区间类型实例，例如：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -410,7 +412,7 @@ main() {
 
 如果一个序列的元素是元组类型，则使用 `for-in` 表达式遍历时，“迭代变量”可以写成元组形式，以此实现对序列元素的解构，例如：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -433,7 +435,7 @@ main() {
 
 在 `for-in` 表达式的循环体中，不能修改迭代变量，例如以下程序在编译时会报错：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 main() {
@@ -448,7 +450,7 @@ main() {
 
 在一些应用场景中，只需要循环执行某些操作，但并不使用迭代变量，这时可以使用通配符 `_` 代替迭代变量，例如：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -474,7 +476,7 @@ main() {
 
 在部分循环遍历场景中，对于特定取值的迭代变量，可能需要直接跳过，进入下一轮循环。虽然可以使用 `if` 表达式和 `continue` 表达式在循环体中实现这一逻辑，但仓颉为此提供了更便捷的表达方式——可以在所遍历的“序列”之后用 `where` 关键字引导一个布尔表达式，这样在每次将进入循环体执行前，会先计算此表达式。如果值为 `true` 则执行循环体，反之直接进入下一轮循环。例如：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -499,7 +501,7 @@ main() {
 
 例如，以下程序使用 `for-in` 表达式和 `break` 表达式，在给定的整数数组中，找到第一个能被 5 整除的数字：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -521,7 +523,7 @@ main() {
 
 以下程序使用 `for-in` 表达式和 `continue` 表达式，将给定整数数组中的奇数打印出来：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
