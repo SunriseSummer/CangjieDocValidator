@@ -205,7 +205,7 @@ struct Rectangle {
 
 下面的例子中，`width` 是 `public` 修饰的成员，在类外可以访问，`height` 是缺省访问修饰符的成员，仅在当前包及子包可见，其他包无法访问。
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 package a
@@ -233,7 +233,7 @@ func samePkgFunc() {
 <!-- cfg="-p b --output-type=staticlib" -->
 <!-- cfg="liba.a" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 package b

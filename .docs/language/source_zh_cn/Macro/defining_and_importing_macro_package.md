@@ -9,7 +9,7 @@
 <!-- compile.error -macro4 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 // file define.cj
@@ -32,7 +32,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
   <!-- compile -macro5 -->
   <!-- cfg="--compile-macro" -->
 
-  <!-- check:skip -->
+  <!-- check:ast -->
 
   ```cangjie
   macro package A
@@ -76,7 +76,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
   <!-- compile -macro5 -->
   <!-- cfg="--compile-macro -L. -lB" -->
 
-  <!-- check:skip -->
+  <!-- check:ast -->
 
   ```cangjie
   macro package C
@@ -120,7 +120,7 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 
   <!-- code_no_check -->
 
-  <!-- check:skip -->
+  <!-- check:ast -->
 
   ```cangjie
   import C.*

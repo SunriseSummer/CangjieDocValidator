@@ -155,7 +155,7 @@ Main thread
 
 `Thread` 类的部分方法定义如下（完整的方法描述可参考《仓颉编程语言库 API》）。
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 class Thread {

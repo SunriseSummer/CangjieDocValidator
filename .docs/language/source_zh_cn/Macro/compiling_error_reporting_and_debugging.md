@@ -23,7 +23,7 @@ root_path
 <!-- run -macro0 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 // macros/m.cj
@@ -105,7 +105,7 @@ cjc src/demo.cj -o demo.exe --import-path ./target --output-dir ./target
 <!-- compile -macro1 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 macro package define
@@ -167,7 +167,7 @@ public func diagReport(level: DiagReportLevel, tokens: Tokens, message: String, 
 <!-- compile.error -macro2 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 // macro_definition.cj
@@ -191,7 +191,7 @@ public macro testDef(input: Tokens): Tokens {
 
 <!-- compile.error -macro2 -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 // macro_call.cj
@@ -370,7 +370,7 @@ cjc --debug-macro demo.cj --import-path ./target
 
   <!-- code_no_check -->
 
-  <!-- check:skip -->
+  <!-- check:ast -->
 
   ```cangjie
   // main.cj

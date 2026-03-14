@@ -181,14 +181,14 @@ type varr2 = VArray // Error
 
 `VArray` 可以由一个数组的字面量来进行初始化，左值 `a` 必须标识出 `VArray` 的实例化类型：
 
-<!-- check:skip -->
+<!-- check:ast -->
 ```cangjie
 var a: VArray<Int64, $3> = [1, 2, 3]
 ```
 
 同时，它拥有两个构造函数：
 
-<!-- check:skip -->
+<!-- check:ast -->
 ```cangjie
 // VArray<T, $N>(initElement: (Int64) -> T)
 let b = VArray<Int64, $5>({ i => i }) // [0, 1, 2, 3, 4]
@@ -211,7 +211,7 @@ let c = VArray<Int64, $5>(repeat: 0) // [0, 0, 0, 0, 0]
 
 - 用于获取 `VArray` 长度的 `size` 成员：
 
-  <!-- check:skip -->
+  <!-- check:ast -->
   ```cangjie
   var a: VArray<Int64, $3> = [1, 2, 3]
   let s = a.size // s is 3

@@ -47,7 +47,7 @@ public func printLog(message: String) {
 
 与文件 `main.cj`:
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 import log.*
@@ -91,7 +91,7 @@ public func printLog(message: String) {
 
 与文件 `main.cj`:
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 import my_module.log.*
@@ -155,7 +155,7 @@ void printHello() {
 
 仓颉文件 `main.cj`：
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 foreign func printHello(): Unit
@@ -270,7 +270,7 @@ Hello World
 
 且有如下 `main.cj` 文件：
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 import myModule.log.printLog

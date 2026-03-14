@@ -8,7 +8,7 @@
 
 **单个字符**的字符字面量举例：
 
-<!-- check:skip -->
+<!-- check:ast -->
 ```cangjie
 let a: Rune = r'a'
 let b: Rune = r"b"

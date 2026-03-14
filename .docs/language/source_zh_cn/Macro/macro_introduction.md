@@ -40,7 +40,7 @@ public macro dprint(input: Tokens): Tokens {
 
 <!-- verify -macro12 -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 import define.*

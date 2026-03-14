@@ -99,36 +99,36 @@ project_dir/
 | 文件 | 修改内容 |
 |------|----------|
 | `entry.md` | `<!-- run -->` → `<!-- check:run -->`；`<!-- compile.error -->` → `<!-- check:compile_error -->`；第二个代码块新增 `<!-- expected_output -->` |
-| `import.md` | tree-sitter 不支持的语法改为 `<!-- check:skip -->`（详见 issue.md #9、#10）；重导出示例 3 个块改为 `build_only project=reexport` 多文件项目；最后的块保持 `<!-- check:compile_error -->` |
+| `import.md` | 多文件伪代码片段保留 `<!-- check:skip -->`；重导出示例 3 个块改为 `build_only project=reexport` 多文件项目；最后的块保持 `<!-- check:compile_error -->` |
 | `package_name.md` | 语法正确的独立片段改为 `<!-- check:ast -->`（6 个）；多文件/多包声明片段保留 `<!-- check:skip -->`（3 个） |
 | `toplevel_access.md` | `<!-- compile -->` → `<!-- check:build_only -->`；`<!-- compile.error -->` → `<!-- check:compile_error -->`；最后两个跨文件示例使用 `compile_error project=priv_a file=...` 合并为一个项目 |
 | `package_overview.md` | 无代码块，无需修改 |
 
 ### 3.3 language/source_zh_cn 目录全量标注（本次新增）
 
-共处理约 90 个含代码块的 Markdown 文件，为约 600 个代码块添加了 `<!-- check:XXX -->` 标注。主要工作包括：
+共处理约 90 个含代码块的 Markdown 文件，为约 600 个代码块添加了 `<!-- check:XXX -->` 标注。使用 tree-sitter-cangjie v1.0.5.3 进行语法检查，能解析的代码块标注为 `check:ast`，不能解析的标注为 `check:skip`（详见 issue.md #8、#12、#14~#17）。主要工作包括：
 
 | 目录 | 文件数 | 测试用例数 | 主要处理 |
 |------|--------|-----------|---------|
 | first_understanding/ | 1 | 1 | `<!-- verify -->` → `<!-- check:run -->` |
 | basic_programming_concepts/ | 3 | 35 | const G 和 Planet 合并为 project=const_gravity |
-| basic_data_type/ | 10 | 46 | VArray/位运算/三引号等 tree-sitter 不支持的改为 skip |
+| basic_data_type/ | 10 | 46 | 顶层赋值(#8)/三单引号(#12)/字节字面量(#14)等不支持的改为 skip |
 | function/ | 10 | 89 | 操作符重载 Point 类与 main 合并为 project=overloadOperator |
-| collections/ | 4 | 11 | 大部分代码片段标记为 skip（tree-sitter 不支持泛型语法） |
-| class_and_interface/ | 5 | 71 | 多包访问修饰符示例改为 skip；接口继承 3 块合并为 project=myInt |
-| struct/ | 3 | 24 | 跨包访问修饰符示例改为 skip |
+| collections/ | 4 | 11 | 顶层方法调用/赋值(#8)标记为 skip |
+| class_and_interface/ | 5 | 71 | 跨包访问修饰符示例改为 ast；接口继承 3 块合并为 project=myInt |
+| struct/ | 3 | 24 | 跨包访问修饰符示例改为 ast |
 | enum_and_pattern_match/ | 5 | 45 | 类型模式 4 块合并为 project=mergeCase |
 | generic/ | 9 | 26 | composition 函数与调用合并为 project=composition |
 | error_handle/ | 3 | 16 | try-with-resources 异常示例改为 runtime_error |
 | concurrency/ | 5 | 21 | 死锁/非法解锁等示例正确标注为 skip/runtime_error |
-| extension/ | 4 | 24 | 直接扩展/接口扩展合并为项目；跨包导入改为 skip |
-| Basic_IO/ | 3 | 7 | 标准输入/文件依赖示例改为 skip |
-| FFI/ | 1 | 13 | C 调用/完整示例改为 skip |
-| Macro/ | 8 | 10 | 需要宏包结构的示例改为 skip |
+| extension/ | 4 | 24 | 直接扩展/接口扩展合并为项目；跨包示例改为 ast |
+| Basic_IO/ | 3 | 7 | 标准输入依赖示例改为 skip；文件操作改为 ast |
+| FFI/ | 1 | 13 | VArray 参数/@C struct 改为 ast；需外部库的改为 skip |
+| Macro/ | 8 | 10 | 语法可解析的改为 ast；宏特殊语法(#17)改为 skip |
 | Net/ | 3 | 2 | 需要 stdx 的示例改为 skip |
-| Appendix/ | 3 | 1 | 需要特殊编译选项的示例改为 skip |
+| Appendix/ | 3 | 1 | 语法可解析的改为 ast；需要特殊编译选项的保留 skip |
 | reflect_and_annotation/ | 2 | 18 | 溢出异常和反射异常改为 runtime_error |
-| compile_and_build/ | 2 | 10 | 条件编译需要特殊标志的改为 skip |
+| compile_and_build/ | 2 | 10 | 语法可解析的改为 ast |
 
 ## 四、模块化拆分
 

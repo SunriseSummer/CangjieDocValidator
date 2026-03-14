@@ -283,7 +283,7 @@ main() {
 
 如下代码所示，在包 `a` 中，虽然接口访问修饰符为 `private`，但 `Foo` 的扩展仍然会被导出。
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 // package a
@@ -299,7 +299,7 @@ extend<T> Foo<T> <: I0 {}
 
 当在其他包中为 `Foo` 类型扩展时，扩展是否导出由实现接口和泛型约束的访问修饰符决定。实现接口至少存在一个导出的接口，且所有的泛型约束均可导出时，该扩展将被导出。
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 // package b
@@ -351,7 +351,7 @@ public class Foo {}
 <!-- compile.error -access_rules3 -->
 <!-- cfg="-p b --output-type=staticlib" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 // package b
@@ -378,7 +378,7 @@ extend Foo <: I1 & I2 {
 <!-- cfg="-p c --output-type=staticlib" -->
 <!-- cfg="liba.a libb.a" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 // package c

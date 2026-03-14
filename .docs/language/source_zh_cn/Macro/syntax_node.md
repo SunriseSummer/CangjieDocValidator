@@ -34,7 +34,7 @@
 
 这些函数的使用如下例所示：
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 let tks1 = quote(a + b)
@@ -116,7 +116,7 @@ let funcDecl = FuncDecl(quote(func f1(x: Int64) { return x + 1 }))
 
 ### BinaryExpr 案例
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 let binExpr = BinaryExpr(quote(x * y))
@@ -168,7 +168,7 @@ a + b + y
 
 ### FuncDecl 案例
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 let funcDecl = FuncDecl(quote(func f1(x: Int64) { x + 1 }))
@@ -197,7 +197,7 @@ func foo(a: Int64) {
 
 下面，通过一些案例展示节点的插值。
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 var binExpr = BinaryExpr(quote(1 + 2))

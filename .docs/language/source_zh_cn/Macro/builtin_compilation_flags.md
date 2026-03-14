@@ -56,7 +56,7 @@ char* foo()
 
 <!-- code_no_check -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 @FastNative
@@ -143,7 +143,7 @@ public class testClass {
 <!-- run -macro0 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 public macro Component(input: Tokens): Tokens {
@@ -161,7 +161,7 @@ public macro Component(input: Tokens): Tokens {
 <!-- run -macro0 -->
 <!-- cfg="--debug-macro" -->
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 @Component(

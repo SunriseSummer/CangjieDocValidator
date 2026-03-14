@@ -374,7 +374,7 @@ class Rectangle {
 
 <!-- compile.error -error-->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 package a
@@ -405,7 +405,7 @@ func samePkgFunc() {
 
 <!-- compile.error -error-->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 package b

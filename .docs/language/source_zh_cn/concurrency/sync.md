@@ -104,7 +104,7 @@ count = 1000
 
 以下是使用整数类型原子操作的一些其他正确示例：
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 var obj: AtomicInt32 = AtomicInt32(1)
@@ -201,7 +201,7 @@ public class Mutex <: UniqueLock {
 
 下方示例演示了如何使用 `Mutex` 来保护对全局共享变量 `count` 的访问，对 `count` 的操作即属于临界区：
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 import std.sync.Mutex
@@ -284,7 +284,7 @@ get the lock, do something
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 import std.sync.Mutex

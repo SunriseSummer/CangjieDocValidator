@@ -22,7 +22,7 @@ public macro MacroName(args: Tokens): Tokens {
 
 <!-- code_no_check -->
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 @MacroName(...)
@@ -34,7 +34,7 @@ public macro MacroName(args: Tokens): Tokens {
 
 <!-- code_no_check -->
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 @MacroName func name() {}        // Before a FuncDecl
@@ -64,7 +64,7 @@ class C {
 
 <!-- code_no_check -->
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 // Illegal input Tokens
@@ -96,7 +96,7 @@ class C {
   <!-- verify -macro6 -->
   <!-- cfg="--compile-macro" -->
 
-  <!-- check:skip -->
+  <!-- check:ast -->
 
   ```cangjie
   macro package macro_definition
@@ -113,7 +113,7 @@ class C {
 
   <!-- verify -macro6 -->
 
-  <!-- check:skip -->
+  <!-- check:ast -->
 
   ```cangjie
   package macro_calling
@@ -154,7 +154,7 @@ class C {
 
   <!-- code_no_check -->
 
-  <!-- check:skip -->
+  <!-- check:ast -->
 
   ```cangjie
   main(): Int64 {
@@ -183,7 +183,7 @@ class C {
   <!-- verify -macro7 -->
   <!-- cfg="--compile-macro" -->
 
-  <!-- check:skip -->
+  <!-- check:ast -->
 
   ```cangjie
   // file macro_definition.cj
@@ -207,7 +207,7 @@ class C {
 
   <!-- verify -macro7 -->
 
-  <!-- check:skip -->
+  <!-- check:ast -->
 
   ```cangjie
   package macro_calling
@@ -343,7 +343,7 @@ main() {}
 
     <!-- code_no_check -->
 
-    <!-- check:ast -->
+    <!-- check:skip -->
 
     ```cangjie
     // Illegal attribute Tokens
@@ -425,7 +425,7 @@ public macro Prop(input:Tokens):Tokens {
 
 <!-- compile -macro8 -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 package pkg3
@@ -498,7 +498,7 @@ public macro Prop(input: Tokens): Tokens {
 <!-- run -macro9 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 macro package pkg1
@@ -519,7 +519,7 @@ public macro Bar(input: Tokens): Tokens {
 <!-- run -macro9 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 macro package pkg2
@@ -541,7 +541,7 @@ public macro addToMul(inputTokens: Tokens): Tokens {
 
 <!-- run -macro9 -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 package pkg3
@@ -578,7 +578,7 @@ main(): Int64 {
 
 <!-- code_no_check -->
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 var a = @foo(@foo1(2 * 3)+@foo2(1 + 3))  // foo1, foo2 have to be defined.
@@ -604,7 +604,7 @@ struct Data{
 <!-- compile.error -macro92 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 public macro Outer(input: Tokens): Tokens {
@@ -622,7 +622,7 @@ public macro Inner(input: Tokens): Tokens {
 <!-- compile.error -macro92 -->
 <!-- cfg="--debug-macro" -->
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 @Outer var a = 0
