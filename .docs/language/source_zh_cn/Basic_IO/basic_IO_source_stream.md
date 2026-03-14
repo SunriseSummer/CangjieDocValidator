@@ -18,7 +18,7 @@
 
 导入 env 包示例：
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 import std.env.*
@@ -34,7 +34,7 @@ import std.env.*
 
 标准输入流读取示例：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.env.getStdIn
@@ -58,7 +58,7 @@ main() {
 
 标准输出流写入示例：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.env.getStdOut
@@ -82,7 +82,7 @@ main() {
 
 导入 fs 包示例：
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 import std.fs.*
@@ -100,7 +100,7 @@ import std.fs.*
 
 exists 函数使用示例：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.fs.exists
@@ -115,7 +115,7 @@ main() {
 
 move、copy、delete 函数使用示例：
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 import std.fs.{copy, rename, remove}
@@ -131,7 +131,7 @@ main() {
 
 readFrom、writeTo 函数使用示例：
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 import std.fs.File
@@ -148,6 +148,8 @@ main() {
 
 File 类定义：
 
+<!-- check:skip -->
+
 ```cangjie
 public class File <: Resource & IOStream & Seekable {
     ...
@@ -160,7 +162,7 @@ public class File <: Resource & IOStream & Seekable {
 
 File 构造示例：
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 // 创建
@@ -182,6 +184,8 @@ main() {
 
 File 打开模式使用示例：
 
+<!-- check:ast -->
+
 ```cangjie
 // 使用指定选项打开模式
 let file = File("./tempFile.txt", Write)
@@ -192,6 +196,8 @@ let file = File("./tempFile.txt", Write)
 `File` 实现了 `Resource` 接口，在大多数时候都可以使用 try-with-resource 语法来简化使用。
 
 try-with-resource 语法使用示例：
+
+<!-- check:skip -->
 
 ```cangjie
 try (file2 = File("./tempFile.txt", Read)) {

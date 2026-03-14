@@ -27,7 +27,7 @@ Stream 主要面向处理原始二进制数据，Stream 中最小的数据单元
 
 InputStream 接口定义：
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 interface InputStream {
@@ -38,6 +38,8 @@ interface InputStream {
 当拥有一个输入流的时候，就可以像下面的代码那样去读取字节数据，读取的数据会被写到 `read` 的入参数组中。
 
 输入流读取示例：
+
+<!-- check:run -->
 
 ```cangjie
 import std.io.InputStream
@@ -63,6 +65,8 @@ main() {
 
 OutputStream 接口定义：
 
+<!-- check:ast -->
+
 ```cangjie
 interface OutputStream {
     func write(buffer: Array<Byte>): Unit
@@ -76,6 +80,8 @@ interface OutputStream {
 当拥有一个输出流时，可以写入字节数据。
 
 输出流写入示例：
+
+<!-- check:run -->
 
 ```cangjie
 import std.io.OutputStream

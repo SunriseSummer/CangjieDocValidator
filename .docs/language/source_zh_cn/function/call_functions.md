@@ -6,7 +6,7 @@
 
 非命名参数调用举例：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func add(a: Int64, b: Int64) {
@@ -29,7 +29,7 @@ The sum of x and y is 3
 
 命名参数调用举例：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func add(a: Int64, b!: Int64) {
@@ -52,7 +52,7 @@ The sum of x and y is 3
 
 对于多个命名参数，调用时的传参顺序可以和定义时的参数顺序不同。例如，下例中调用 `add` 函数时 `b` 可以出现在 `a` 之前：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func add(a!: Int64, b!: Int64) {
@@ -75,7 +75,7 @@ The sum of x and y is 3
 
 对于拥有默认值的命名参数，调用时如果没有传实参，那么此参数将使用默认值作为实参的值。例如，下例中调用 `add` 函数时没有为参数 `b` 传实参，那么参数 `b` 的值等于其定义时的默认值 `2`：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func add(a: Int64, b!: Int64 = 2) {
@@ -97,7 +97,7 @@ The sum of x and y is 3
 
 对于拥有默认值的命名参数，调用时也可以为其传递新的实参，此时命名参数的值等于新的实参的值，即定义时的默认值将失效。例如，下例中调用 `add` 函数时为参数 `b` 传了新的实参值 `20`，那么参数 `b` 的值就等于 `20`：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func add(a: Int64, b!: Int64 = 2) {

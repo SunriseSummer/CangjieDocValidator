@@ -9,6 +9,8 @@
 <!-- compile.error -macro4 -->
 <!-- cfg="--compile-macro" -->
 
+<!-- check:skip -->
+
 ```cangjie
 // file define.cj
 macro package define         // 编译 define.cjo 携带 macro 属性
@@ -30,6 +32,8 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
   <!-- compile -macro5 -->
   <!-- cfg="--compile-macro" -->
 
+  <!-- check:skip -->
+
   ```cangjie
   macro package A
   import std.ast.*
@@ -50,6 +54,8 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
   <!-- compile -macro5 -->
   <!-- cfg="--output-type=dylib -o libB.so" -->
 
+  <!-- check:ast -->
+
   ```cangjie
   package B
   // public import A.* // Error, it is not allowed to re-export a macro package in a package.
@@ -69,6 +75,8 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
 
   <!-- compile -macro5 -->
   <!-- cfg="--compile-macro -L. -lB" -->
+
+  <!-- check:skip -->
 
   ```cangjie
   macro package C
@@ -92,6 +100,8 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
   <!-- compile -macro5 -->
   <!-- cfg="--compile-macro -L. -lB" -->
 
+  <!-- check:run -->
+
   ```cangjie
   import C.*
 
@@ -109,6 +119,8 @@ public macro M(input: Tokens): Tokens { // macro M 外部可见
   `main.cj`中 `M2` 宏展开后的结果如下：
 
   <!-- code_no_check -->
+
+  <!-- check:run -->
 
   ```cangjie
   import C.*

@@ -4,6 +4,8 @@
 
 <!-- verify -PrintSizeable -->
 
+<!-- check:run project=PrintSizeable -->
+
 ```cangjie
 interface PrintSizeable {
     func printSize(): Unit
@@ -21,6 +23,8 @@ extend<T> Array<T> <: PrintSizeable {
 因此可以将 `Array` 作为 `PrintSizeable` 的实现类型来使用，代码如下所示。
 
 <!-- verify -PrintSizeable -->
+
+<!-- check:run project=PrintSizeable -->
 
 ```cangjie
 main() {
@@ -41,7 +45,7 @@ The size is 0
 
 如下面代码所示，可以在扩展中为 `Foo` 同时实现 `I1`、`I2`、`I3`。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 interface I1 {
@@ -69,7 +73,7 @@ extend Foo <: I1 & I2 & I3 {
 
 例如可以让上面的 `Pair` 类型实现 `Eq` 接口，这样 `Pair` 自己也能成为一个符合 `Eq` 约束的类型，如下代码所示。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 class Pair<T1, T2> {
@@ -114,7 +118,7 @@ true
 
 例如下面的例子，定义了一个新接口 `Sizeable`，目的是获取某个类型的 `size`，而已经知道 `Array` 中包含了这个函数，因此就可以通过扩展让 `Array` 实现 `Sizeable`，而不需要添加额外的函数。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 interface Sizeable {
@@ -139,7 +143,7 @@ main() {
 
 例如，接口 `I1` 存在一个子接口 `I2`，且 `I1` 中包含一个默认实现，类型 `A` 的两个扩展分别实现了父子接口，根据以上检查顺序，实现 `I1` 的扩展将会优先检查，然后再检查实现 `I2` 的扩展。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 interface I1 {
@@ -169,7 +173,7 @@ I2 foo
 
 如果同一类型的两个接口扩展实现的接口存在继承冲突，导致无法确定检查顺序时，将会报错。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 interface I1 {}
@@ -184,7 +188,7 @@ extend A <: I2 & I3 {} // error: unable to decide which extension happens first
 
 如果同一类型的两个接口扩展实现的接口不存在继承关系，将会被同时检查。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 interface I1 {
@@ -203,7 +207,7 @@ extend A <: I2 {} // Error, multiple default implementations, need to re-impleme
 >
 > 当类 A 有个泛型基类 `B<T1,...,Tn>`，`B<T1,...,Tn>` 扩展了一个接口 `I<R1,...,Rn>`，`I<R1,...,Rn>` 带有默认实现的实例或者静态函数（比如 foo），该函数没有在 `B<T1,...,Tn>` 及其扩展中被重写，且类 A 没有直接实现接口 `I<R1,...,Rn>` 时，通过类 A 的实例调用函数 foo 时会产生非预期行为。
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 interface I<N> {

@@ -8,7 +8,7 @@
 
 下面的例子展示了数值类型之间的类型转换：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -58,7 +58,7 @@ The type of r6 is 'Int64', and r6 = 1024
 
 下面的例子展示了 `Rune` 和 `UInt32` 之间的类型转换：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -84,7 +84,7 @@ The type of r2 is 'Rune', and r2 = A
 
 下面的例子展示了 `is` 操作符的使用：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 open class Base {
@@ -128,7 +128,7 @@ Is the type of b2 'Derived'? true
 
 下面的例子展示了 `as` 操作符的使用（注释中标明了 `as` 操作的结果）：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 open class Base {

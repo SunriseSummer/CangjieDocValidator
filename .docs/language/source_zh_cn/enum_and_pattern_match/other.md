@@ -6,7 +6,7 @@
 
 1. 变量定义和 `for in` 表达式中使用通配符模式的例子如下：
 
-    <!-- verify -->
+    <!-- check:run -->
 
     ```cangjie
     main() {
@@ -28,7 +28,7 @@
 
 2. 变量定义和 `for in` 表达式中使用绑定模式的例子如下：
 
-    <!-- verify -->
+    <!-- check:run -->
 
     ```cangjie
     main() {
@@ -52,7 +52,7 @@
 
 3. 变量定义和 `for in` 表达式中使用 `irrefutable` tuple 模式的例子如下：
 
-    <!-- verify -->
+    <!-- check:run -->
 
     ```cangjie
     main() {
@@ -78,7 +78,7 @@
 
 4. 变量定义和 `for in` 表达式中使用 `irrefutable` enum 模式的例子如下：
 
-    <!-- verify -->
+    <!-- check:run -->
 
     ```cangjie
     enum RedColor {

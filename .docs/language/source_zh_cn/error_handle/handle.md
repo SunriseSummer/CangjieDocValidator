@@ -31,7 +31,7 @@
 
 下面是一个只有 try 块和 catch 块的简单示例：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -55,7 +55,7 @@ This will also be printed!
 
 `catchPattern` 中引入的变量作用域级别与 `catch` 后面的块中变量作用域级别相同，在 catch 块中再次引入相同名字会触发重定义错误。例如：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 main() {
@@ -73,7 +73,7 @@ main() {
 
 下面是带有 finally 块的 try 表达式的简单示例：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -98,7 +98,7 @@ try 表达式可以出现在任何允许使用表达式的地方。try 表达式
 
 另外，当 `try` 表达式的值没有被使用时，其类型为 `Unit`，不要求各分支的类型有最小公共父类型。
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 open class C { }
@@ -120,7 +120,7 @@ main () {
 
 try-with-resources 表达式主要是为了自动释放非内存资源。不同于普通 try 表达式，try-with-resources 表达式中的 catch 块和 finally 块均是可选的，并且 try 关键字其后的块之间可以插入一个或者多个 `ResourceSpecification` 用来申请一系列的资源（`ResourceSpecification` 并不会影响整个 try 表达式的类型）。这里所讲的资源对应到语言层面即指对象，因此 `ResourceSpecification` 其实就是实例化一系列的对象（多个实例化之间使用“,”分隔）。使用 try-with-resources 表达式的例子如下所示：
 
-<!-- compile -->
+<!-- check:runtime_error -->
 
 ```cangjie
 class Worker <: Resource {
@@ -192,7 +192,7 @@ Exception: Jack left, because of an emergency.
 
 `try` 关键字和 `{}` 之间引入的名字，其作用域与 `{}` 中引入的变量作用域级别相同，在 `{}` 中再次引入相同名字会触发重定义错误。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class R <: Resource {
@@ -215,7 +215,7 @@ main() {
 
 try-with-resources 表达式中的 `ResourceSpecification` 的类型必须实现 Resource 接口：
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 interface Resource {
@@ -226,7 +226,7 @@ interface Resource {
 
 需要说明的是，try-with-resources 表达式中一般没有必要再包含 catch 块和 finally 块，也不建议开发者再手动释放资源（逻辑冗余）。但是，如果需要显式地捕获 try 块或资源申请和释放过程中可能抛出的异常并处理，仍可在 try-with-resources 表达式中包含 catch 块和 finally 块：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 class R <: Resource {
@@ -269,7 +269,7 @@ try-with-resources 表达式的类型是 `Unit`。
 
 示例如下：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main(): Int64 {
@@ -298,7 +298,7 @@ finally is executed!
 
 关于“被捕获异常的类型是由 `|` 连接的所有类型的最小公共父类”的示例：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 open class Father <: Exception {
@@ -330,10 +330,9 @@ true
 
 **通配符模式**的语法是 `_`，它可以捕获同级 try 块内抛出的任意类型的异常，等价于类型模式中的 `e: Exception`，即捕获 Exception 子类所定义的异常。示例如下：
 
-<!-- compile -->
+<!-- check:ast -->
 
 ```cangjie
-// Catch with wildcardPattern.
 try {
     throw OverflowException()
 } catch (_) {

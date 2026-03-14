@@ -8,6 +8,8 @@
 
 `Future<T>` 的原型声明如下：
 
+<!-- check:ast -->
+
 ```cangjie
 public class Future<T> {
     // Blocking the current thread, waiting for the result of the thread corresponding to the current Future object.
@@ -28,7 +30,7 @@ public class Future<T> {
 
 下方示例代码演示了如何使用 `Future<T>` 在 `main` 中等待新创建的线程执行完成：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 main(): Int64 {
@@ -57,7 +59,7 @@ New thread after sleeping
 
 如果将 `fut.get()` 移动到主线程的打印之前，如下所示：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main(): Int64 {
@@ -90,7 +92,7 @@ Main thread
 
     示例代码如下：
 
-    <!-- verify -->
+    <!-- check:run -->
 
     ```cangjie
     main(): Int64 {
@@ -120,7 +122,7 @@ Main thread
 
     示例代码如下：
 
-    <!-- verify -->
+    <!-- check:run -->
 
     ```cangjie
     main(): Int64 {
@@ -153,6 +155,8 @@ Main thread
 
 `Thread` 类的部分方法定义如下（完整的方法描述可参考《仓颉编程语言库 API》）。
 
+<!-- check:ast -->
+
 ```cangjie
 class Thread {
     // Get the currently running thread
@@ -168,7 +172,7 @@ class Thread {
 
 下列示例代码在创建新线程后分别通过两种方式获取线程标识。由于主线程和新线程获取的是同一个 `Thread` 对象，所以他们能够打印出相同的线程标识。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 main(): Unit {

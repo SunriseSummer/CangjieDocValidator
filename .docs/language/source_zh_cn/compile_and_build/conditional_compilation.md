@@ -10,7 +10,7 @@
 
 以内置 os 编译条件为例，其使用方法如下：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 @When[os == "Linux"]
@@ -28,6 +28,8 @@ main(): Int64 {
 
 - 仓颉不支持编译条件嵌套，以下写法均不允许：
 
+    <!-- check:compile_error -->
+
     ```cangjie
     @When[os == "Windows"]
     @When[os == "Linux"]    // Error, illegal nested when conditional compilation
@@ -38,6 +40,8 @@ main(): Int64 {
     ```
 
 - `@When[...]` 作为内置编译标记，在导入前处理，由宏展开生成的代码中含有 `@When[...]` 会编译报错，如：
+
+    <!-- check:compile_error -->
 
     ```cangjie
     @M0                     // macro which returns the input
@@ -55,7 +59,7 @@ os 表示目标平台的操作系统。`os` 支持 `==` 和 `!=` 两种操作符
 
 使用方式如下：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 @When[os == "Linux"]
@@ -90,7 +94,7 @@ main() {
 
 使用方式如下：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 @When[backend == "cjnative"]
@@ -116,7 +120,7 @@ main() {
 
 使用方式如下：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 @When[arch == "aarch64"]
@@ -138,7 +142,7 @@ main() {
 
 使用方式如下：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 @When[cjc_version == "0.18.6"]
@@ -180,7 +184,7 @@ main() {
 
 使用方式如下：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 @When[debug]
@@ -203,7 +207,7 @@ main() {
 `test` 表示当前是否启用了单元测试选项 `--test`。`test` 条件仅支持逻辑非运算符（`!`）。可以用于区分测试代码与普通代码。
 使用方式如下：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 @When[test]
@@ -289,6 +293,8 @@ main () {
 仓颉条件编译允许开发者自由组合多个条件编译选项。支持逻辑运算符组合多个条件，支持括号运算符明确优先级。
 
 使用方式如下：
+
+<!-- check:run -->
 
 ```cangjie
 //source.cj

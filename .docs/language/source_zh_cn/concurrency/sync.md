@@ -31,6 +31,8 @@
 
 以 `Int8` 类型为例，对应的原子操作类型声明如下：
 
+<!-- check:ast -->
+
 ```cangjie
 class AtomicInt8 {
     public func load(): Int8
@@ -49,6 +51,8 @@ class AtomicInt8 {
 
 类似的，其他整数类型对应的原子操作类型有：
 
+<!-- check:skip -->
+
 ```cangjie
 class AtomicInt16 {...}
 class AtomicInt32 {...}
@@ -61,7 +65,7 @@ class AtomicUInt64 {...}
 
 下方示例演示了如何在多线程程序中，使用原子操作实现计数：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.sync.AtomicInt64
@@ -100,7 +104,7 @@ count = 1000
 
 以下是使用整数类型原子操作的一些其他正确示例：
 
-<!-- compile -->
+<!-- check:ast -->
 
 ```cangjie
 var obj: AtomicInt32 = AtomicInt32(1)
@@ -128,7 +132,7 @@ x = obj.load() // x: 4
 
 原子引用类型是 `AtomicReference`，以下是使用 `Bool` 类型、引用类型原子操作的一些正确示例：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.sync.{AtomicBool, AtomicReference}
@@ -172,6 +176,8 @@ true
 
 `Mutex` 提供的主要成员函数如下：
 
+<!-- check:skip -->
+
 ```cangjie
 public class Mutex <: UniqueLock {
     // Create a Mutex.
@@ -195,7 +201,7 @@ public class Mutex <: UniqueLock {
 
 下方示例演示了如何使用 `Mutex` 来保护对全局共享变量 `count` 的访问，对 `count` 的操作即属于临界区：
 
-<!-- verify -->
+<!-- check:skip -->
 
 ```cangjie
 import std.sync.Mutex
@@ -236,7 +242,7 @@ count = 1000
 
 下方示例演示了如何使用 `tryLock`：
 
-<!-- run -->
+<!-- check:runtime_error -->
 
 ```cangjie
 import std.sync.Mutex
@@ -278,6 +284,8 @@ get the lock, do something
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
+<!-- check:runtime_error -->
+
 ```cangjie
 import std.sync.Mutex
 
@@ -304,6 +312,8 @@ main() {
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
+<!-- check:run -->
+
 ```cangjie
 import std.sync.Mutex
 
@@ -323,6 +333,8 @@ main() {
 
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
+
+<!-- check:run -->
 
 ```cangjie
 import std.sync.Mutex
@@ -349,7 +361,7 @@ main() {
 
 下方示例代码演示了 `Mutex` 可重入的特性：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.sync.Mutex
@@ -397,6 +409,8 @@ count = 220
 
 `Condition` 是与某个互斥锁绑定的条件变量（也就是等待队列），`Condition` 实例由互斥锁创建，一个互斥锁可以创建多个 `Condition` 实例。`Condition` 可以使线程阻塞并等待来自另一个线程的信号以恢复执行。这是一种利用共享变量进行线程同步的机制，主要提供如下方法：
 
+<!-- check:ast -->
+
 ```cangjie
 public class Mutex <: UniqueLock {
     // ...
@@ -430,6 +444,8 @@ public interface Condition {
 
 `wait` 方法接受一个可选参数 `timeout`。需要注意的是，业界很多常用的常规操作系统不保证调度的实时性，因此无法保证一个线程会被阻塞“精确的 N 纳秒”——可能会观察到与系统相关的不精确情况。此外，当前语言规范明确允许实现产生虚假唤醒——在这种情况下，`wait` 返回值是由实现决定的——可能为 `true` 或 `false`。因此鼓励开发者始终将 `wait` 包在一个循环中：
 
+<!-- check:skip -->
+
 ```cangjie
 synchronized (obj) {
   while (<condition is not true>) {
@@ -440,7 +456,7 @@ synchronized (obj) {
 
 以下是使用 `Condition` 的一个正确示例：
 
-<!-- verify -->
+<!-- check:runtime_error -->
 
 ```cangjie
 import std.sync.Mutex
@@ -496,6 +512,8 @@ New thread: after wait
 
 <!-- run.error -->
 
+<!-- check:run -->
+
 ```cangjie
 import std.sync.Mutex
 
@@ -544,7 +562,7 @@ main() {
 
 有时在复杂的线程间同步的场景下需要对同一个锁对象生成多个 `Condition` 实例，以下示例实现了一个长度固定的有界 `FIFO` 队列。当队列为空，`get()` 会被阻塞；当队列已满，`put()` 会被阻塞。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.sync.{Mutex, Condition}
@@ -627,7 +645,7 @@ class BoundedQueue {
 
 下方示例代码演示了如何使用 `synchronized` 关键字来保护共享数据：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.sync.Mutex
@@ -676,7 +694,7 @@ count = 1000
 
 下方示例演示了在 `synchronized` 代码块中出现 `break` 语句的情况：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.sync.Mutex
@@ -724,6 +742,8 @@ in main, count = 10
 
 使用 core 包中的 `ThreadLocal` 可以创建并使用线程局部变量，每一个线程都有它独立的一个存储空间来保存这些线程局部变量。因此，在每个线程可以安全地访问他们各自的线程局部变量，而不受其他线程的影响。
 
+<!-- check:skip -->
+
 ```cangjie
 public class ThreadLocal<T> {
     /* 构造一个携带空值的仓颉线程局部变量 */
@@ -739,7 +759,7 @@ public class ThreadLocal<T> {
 
 下方示例代码演示了如何通过 `ThreadLocal`类来创建并使用各自线程的局部变量：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 

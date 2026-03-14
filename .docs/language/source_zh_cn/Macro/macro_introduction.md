@@ -6,6 +6,8 @@
 
 <!-- code_no_check -->
 
+<!-- check:ast -->
+
 ```cangjie
 let x = 3
 let y = 2
@@ -17,6 +19,8 @@ let y = 2
 
 <!-- verify -macro12 -->
 <!-- cfg="--compile-macro" -->
+
+<!-- check:compile_error -->
 
 ```cangjie
 macro package define
@@ -35,6 +39,8 @@ public macro dprint(input: Tokens): Tokens {
 在解释每行代码之前，先测试这个宏可以达到预期的效果。首先，在当前目录下创建一个 `define` 文件夹，并在 `define` 文件夹中创建 `dprint.cj` 文件，将以上内容复制到 `dprint.cj` 文件中。另外在当前目录下创建 `main.cj`，包含以下测试代码：
 
 <!-- verify -macro12 -->
+
+<!-- check:run -->
 
 ```cangjie
 import define.*
@@ -96,6 +102,8 @@ x + y = 5
   这里 [`quote` 表达式](./Tokens_types_and_quote_expressions.md#quote-表达式和插值)是用于构造 [`Tokens`](./Tokens_types_and_quote_expressions.md#tokens-类型) 的一种表达式，它将括号内的程序片段转换为 `Tokens`。在 `quote` 的输入中，可以使用插值 `$(...)` 来将括号内的表达式转换为 `Tokens`，然后插入到 `quote` 构建的 `Tokens` 中。对于以上代码，`$(inputStr)` 中插入了 `inputStr` 字符串的值（包含字符串两端的引号），`$(input)` 中插入了 `input`，即输入的程序片段。因此，如果输入的表达式是 `x + y`，那么形成的`Tokens`为：
 
   <!-- code_no_check -->
+
+  <!-- check:skip -->
 
   ```cangjie
   print("x + y" + " = ")

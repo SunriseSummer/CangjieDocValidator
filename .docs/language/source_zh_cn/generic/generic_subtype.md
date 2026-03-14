@@ -2,7 +2,7 @@
 
 实例化后的泛型类型间也有子类型关系。例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 interface I<X, Y> { }
@@ -14,7 +14,7 @@ class C<Z> <: I<Z, Z> { }
 
 但是对于下列代码：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 open class C { }

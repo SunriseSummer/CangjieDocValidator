@@ -4,7 +4,7 @@
 
 函数定义举例：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func add(a: Int64, b: Int64): Int64 {
@@ -24,7 +24,7 @@ func add(a: Int64, b: Int64): Int64 {
 
 命名参数的定义方式是 `p!: T`，与非命名参数的不同是在参数名 `p` 之后多了一个 `!`。可以将上例中 `add` 函数的两个非命名参数修改为命名参数，如下所示：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func add(a!: Int64, b!: Int64): Int64 {
@@ -34,7 +34,7 @@ func add(a!: Int64, b!: Int64): Int64 {
 
 命名参数还可以设置默认值，通过 `p!: T = e` 方式将参数 `p` 的默认值设置为表达式 `e` 的值。例如，可以将上述 `add` 函数的两个参数的默认值都设置为 `1`：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func add(a!: Int64 = 1, b!: Int64 = 1): Int64 {
@@ -48,7 +48,7 @@ func add(a!: Int64 = 1, b!: Int64 = 1): Int64 {
 
 参数列表中可以同时定义非命名参数和命名参数，但是需要注意的是，非命名参数只能定义在命名参数之前，也就意味着命名参数之后不能再出现非命名参数。例如，下例中 `add` 函数的参数列表定义是不合法的：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 func add(a!: Int64, b: Int64): Int64 { // Error, named parameter 'a' must be defined after non-named parameter 'b'
@@ -60,7 +60,7 @@ func add(a!: Int64, b: Int64): Int64 { // Error, named parameter 'a' must be def
 
 函数参数均为不可变变量，在函数定义内不能对其赋值。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 func add(a: Int64, b: Int64): Int64 {
@@ -71,7 +71,7 @@ func add(a: Int64, b: Int64): Int64 {
 
 函数参数作用域从定义处起至函数体结束：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 func add(a: Int64, b: Int64): Int64 {
@@ -87,7 +87,7 @@ func add(a: Int64, b: Int64): Int64 {
 
 当显式地定义了函数返回值类型时，就要求函数体的类型（关于如何确定函数体的类型可参见下节[函数体](./define_functions.md#函数体)）、函数体中所有 `return e` 表达式中 `e` 的类型是返回值类型的子类型。例如，对于上述 `add` 函数，显式地定义了它的返回值类型为 `Int64`；如果将函数体中的 `return a + b` 修改为 `return (a, b)`，则会因为类型不匹配而报错：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 // Error, the type of the expression after return does not match the return type of the function
@@ -98,7 +98,7 @@ func add(a: Int64, b: Int64): Int64 {
 
 在函数定义时如果未显式定义返回值类型，编译器将根据函数体的类型以及函数体中所有的 `return` 表达式来共同推导出函数的返回值类型。例如，下例中 `add` 函数的返回值类型虽然被省略，但编译器可以根据 `return a + b` 推导出 `add` 函数的返回值类型是 `Int64`：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func add(a: Int64, b: Int64) {
@@ -116,7 +116,7 @@ func add(a: Int64, b: Int64) {
 
 函数体中定义了函数被调用时执行的操作，通常包含一系列的变量定义和表达式，也可以包含新的函数定义（即嵌套函数）。如下 `add` 函数的函数体中首先定义了 `Int64` 类型的变量 `r`（初始值为 `0`），接着将 `a + b` 的值赋值给 `r`，最后将 `r` 的值返回：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func add(a: Int64, b: Int64) {
@@ -130,7 +130,7 @@ func add(a: Int64, b: Int64) {
 
 对于 `return expr`，要求 `expr` 的类型与函数定义中的返回值类型保持一致。例如，下例中会因为 `return 100` 中 `100` 类型（`Int64`）和函数 `foo` 的返回值类型（`String`）不同而报错。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 // Error, cannot convert an integer literal to type 'Struct-String'
@@ -141,7 +141,7 @@ func foo(): String {
 
 对于 `return`，其等价于 `return ()`，所以要求函数的返回值类型为 `Unit`。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func add(a: Int64, b: Int64) {
@@ -164,7 +164,7 @@ func foo(): Unit {
 
 对于一个局部变量，允许在其外层作用域中定义同名变量，并且在此局部变量的作用域内，局部变量会“遮盖”外层作用域的同名变量。例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 let r = 0
@@ -179,7 +179,7 @@ func add(a: Int64, b: Int64) {
 
 [函数返回值类型](./define_functions.md#函数返回值类型)中提到函数体也是有类型的，函数体的类型是函数体内最后一“项”的类型：若最后一项为表达式，则函数体的类型是此表达式的类型，若最后一项为变量定义或函数声明，或函数体为空，则函数体的类型为 `Unit`。例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func add(a: Int64, b: Int64): Int64 {
@@ -189,7 +189,7 @@ func add(a: Int64, b: Int64): Int64 {
 
 上例中，因为函数体的最后一“项”是 `Int64` 类型的表达式（即 `a + b`），所以函数体的类型也是 `Int64`，与函数定义的返回值类型相匹配。又如，下例中函数体的最后一项是 `print` 函数调用，所以函数体的类型是 `Unit`，同样与函数定义的返回值类型相匹配：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func foo(): Unit {

@@ -13,7 +13,7 @@
 
 上述具体添加的功能方式可参考如下示例，具体使用语法请参考后续介绍：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 interface Foo {

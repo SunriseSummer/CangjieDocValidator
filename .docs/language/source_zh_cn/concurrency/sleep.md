@@ -2,6 +2,8 @@
 
 `sleep` 函数会阻塞当前运行的线程，该线程会主动睡眠一段时间，之后再恢复执行，其参数类型为 Duration 类型。函数原型为：
 
+<!-- check:ast -->
+
 ```cangjie
 func sleep(dur: Duration): Unit // Sleep for at least `dur`.
 ```
@@ -12,7 +14,7 @@ func sleep(dur: Duration): Unit // Sleep for at least `dur`.
 
 以下是使用 `sleep` 的示例：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main(): Int64 {

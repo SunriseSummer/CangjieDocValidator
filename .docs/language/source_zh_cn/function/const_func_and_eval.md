@@ -30,7 +30,7 @@
 
 下例是一个计算平面上两点距离的 `const` 函数，`distance` 中使用 `let` 定义了两个局部变量 `dx` 和 `dy`：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 struct Point {
@@ -77,7 +77,7 @@ main() {
 
 在下面的例子中，在接口 `I` 里定义了两个 `const` 函数，类 `A` 实现了接口 `I`，泛型函数 `g` 的形参类型上界是 `I`。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 interface I {
@@ -112,7 +112,7 @@ main() {
 
 1. 如果当前类型是 `class`，则不能具有 `var` 声明的实例成员变量，否则不允许定义 `const init` 。如果当前类型具有父类，当前的 `const init` 必须调用父类的 `const init`（可以显式调用或者隐式调用无参`const init`），如果父类没有 `const init` 则报错。
 
-    <!-- compile.error -->
+    <!-- check:compile_error -->
 
     ```cangjie
     public class Foo {
@@ -124,7 +124,7 @@ main() {
     }
     ```
 
-    <!-- compile.error -->
+    <!-- check:compile_error -->
 
     ```cangjie
     open public class Boo {
@@ -144,7 +144,7 @@ main() {
 
 2. 当前类型的实例成员变量如果有初始值，初始值必须要是 `const` 表达式，否则不允许定义 `const init`。
 
-    <!-- compile.error -->
+    <!-- check:compile_error -->
 
     ```cangjie
     var a = "4123"
@@ -157,7 +157,7 @@ main() {
 
 3. `const init` 内可以使用赋值表达式 `=` 对实例成员变量赋值，除此以外不能有其他赋值表达式（如 `+=`, `-=`）。
 
-    <!-- compile.error -->
+    <!-- check:compile_error -->
 
     ```cangjie
     var a = "4123"

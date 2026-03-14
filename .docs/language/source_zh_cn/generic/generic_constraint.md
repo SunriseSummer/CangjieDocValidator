@@ -2,7 +2,7 @@
 
 泛型约束的作用是在 function、class、interface、struct、enum 声明时明确泛型形参所具备的操作与能力。只有声明了这些约束才能调用相应的成员函数。在很多场景下泛型形参是需要加以约束的，以 `id` 函数为例：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func id<T>(a: T) {
@@ -16,6 +16,8 @@ func id<T>(a: T) {
 
 仓颉中的 `println` 函数能接受类型为字符串的参数。如果需要把一个泛型类型的变量转为字符串后打印在命令行上，可以对这个泛型类型变元加以约束，这个约束是 `core` 中定义的 `ToString` 接口，显然它是一个接口约束：
 
+<!-- check:ast -->
+
 ```cangjie
 package std.core // `ToString` is defined in core.
 
@@ -26,7 +28,7 @@ public interface ToString {
 
 这样就可以利用这个约束，定义一个名为 `genericPrint` 的函数：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func genericPrint<T>(a: T) where T <: ToString {
@@ -46,7 +48,7 @@ main() {
 
 如果 genericPrint 函数的类型实参没有实现 ToString 接口，那么编译器会报错。例如传入一个函数做为参数时：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 func genericPrint<T>(a: T) where T <: ToString {
@@ -62,7 +64,7 @@ main() {
 
 除了上述通过接口来表示约束，还可以使用 class 类型来约束一个泛型类型变元。例如：当要声明一个动物园类型 `Zoo<T>`，但是需要这里声明的类型形参 `T` 受到约束，这个约束就是 `T` 需要是动物类型 `Animal` 的子类型， `Animal` 类型中声明了 `run` 成员函数。这里声明两个子类型 `Dog` 与 `Fox` 都实现了 `run` 成员函数，这样在 `Zoo<T>` 的类型中，就可以对于 `animals` 数组列表中存放的动物实例调用 `run` 成员函数：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.collection.ArrayList

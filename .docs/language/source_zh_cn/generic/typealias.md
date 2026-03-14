@@ -2,6 +2,8 @@
 
 当某个类型的名字比较复杂或者在特定场景中不够直观时，可以选择使用类型别名的方式为此类型设置一个别名。
 
+<!-- check:ast -->
+
 ```cangjie
 type I64 = Int64
 ```
@@ -10,7 +12,7 @@ type I64 = Int64
 
 只能在源文件顶层定义类型别名，并且原类型必须在别名定义处可见。例如，下例中 `Int64` 的别名定义在 `main` 中将报错，`LongNameClassB` 类型在为其定义别名时不可见，同样报错。
 
-<!-- compile.error  -->
+<!-- check:compile_error -->
 
 ```cangjie
 main() {
@@ -23,7 +25,7 @@ type B = LongNameClassB // Error, type 'LongNameClassB' is not defined
 
 一个（或多个）类型别名定义中禁止出现（直接或间接的）循环引用。
 
-<!-- compile.error  -->
+<!-- check:compile_error -->
 
 ```cangjie
 type A = (Int64, A) // Error, 'A' refered itself
@@ -35,7 +37,7 @@ type C = (B, Int64)
 
 1. 作为类型使用，例如：
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     type A = B
@@ -45,7 +47,7 @@ type C = (B, Int64)
 
 2. 当类型别名实际指向的类型为 class、struct 时，可以作为构造器名称使用：
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     type A = B
@@ -55,7 +57,7 @@ type C = (B, Int64)
 
 3. 当类型别名实际指向的类型为 class、interface、struct 时，可以作为访问内部静态成员变量或函数的类型名：
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     type A = B
@@ -71,7 +73,7 @@ type C = (B, Int64)
 
 4. 当类型别名实际指向的类型为 enum 时，可以作为 enum 声明的构造器的类型名：
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     enum TimeUnit {
@@ -84,7 +86,7 @@ type C = (B, Int64)
 
 需要注意的是，当前用户自定义的类型别名暂不支持在类型转换表达式中使用，参考如下示例：
 
-<!-- compile.error  -->
+<!-- check:compile_error -->
 
 ```cangjie
 type MyInt = Int32
@@ -97,7 +99,7 @@ MyInt(0)  // Error, no matching function for operator '()' function call
 
 当一个泛型类型的名称过长时，可以使用类型别名来为其声明一个更短的别名。例如，有一个类型为 `RecordData` ，可以把他用类型别名简写为 `RD` ：
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 struct RecordData<T> {

@@ -34,7 +34,7 @@
 
 这些函数的使用如下例所示：
 
-<!-- verify -->
+<!-- check:ast -->
 
 ```cangjie
 let tks1 = quote(a + b)
@@ -82,7 +82,7 @@ func f3(x: Int64) {
 
 大多数语法节点都支持 `init(input: Tokens)` 构造函数，将输入的 `Tokens` 解析为相应类型的节点，例如：
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 import std.ast.*
@@ -116,7 +116,7 @@ let funcDecl = FuncDecl(quote(func f1(x: Int64) { return x + 1 }))
 
 ### BinaryExpr 案例
 
-<!-- verify -->
+<!-- check:ast -->
 
 ```cangjie
 let binExpr = BinaryExpr(quote(x * y))
@@ -168,7 +168,7 @@ a + b + y
 
 ### FuncDecl 案例
 
-<!-- verify -->
+<!-- check:ast -->
 
 ```cangjie
 let funcDecl = FuncDecl(quote(func f1(x: Int64) { x + 1 }))
@@ -197,7 +197,7 @@ func foo(a: Int64) {
 
 下面，通过一些案例展示节点的插值。
 
-<!-- verify -->
+<!-- check:ast -->
 
 ```cangjie
 var binExpr = BinaryExpr(quote(1 + 2))
@@ -224,7 +224,7 @@ d: 1 + 2.leftExpr
 
 下面的案例展示节点列表（`ArrayList`）的插值。
 
-<!-- verify -->
+<!-- check:skip -->
 
 ```cangjie
 var incrs = ArrayList<Node>()
@@ -258,7 +258,7 @@ func foo(n: Int64) {
 
 下面的案例展示在某些情况下，需要在插值周围添加括号，以保证正确性。
 
-<!-- verify -->
+<!-- check:skip -->
 
 ```cangjie
 var binExpr1 = BinaryExpr(quote(x + y))
