@@ -99,7 +99,7 @@ project_dir/
 | 文件 | 修改内容 |
 |------|----------|
 | `entry.md` | `<!-- run -->` → `<!-- check:run -->`；`<!-- compile.error -->` → `<!-- check:compile_error -->`；第二个代码块新增 `<!-- expected_output -->` |
-| `import.md` | tree-sitter 不支持的语法（`import {}`、`import as` 多行等）改为 `<!-- check:skip -->`；重导出示例 3 个块改为 `build_only project=reexport` 多文件项目；最后的块保持 `<!-- check:compile_error -->` |
+| `import.md` | tree-sitter 不支持的语法改为 `<!-- check:skip -->`（详见 issue.md #9、#10）；重导出示例 3 个块改为 `build_only project=reexport` 多文件项目；最后的块保持 `<!-- check:compile_error -->` |
 | `package_name.md` | 语法正确的独立片段改为 `<!-- check:ast -->`（6 个）；多文件/多包声明片段保留 `<!-- check:skip -->`（3 个） |
 | `toplevel_access.md` | `<!-- compile -->` → `<!-- check:build_only -->`；`<!-- compile.error -->` → `<!-- check:compile_error -->`；最后两个跨文件示例使用 `compile_error project=priv_a file=...` 合并为一个项目 |
 | `package_overview.md` | 无代码块，无需修改 |
