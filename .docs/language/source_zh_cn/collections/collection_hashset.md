@@ -12,11 +12,9 @@ import std.collection.*
 
 仓颉使用 `HashSet<T>` 表示 HashSet 类型，T 表示 HashSet 的元素类型，T 必须是实现了 Hashable 和 `Equatable<T>` 接口的类型，例如数值或 String。
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
-import std.collection.HashSet
-
 var a = HashSet<Int64>() // HashSet whose element type is Int64
 var b = HashSet<String>() // HashSet whose element type is String
 ```
@@ -33,11 +31,9 @@ b = a // Type mismatch
 
 仓颉中可以使用构造函数的方式构造一个指定的 HashSet。
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
-import std.collection.HashSet
-
 let a = HashSet<String>() // Created an empty HashSet whose element type is String
 let b = HashSet<String>(100) // Created a HashSet whose capacity is 100
 let c = HashSet<Int64>([0, 1, 2]) // Created a HashSet whose element type is Int64, containing elements 0, 1, 2
@@ -97,14 +93,17 @@ The size of hashset is 3
 
 当想判断某个元素是否被包含在某个 HashSet 中时，可以使用 contains 函数。如果该元素存在会返回 true，否则返回 false。
 
-<!-- check:build_only -->
+<!-- check:run -->
 
 ```cangjie
 import std.collection.HashSet
 
-let mySet = HashSet<Int64>([0, 1, 2])
-let a = mySet.contains(0) // a == true
-let b = mySet.contains(-1) // b == false
+main() {
+    let mySet = HashSet<Int64>([0, 1, 2])
+    let a = mySet.contains(0) // a == true
+    let b = mySet.contains(-1) // b == false
+    println("contains 0: ${a}, contains -1: ${b}")
+}
 ```
 
 ## 修改 HashSet

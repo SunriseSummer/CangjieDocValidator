@@ -1,17 +1,17 @@
 # 测试报告
 
 - **扫描目录**: `.docs/language/source_zh_cn/`
-- **生成时间**: 2026-03-15 06:40:09 UTC
+- **生成时间**: 2026-03-15 06:52:53 UTC
 - **文档文件数**: 106
 
 ## 总览
 
 | 指标 | 数量 |
 |------|------|
-| ❌ 测试总数 | 655 |
-| ✅ 通过 | 651 |
+| ❌ 测试总数 | 657 |
+| ✅ 通过 | 653 |
 | ❌ 失败 | 4 |
-| ⏭️ 跳过 | 53 |
+| ⏭️ 跳过 | 51 |
 | ⚠️ 未标注 | 0 |
 
 ## 文件详情
@@ -63,6 +63,7 @@
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
 | 文件流操作 | `ast` | ✅ PASS |
+| 文件流操作 | `ast` | ✅ PASS |
 | 标准流 | `build_only` | ✅ PASS |
 | 标准流 | `run` | ✅ PASS |
 | 文件流 | `build_only` | ✅ PASS |
@@ -70,7 +71,6 @@
 | 常规文件操作 | `build_only` | ✅ PASS |
 | 常规文件操作 | `build_only` | ✅ PASS |
 | 文件流操作 | `run` | ✅ PASS |
-| 文件流操作 | `build_only` | ✅ PASS |
 | 文件流操作 | `build_only` | ✅ PASS |
 
 ### ✅ `.docs/language/source_zh_cn/FFI/cangjie-c.md`
@@ -108,7 +108,7 @@
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
-| Token 类型 | `build_only` | ✅ PASS |
+| Token 类型 | `ast` | ✅ PASS |
 | Tokens 类型 | `run` | ✅ PASS |
 | quote 表达式和插值 | `run` | ✅ PASS |
 | quote 表达式和插值 | `compile_error` | ✅ PASS |
@@ -476,10 +476,11 @@
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
-| ArrayList | `build_only` | ✅ PASS |
+| ArrayList | `ast` | ✅ PASS |
+| ArrayList | `ast` | ✅ PASS |
 | ArrayList | `build_only` | ✅ PASS |
 | ArrayList | `compile_error` | ✅ PASS |
-| ArrayList | `build_only` | ✅ PASS |
+| 访问 ArrayList 成员 | `run` | ✅ PASS |
 | 访问 ArrayList 成员 | `run` | ✅ PASS |
 | 访问 ArrayList 成员 | `run` | ✅ PASS |
 | 修改 ArrayList | `run` | ✅ PASS |
@@ -493,13 +494,14 @@
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
-| HashMap | `build_only` | ✅ PASS |
+| HashMap | `ast` | ✅ PASS |
+| HashMap | `ast` | ✅ PASS |
 | HashMap | `build_only` | ✅ PASS |
 | HashMap | `compile_error` | ✅ PASS |
-| HashMap | `build_only` | ✅ PASS |
 | 访问 HashMap 成员 | `run` | ✅ PASS |
 | 访问 HashMap 成员 | `run` | ✅ PASS |
-| 访问 HashMap 成员 | `build_only` | ✅ PASS |
+| 访问 HashMap 成员 | `run` | ✅ PASS |
+| 访问 HashMap 成员 | `run` | ✅ PASS |
 | 修改 HashMap | `run` | ✅ PASS |
 | 修改 HashMap | `run` | ✅ PASS |
 | 修改 HashMap | `run` | ✅ PASS |
@@ -510,13 +512,13 @@
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
-| HashSet | `build_only` | ✅ PASS |
+| HashSet | `ast` | ✅ PASS |
+| HashSet | `ast` | ✅ PASS |
 | HashSet | `build_only` | ✅ PASS |
 | HashSet | `compile_error` | ✅ PASS |
-| HashSet | `build_only` | ✅ PASS |
 | 访问 HashSet 成员 | `run` | ✅ PASS |
 | 访问 HashSet 成员 | `run` | ✅ PASS |
-| 访问 HashSet 成员 | `build_only` | ✅ PASS |
+| 访问 HashSet 成员 | `run` | ✅ PASS |
 | 修改 HashSet | `run` | ✅ PASS |
 | 修改 HashSet | `run` | ✅ PASS |
 | 修改 HashSet | `run` | ✅ PASS |

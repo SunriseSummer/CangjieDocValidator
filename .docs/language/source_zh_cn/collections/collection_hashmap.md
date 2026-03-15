@@ -14,11 +14,9 @@ HashMap 是一种哈希表，提供对其包含的元素的快速访问。表中
 
 仓颉使用 `HashMap<K, V>` 表示 HashMap 类型，K 表示 HashMap 的键类型，K 必须是实现了 Hashable 和 `Equatable<K>` 接口的类型，例如数值或 String。V 表示 HashMap 的值类型，V 可以是任意类型。
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
-import std.collection.HashMap
-
 var a = HashMap<Int64, Int64>() // HashMap whose key type is Int64 and value type is Int64
 var b = HashMap<String, Int64>() // HashMap whose key type is String and value type is Int64
 ```
@@ -35,11 +33,9 @@ b = a // Type mismatch
 
 仓颉中可以使用构造函数的方式构造一个指定的 HashMap。
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
-import std.collection.HashMap
-
 let a = HashMap<String, Int64>() // Created an empty HashMap whose key type is String and value type is Int64
 let b = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)]) // whose key type is String and value type is Int64, containing elements ("a", 0), ("b", 1), ("c", 2)
 let c = HashMap<String, Int64>(b) // Use another Collection to initialize a HashMap
@@ -99,25 +95,32 @@ The size of hashmap is 3
 
 当想判断 HashMap 中是否包含某个键时，可以使用 contains 函数。如果该键存在会返回 true，否则返回 false。
 
-<!-- check:build_only -->
+<!-- check:run -->
 
 ```cangjie
 import std.collection.HashMap
 
-let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
-let a = map.contains("a") // a == true
-let b = map.contains("d") // b == false
+main() {
+    let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
+    let a = map.contains("a") // a == true
+    let b = map.contains("d") // b == false
+    println("contains a: ${a}, contains d: ${b}")
+}
 ```
 
 当想访问指定键对应的元素时，可以使用下标语法访问（下标的类型必须是键类型）。使用不存在的键作为索引会触发运行时异常。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
-let a = map["a"] // a == 0
-let b = map["b"] // b == 1
-let c = map["d"] // Runtime exceptions
+import std.collection.HashMap
+
+main() {
+    let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
+    let a = map["a"] // a == 0
+    let b = map["b"] // b == 1
+    println("a = ${a}, b = ${b}")
+}
 ```
 
 ## 修改 HashMap

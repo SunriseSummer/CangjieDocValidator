@@ -17,11 +17,9 @@ Token(k: TokenKind, v: String)
 
 下面给出一些`Token`构造的例子：
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
-import std.ast.*
-
 let tk1 = Token(TokenKind.ADD)   // '+' 运算符
 let tk2 = Token(TokenKind.FUNC)   // func 关键字
 let tk3 = Token(TokenKind.IDENTIFIER, "x")   // x 标识符

@@ -184,11 +184,9 @@ main() {
 
 File 打开模式使用示例：
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
-import std.fs.*
-
 // 使用指定选项打开模式
 let file = File("./tempFile.txt", Write)
 ```

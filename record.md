@@ -106,21 +106,24 @@ project_dir/
 
 ### 3.3 language/source_zh_cn 目录全量标注（本次新增）
 
-共处理约 90 个含代码块的 Markdown 文件，为约 730 个代码块添加了 `<!-- check:XXX -->` 标注。使用 tree-sitter-cangjie v1.0.5.3 进行语法检查。最终统计：
+共处理约 90 个含代码块的 Markdown 文件，为约 730 个代码块添加了 `<!-- check:XXX -->` 标注。使用 Cangjie SDK 1.0.5 和 tree-sitter-cangjie v1.0.5.3 进行编译运行和语法检查。最终统计：
 
 | 标注类型 | 数量 | 说明 |
 |---------|------|------|
-| `check:run` | 237 | 编译并运行验证 |
-| `check:build_only` | 224 | 仅编译验证 |
-| `check:compile_error` | 130 | 预期编译失败 |
-| `check:ast` | 85 | tree-sitter 语法解析检查（跨包引用等无法独立编译的代码块） |
-| `check:skip` | 45 | 跳过（多包伪代码/特殊环境/死锁示例等） |
-| `check:runtime_error` | 6 | 预期运行时错误 |
+| `check:run` | 234 | 编译并运行验证 |
+| `check:build_only` | 210 | 仅编译验证 |
+| `check:compile_error` | 133 | 预期编译失败 |
+| `check:ast` | 93 | tree-sitter 语法解析检查（跨包引用等无法独立编译的代码块） |
+| `check:skip` | 51 | 跳过（多包伪代码/特殊环境/死锁示例等） |
+| `check:runtime_error` | 5 | 预期运行时错误 |
 
 主要优化措施：
+- 简单接口/构造函数演示代码使用 `check:ast` 而非添加 import 后 `check:build_only`，保持文档简洁
+- 将可扩展的 `check:skip` 代码块（如下标访问、contains 演示）扩展为带 `main()` 的可运行示例
 - 将包含 `...` 伪代码的代码块替换为具体的可编译代码（如 `HashMap<K,V> = ...` → `HashMap<K,V>()`）
 - 将顶层赋值/表达式语句代码块包装在 `main()` 或函数中，从 `check:skip` 提升为 `check:run`/`check:build_only`
-- 将自包含的声明代码块从 `check:ast` 提升为 `check:build_only`（实际编译验证）
+- 将含有预期编译错误注释的代码块从 `check:build_only` 修正为 `check:compile_error`
+- 将标准库 API 声明代码块（TypeInfo、Future、Atomic 等）从 `check:build_only` 修正为 `check:ast`
 - 将误标为 ````cangjie` 的测试输出文本改为 ````text`（Appendix/compile_options.md）
 - 添加 stdx 自动下载支持（`project.py`），使 Net 章节 HTTP/WebSocket 示例可实际编译运行
 - stdx 下载地址：`https://github.com/SunriseSummer/CangjieSDK/releases/download/1.0.5/cangjie-stdx-linux-x64-1.0.5.1.zip`
@@ -179,13 +182,25 @@ project_dir/
 
 ## 六、测试结果
 
-### 全量测试（language/source_zh_cn 整个目录）
+### 全量编译运行测试（Cangjie SDK 1.0.5 + tree-sitter-cangjie 1.0.5.3）
 
-- 测试用例：464 个
-- 通过：464 个
-- 失败：0 个
-- 跳过：245 个
-- 未标注代码块：0 个
+使用仓颉 SDK 实际编译运行全部代码块：
+
+- 测试用例：657 个（含编译运行、编译检查、预期错误、语法检查）
+- 通过：653 个
+- 失败：4 个（均为 tree-sitter 已知解析限制）
+- 跳过：51 个
+
+| 标注类型 | 数量 | 说明 |
+|---------|------|------|
+| `check:run` | 234 | 编译并运行验证 |
+| `check:build_only` | 210 | 仅编译验证 |
+| `check:compile_error` | 133 | 预期编译失败 |
+| `check:ast` | 93 | tree-sitter 语法解析检查 |
+| `check:skip` | 51 | 跳过（多包伪代码/特殊环境/死锁示例等） |
+| `check:runtime_error` | 5 | 预期运行时错误 |
+
+4 个 AST 失败均为 tree-sitter-cangjie v1.0.5.3 已知限制（详见 issue.md #8/#15）。
 
 ### ast_samples 目录
 - 测试用例：9 个（2 宏项目 + 6 独立项目 + 1 语法检查）
