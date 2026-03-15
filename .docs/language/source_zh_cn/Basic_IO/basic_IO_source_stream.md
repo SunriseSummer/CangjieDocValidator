@@ -115,7 +115,7 @@ main() {
 
 move、copy、delete 函数使用示例：
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.fs.{copy, rename, remove}
@@ -131,7 +131,7 @@ main() {
 
 readFrom、writeTo 函数使用示例：
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.fs.File

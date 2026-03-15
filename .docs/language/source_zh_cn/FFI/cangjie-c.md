@@ -356,7 +356,7 @@ typedef struct {
 
 <!-- run -example00-->
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 @C
@@ -534,7 +534,7 @@ struct S {
 
 在仓颉中，可以声明为如下结构体与 C 代码对应：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 @C
