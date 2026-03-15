@@ -47,7 +47,7 @@ main(): Int64 {
 
 一元负号（`-`）的操作数只能是数值类型的表达式。一元前缀负号表达式的值等于操作数取负的值，类型和操作数的类型相同：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
     let num1: Int64 = 8
     let num2 = -num1 // num2 = -8, 其数据类型为“Int64”。
@@ -62,7 +62,7 @@ main(): Int64 {
 > - 整数取余运算 `a % b` 的值定义为 `a - b * (a / b)`。
 > - 加法操作符也可用于字符串的拼接。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
     let a = 2 + 3    // a = 5
     let b = 3 - 1    // b = 2
@@ -88,7 +88,7 @@ main(): Int64 {
 > 当左操作类型为 Int64 时，右操作数只能为 UInt64 类型，表达式的类型为 Int64。
 > 当左操作类型为 Float64 时，右操作数只能为 Int64 类型或 Float64 类型，表达式的类型为 Float64。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
     let p1 = 2 ** 3                  // p1 = 8
     let p2 = 2 ** UInt64(3 ** 2)     // p2 = 512
@@ -202,7 +202,7 @@ main(): Int64 {
 
 逻辑非（`!`）是一元操作符，它的作用是对其操作数的布尔值取反：`!false` 的值等于 `true`，`!true` 的值等于 `false`。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
     var a: Bool = true     // a = true
     var b: Bool = !a       // b = false

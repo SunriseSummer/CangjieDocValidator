@@ -16,7 +16,7 @@ func id<T>(a: T) {
 
 仓颉中的 `println` 函数能接受类型为字符串的参数。如果需要把一个泛型类型的变量转为字符串后打印在命令行上，可以对这个泛型类型变元加以约束，这个约束是 `core` 中定义的 `ToString` 接口，显然它是一个接口约束：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 package std.core // `ToString` is defined in core.

@@ -16,7 +16,7 @@
 
 导入 io 包示例：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.io.*
@@ -89,7 +89,7 @@ main(): Unit {
 
 导入 io 包示例：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.io.*

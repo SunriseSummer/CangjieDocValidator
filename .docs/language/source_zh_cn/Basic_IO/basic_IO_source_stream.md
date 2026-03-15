@@ -18,7 +18,7 @@
 
 导入 env 包示例：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.env.*
@@ -34,7 +34,7 @@ import std.env.*
 
 标准输入流读取示例：
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 import std.env.getStdIn
@@ -82,7 +82,7 @@ main() {
 
 导入 fs 包示例：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.fs.*
@@ -115,7 +115,7 @@ main() {
 
 move、copy、delete 函数使用示例：
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 import std.fs.{copy, rename, remove}
@@ -131,7 +131,7 @@ main() {
 
 readFrom、writeTo 函数使用示例：
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 import std.fs.File
@@ -184,7 +184,7 @@ main() {
 
 File 打开模式使用示例：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 // 使用指定选项打开模式

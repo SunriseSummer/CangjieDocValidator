@@ -283,7 +283,7 @@ main() {
 
 如下代码所示，在包 `a` 中，虽然接口访问修饰符为 `private`，但 `Foo` 的扩展仍然会被导出。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 // package a
@@ -339,7 +339,7 @@ extend<T> Foo<T> <: I4 & I3 where T <: I2 {}
 <!-- compile.error -access_rules3 -->
 <!-- cfg="-p a --output-type=staticlib" -->
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 // package a

@@ -2,7 +2,7 @@
 
 使用 HashSet 类型需要导入 collection 包：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.collection.*
@@ -31,7 +31,7 @@ b = a // Type mismatch
 
 仓颉中可以使用构造函数的方式构造一个指定的 HashSet。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 let a = HashSet<String>() // Created an empty HashSet whose element type is String
@@ -93,7 +93,7 @@ The size of hashset is 3
 
 当想判断某个元素是否被包含在某个 HashSet 中时，可以使用 contains 函数。如果该元素存在会返回 true，否则返回 false。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 let mySet = HashSet<Int64>([0, 1, 2])

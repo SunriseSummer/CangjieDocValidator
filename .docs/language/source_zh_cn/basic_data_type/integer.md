@@ -49,7 +49,7 @@ let z: Int32 = 0x8000_0000 // Error, 0x8000_0000 out of the range of Int32
 
 加入了后缀的整数字面量可以通过以下方式使用：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
 var x = 100i8  // x is 100 with type Int8
 var y = 0x10u64 // y is 16 with type UInt64

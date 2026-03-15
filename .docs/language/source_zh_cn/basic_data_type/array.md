@@ -6,7 +6,7 @@
 
 仓颉使用 `Array<T>` 来表示 Array 类型。T 表示 Array 的元素类型，T 可以是任意类型。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
 var a: Array<Int64> = [0, 0, 0, 0] // Array whose element type is Int64
 var b: Array<String> = ["a1", "a2", "a3"] // Array whose element type is String
@@ -25,7 +25,7 @@ b = a // Type mismatch
 
 编译器会根据上下文自动推断 Array 字面量的类型。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
 let a: Array<String> = [] // Created an empty Array whose element type is String
 let b = [1, 2, 3, 3, 2, 1] // Created a Array whose element type is Int64, containing elements 1, 2, 3, 3, 2, 1
@@ -35,7 +35,7 @@ let b = [1, 2, 3, 3, 2, 1] // Created a Array whose element type is Int64, conta
 
 需要注意的是，当通过 repeat 指定的初始值初始化 Array 时，该构造函数不会拷贝 repeat，如果 repeat 是一个引用类型，构造后数组的每一个元素都将指向相同的引用。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
 let a = Array<Int64>() // Created an empty Array whose element type is Int64
 let c = Array<Int64>(3, repeat: 0) // Created an Array whose element type is Int64, length is 3 and all elements are initialized as 0
@@ -110,7 +110,7 @@ main() {
 
 如果想获取某一段 Array 的元素，可以在下标中传入 Range 类型的值，就可以一次性取得 Range 对应范围的一段 Array。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
 let arr1 = [0, 1, 2, 3, 4, 5, 6]
 let arr2 = arr1[0..5] // arr2 contains the elements 0, 1, 2, 3, 4
@@ -120,7 +120,7 @@ let arr2 = arr1[0..5] // arr2 contains the elements 0, 1, 2, 3, 4
 
 当省略 start 时，Range 会从 0 开始；当省略 end 时，Range 的 end 会延续到最后一位。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
 let arr1 = [0, 1, 2, 3, 4, 5, 6]
 let arr2 = arr1[..3] // arr2 contains elements 0, 1, 2
@@ -183,14 +183,14 @@ type varr2 = VArray // Error
 
 `VArray` 可以由一个数组的字面量来进行初始化，左值 `a` 必须标识出 `VArray` 的实例化类型：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
 var a: VArray<Int64, $3> = [1, 2, 3]
 ```
 
 同时，它拥有两个构造函数：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
 // VArray<T, $N>(initElement: (Int64) -> T)
 let b = VArray<Int64, $5>({ i => i }) // [0, 1, 2, 3, 4]
@@ -215,7 +215,7 @@ let c = VArray<Int64, $5>(repeat: 0) // [0, 0, 0, 0, 0]
 
 - 用于获取 `VArray` 长度的 `size` 成员：
 
-  <!-- check:ast -->
+  <!-- check:build_only -->
   ```cangjie
   var a: VArray<Int64, $3> = [1, 2, 3]
   let s = a.size // s is 3

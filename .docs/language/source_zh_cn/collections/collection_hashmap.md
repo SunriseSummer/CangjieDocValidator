@@ -2,7 +2,7 @@
 
 使用 HashMap 类型需要导入 collection 包：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.collection.*
@@ -33,7 +33,7 @@ b = a // Type mismatch
 
 仓颉中可以使用构造函数的方式构造一个指定的 HashMap。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 let a = HashMap<String, Int64>() // Created an empty HashMap whose key type is String and value type is Int64
@@ -95,7 +95,7 @@ The size of hashmap is 3
 
 当想判断 HashMap 中是否包含某个键时，可以使用 contains 函数。如果该键存在会返回 true，否则返回 false。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
@@ -105,7 +105,7 @@ let b = map.contains("d") // b == false
 
 当想访问指定键对应的元素时，可以使用下标语法访问（下标的类型必须是键类型）。使用不存在的键作为索引会触发运行时异常。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])

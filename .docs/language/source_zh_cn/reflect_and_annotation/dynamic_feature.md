@@ -22,7 +22,7 @@
 
 可以使用三种静态的 `of` 方法来生成 TypeInfo 信息类。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 public class TypeInfo {
@@ -61,7 +61,7 @@ default.Foo
 
 此外 TypeInfo 还提供了静态函数 `get`，该接口可通过传入的类型名称获取 TypeInfo。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 public class TypeInfo {

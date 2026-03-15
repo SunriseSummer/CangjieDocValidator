@@ -75,7 +75,7 @@ func f() {
 
 <!-- compile.error -error-->
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 func f() {

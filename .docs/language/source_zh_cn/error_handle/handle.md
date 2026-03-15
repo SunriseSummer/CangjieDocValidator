@@ -215,7 +215,7 @@ main() {
 
 try-with-resources 表达式中的 `ResourceSpecification` 的类型必须实现 Resource 接口：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 interface Resource {

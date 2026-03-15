@@ -173,7 +173,7 @@ main(): Int64 {
 <!-- run -pkg1 -->
 <!-- cfg="-p prod --mock=on --output-type=dylib" -->
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 package prod

@@ -2,7 +2,7 @@
 
 使用 ArrayList 类型需要导入 collection 包：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.collection.*
@@ -35,7 +35,7 @@ b = a // Type mismatch
 
 仓颉中可以使用构造函数的方式构造一个指定的 ArrayList。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 let a = ArrayList<String>() // Created an empty ArrayList whose element type is String
@@ -95,7 +95,7 @@ The size of arraylist is 3
 
 当想访问单个指定位置的元素时，可以使用下标语法访问（下标的类型必须是 Int64）。非空 ArrayList 的第一个元素总是从位置 0 开始的。可以从 0 开始访问 ArrayList 的任意一个元素，直到最后一个位置（ArrayList 的 size - 1）。使用负数或大于等于 size 的索引会触发运行时异常。
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 let a = list[0] // a == 0

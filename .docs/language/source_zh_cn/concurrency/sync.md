@@ -31,7 +31,7 @@
 
 以 `Int8` 类型为例，对应的原子操作类型声明如下：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 class AtomicInt8 {
@@ -205,7 +205,7 @@ public class Mutex <: UniqueLock {
 
 下方示例演示了如何使用 `Mutex` 来保护对全局共享变量 `count` 的访问，对 `count` 的操作即属于临界区：
 
-<!-- check:ast -->
+<!-- check:run -->
 
 ```cangjie
 import std.sync.Mutex
@@ -288,7 +288,7 @@ get the lock, do something
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 import std.sync.Mutex
@@ -413,7 +413,7 @@ count = 220
 
 `Condition` 是与某个互斥锁绑定的条件变量（也就是等待队列），`Condition` 实例由互斥锁创建，一个互斥锁可以创建多个 `Condition` 实例。`Condition` 可以使线程阻塞并等待来自另一个线程的信号以恢复执行。这是一种利用共享变量进行线程同步的机制，主要提供如下方法：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 public class Mutex <: UniqueLock {

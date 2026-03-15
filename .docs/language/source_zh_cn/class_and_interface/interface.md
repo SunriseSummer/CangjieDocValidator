@@ -16,7 +16,7 @@
 
 <!-- verify -interface -->
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 interface I { // 'open' modifier is optional.

@@ -23,7 +23,7 @@ println(tuple3[1])      // false
 
 元组类型的字面量使用 `(e1, e2, ..., eN)` 表示，其中 `e1` 到 `eN` 是表达式，多个表达式之间使用逗号分隔。下面的例子中，分别定义了一个 `(Int64, Float64)` 类型的变量 `x`，以及一个 `(Int64, Float64, String)` 类型的变量 `y`，并且使用元组类型的字面量为它们定义了初值：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 ```cangjie
 let x: (Int64, Float64) = (3, 3.141592)
 let y: (Int64, Float64, String) = (3, 3.141592, "PI")

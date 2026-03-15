@@ -27,7 +27,7 @@ Stream 主要面向处理原始二进制数据，Stream 中最小的数据单元
 
 InputStream 接口定义：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 interface InputStream {
@@ -65,7 +65,7 @@ main() {
 
 OutputStream 接口定义：
 
-<!-- check:ast -->
+<!-- check:build_only -->
 
 ```cangjie
 interface OutputStream {
