@@ -104,17 +104,21 @@ count = 1000
 
 以下是使用整数类型原子操作的一些其他正确示例：
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-var obj: AtomicInt32 = AtomicInt32(1)
-var x = obj.load() // x: 1, the type is Int32
-x = obj.swap(2) // x: 1
-x = obj.load() // x: 2
-var y = obj.compareAndSwap(2, 3) // y: true, the type is Bool.
-y = obj.compareAndSwap(2, 3) // y: false, the value in obj is no longer 2 but 3. Therefore, the CAS operation fails.
-x = obj.fetchAdd(1) // x: 3
-x = obj.load() // x: 4
+import std.sync.*
+
+main() {
+    var obj: AtomicInt32 = AtomicInt32(1)
+    var x = obj.load() // x: 1, the type is Int32
+    x = obj.swap(2) // x: 1
+    x = obj.load() // x: 2
+    var y = obj.compareAndSwap(2, 3) // y: true, the type is Bool.
+    y = obj.compareAndSwap(2, 3) // y: false, the value in obj is no longer 2 but 3. Therefore, the CAS operation fails.
+    x = obj.fetchAdd(1) // x: 3
+    x = obj.load() // x: 4
+}
 ```
 
 `Bool` 类型和引用类型的原子操作只提供读写和交换操作：

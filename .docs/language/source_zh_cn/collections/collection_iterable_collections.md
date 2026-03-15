@@ -30,39 +30,45 @@ interface Iterator<T> <: Iterable<T> {
 
 假设有这样一段 for-in 代码，如下所示。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let list = [1, 2, 3]
-for (i in list) {
-    println(i)
+main() {
+    let list = [1, 2, 3]
+    for (i in list) {
+        println(i)
+    }
 }
 ```
 
 它等价于如下形式的 while 代码。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let list = [1, 2, 3]
-var it = list.iterator()
-while (true) {
-    match (it.next()) {
-        case Some(i) => println(i)
-        case None => break
+main() {
+    let list = [1, 2, 3]
+    var it = list.iterator()
+    while (true) {
+        match (it.next()) {
+            case Some(i) => println(i)
+            case None => break
+        }
     }
 }
 ```
 
 另外一种常见的遍历 Iterable 类型的方法是在 while 表达式的条件中使用模式匹配，比如上面 while 代码的另一种等价写法是：
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let list = [1, 2, 3]
-var it = list.iterator()
-while (let Some(i) <- it.next()) {
-    println(i)
+main() {
+    let list = [1, 2, 3]
+    var it = list.iterator()
+    while (let Some(i) <- it.next()) {
+        println(i)
+    }
 }
 ```
 

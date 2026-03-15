@@ -109,25 +109,33 @@ ArrayList 也支持下标中使用 Range 的语法，详见 [Array](../basic_dat
 
 可以使用下标语法对某个位置的元素进行修改。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let list = ArrayList<Int64>([0, 1, 2])
-list[0] = 3
+import std.collection.ArrayList
+
+main() {
+    let list = ArrayList<Int64>([0, 1, 2])
+    list[0] = 3
+}
 ```
 
 ArrayList 是引用类型，ArrayList 在作为表达式使用时不会拷贝副本，同一个 ArrayList 实例的所有引用都会共享同样的数据。
 
 因此对 ArrayList 元素的修改会影响到该实例的所有引用。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let list1 = ArrayList<Int64>([0, 1, 2])
-let list2 = list1
-list2[0] = 3
-// list1 contains elements 3, 1, 2
-// list2 contains elements 3, 1, 2
+import std.collection.ArrayList
+
+main() {
+    let list1 = ArrayList<Int64>([0, 1, 2])
+    let list2 = list1
+    list2[0] = 3
+    // list1 contains elements 3, 1, 2
+    // list2 contains elements 3, 1, 2
+}
 ```
 
 如果需要将单个元素添加到 ArrayList 的末尾，请使用 add 函数。如果希望同时添加多个元素到末尾，可以使用 `add(all!: Collection<T>)` 函数，这个函数可以接受其他相同元素类型的 Collection 类型，如 Array。Collection 类型详见[基础 Collection 类型概述](collection_overview.md)。
@@ -148,20 +156,28 @@ main() {
 
 可以通过 `add(T, at!: Int64)` 和 `add(all!: Collection<T>, at!: Int64)` 函数将指定的单个元素或相同元素类型的 Collection 值插入到指定索引的位置。该索引处的元素和后面的元素会被挪后以腾出空间。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let list = ArrayList<Int64>([0, 1, 2]) // list contains elements 0, 1, 2
-list.add(4, at: 1) // list contains elements 0, 4, 1, 2
+import std.collection.ArrayList
+
+main() {
+    let list = ArrayList<Int64>([0, 1, 2]) // list contains elements 0, 1, 2
+    list.add(4, at: 1) // list contains elements 0, 4, 1, 2
+}
 ```
 
 从 ArrayList 中删除元素，可以使用 remove 函数，需要指定删除的索引。该索引处后面的元素会前移以填充空间。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let list = ArrayList<String>(["a", "b", "c", "d"]) // list contains the elements "a", "b", "c", "d"
-list.remove(at: 1) // Delete the element at subscript 1, now the list contains elements "a", "c", "d"
+import std.collection.ArrayList
+
+main() {
+    let list = ArrayList<String>(["a", "b", "c", "d"]) // list contains the elements "a", "b", "c", "d"
+    list.remove(at: 1) // Delete the element at subscript 1, now the list contains elements "a", "c", "d"
+}
 ```
 
 ## 增加 ArrayList 的大小

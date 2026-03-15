@@ -155,13 +155,15 @@ Array 虽然是 struct 类型，但其内部持有的只是元素的引用，因
 
 因此对 Array 元素的修改会影响到该实例的所有引用。
 
-<!-- check:skip -->
+<!-- check:run -->
 ```cangjie
-let arr1 = [0, 1, 2]
-let arr2 = arr1
-arr2[0] = 3
-// arr1 contains elements 3, 1, 2
-// arr2 contains elements 3, 1, 2
+main() {
+    let arr1 = [0, 1, 2]
+    let arr2 = arr1
+    arr2[0] = 3
+    // arr1 contains elements 3, 1, 2
+    // arr2 contains elements 3, 1, 2
+}
 ```
 
 ## VArray
@@ -200,11 +202,13 @@ let c = VArray<Int64, $5>(repeat: 0) // [0, 0, 0, 0, 0]
 
 - 用于下标访问和修改的 `[]` 操作符方法：
 
-  <!-- check:skip -->
+  <!-- check:run -->
   ```cangjie
-  var a: VArray<Int64, $3> = [1, 2, 3]
-  let i = a[1] // i is 2
-  a[2] = 4 // a is [1, 2, 4]
+  main() {
+      var a: VArray<Int64, $3> = [1, 2, 3]
+      let i = a[1] // i is 2
+      a[2] = 4 // a is [1, 2, 4]
+  }
   ```
 
   下标访问的下标类型必须为 `Int64`。

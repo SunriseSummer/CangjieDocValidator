@@ -109,36 +109,48 @@ HashSet 的可变性是一个非常有用的特征，可以让同一个 HashSet 
 
 如果需要将单个元素添加到 HashSet 里，请使用 add 函数。如果希望同时添加多个元素，可以使用 `add(all!: Collection<T>)` 函数，这个函数可以接受另一个相同元素类型的 Collection 类型（例如 Array）。当元素不存在时，add 函数会执行添加的操作，当 HashSet 中存在相同元素时，add 函数将不会有效果。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let mySet = HashSet<Int64>()
-mySet.add(0) // mySet contains elements 0
-mySet.add(0) // mySet contains elements 0
-mySet.add(1) // mySet contains elements 0, 1
-let li = [2, 3]
-mySet.add(all: li) // mySet contains elements 0, 1, 2, 3
+import std.collection.HashSet
+
+main() {
+    let mySet = HashSet<Int64>()
+    mySet.add(0) // mySet contains elements 0
+    mySet.add(0) // mySet contains elements 0
+    mySet.add(1) // mySet contains elements 0, 1
+    let li = [2, 3]
+    mySet.add(all: li) // mySet contains elements 0, 1, 2, 3
+}
 ```
 
 HashSet 是引用类型，HashSet 在作为表达式使用时不会拷贝副本，同一个 HashSet 实例的所有引用都会共享同样的数据。
 
 因此对 HashSet 元素的修改会影响到该实例的所有引用。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let set1 = HashSet<Int64>([0, 1, 2])
-let set2 = set1
-set2.add(3)
-// set1 contains elements 0, 1, 2, 3
-// set2 contains elements 0, 1, 2, 3
+import std.collection.HashSet
+
+main() {
+    let set1 = HashSet<Int64>([0, 1, 2])
+    let set2 = set1
+    set2.add(3)
+    // set1 contains elements 0, 1, 2, 3
+    // set2 contains elements 0, 1, 2, 3
+}
 ```
 
 从 HashSet 中删除元素，可以使用 remove 函数，需要指定删除的元素。
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-let mySet = HashSet<Int64>([0, 1, 2, 3])
-mySet.remove(1) // mySet contains elements 0, 2, 3
+import std.collection.HashSet
+
+main() {
+    let mySet = HashSet<Int64>([0, 1, 2, 3])
+    mySet.remove(1) // mySet contains elements 0, 2, 3
+}
 ```

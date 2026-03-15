@@ -75,5 +75,6 @@ class TestCase:
     source_file: str
     heading: str
     has_macro_def: bool = False      # 是否包含宏定义代码块
+    needs_stdx: bool = False         # 是否需要 stdx 扩展库
     c_files: dict = field(default_factory=dict)  # C 源文件 {path: code}
     project_dir: Optional['Path'] = None  # 生成的项目目录

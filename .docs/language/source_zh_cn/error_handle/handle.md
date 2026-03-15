@@ -330,12 +330,14 @@ true
 
 **通配符模式**的语法是 `_`，它可以捕获同级 try 块内抛出的任意类型的异常，等价于类型模式中的 `e: Exception`，即捕获 Exception 子类所定义的异常。示例如下：
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-try {
-    throw OverflowException()
-} catch (_) {
-    println("catch an exception!")
+main() {
+    try {
+        throw OverflowException()
+    } catch (_) {
+        println("catch an exception!")
+    }
 }
 ```

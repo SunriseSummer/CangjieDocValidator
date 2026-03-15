@@ -11,6 +11,11 @@ from typing import Optional
 from .models import CodeBlock, TestCase
 
 
+def _needs_stdx(code: str) -> bool:
+    """检测代码是否需要 stdx 扩展库"""
+    return bool(re.search(r'^\s*import\s+stdx\.', code, re.MULTILINE))
+
+
 def _sanitize(s: str) -> str:
     """将字符串转为安全的目录名"""
     s = re.sub(r'[^\w\u4e00-\u9fff-]', '_', s)
@@ -57,6 +62,7 @@ def blocks_to_testcases(blocks: list, md_path: str) -> list:
             expected_output=b.expected_output,
             source_file=b.source_file,
             heading=b.heading,
+            needs_stdx=_needs_stdx(b.code),
         ))
 
     # 处理项目组
@@ -110,6 +116,7 @@ def blocks_to_testcases(blocks: list, md_path: str) -> list:
             md_path, proj_blocks[0].heading,
             proj_blocks[0].block_index, proj_name
         )
+        all_code = '\n'.join(files.values())
         testcases.append(TestCase(
             name=name,
             directive=directive,
@@ -118,6 +125,7 @@ def blocks_to_testcases(blocks: list, md_path: str) -> list:
             source_file=proj_blocks[0].source_file,
             heading=proj_blocks[0].heading,
             has_macro_def=has_macro_def,
+            needs_stdx=_needs_stdx(all_code),
             c_files=c_files,
         ))
 

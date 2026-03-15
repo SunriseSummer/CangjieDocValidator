@@ -2,15 +2,75 @@
 cjpm 项目生成模块
 
 根据 TestCase 创建 cjpm 项目目录结构，包括标准项目和宏项目的多模块结构。
+支持 stdx 扩展库的自动下载和配置。
 """
 
+import os
 import re
 import shutil
 import subprocess
+import urllib.request
+import zipfile
 from pathlib import Path
 from typing import Optional
 
 from .models import TestCase, _ACCESS_MOD_RE
+
+
+# ============================================================
+# stdx 扩展库支持
+# ============================================================
+
+STDX_DOWNLOAD_URL = (
+    'https://github.com/SunriseSummer/CangjieSDK/releases/download/'
+    '1.0.5/cangjie-stdx-linux-x64-1.0.5.1.zip'
+)
+
+_stdx_path: Optional[Path] = None
+
+
+def _get_stdx_path() -> Optional[Path]:
+    """获取 stdx 库路径，首次调用时自动下载解压。
+
+    返回 stdx 的 static 库目录路径，或在下载失败时返回 None。
+    """
+    global _stdx_path
+    if _stdx_path is not None:
+        return _stdx_path
+
+    cache_dir = Path.home() / '.cache' / 'cangjie-doc-validator'
+    stdx_dir = cache_dir / 'cangjie-stdx'
+    static_dir = stdx_dir / 'linux_x86_64_cjnative' / 'static' / 'stdx'
+
+    if static_dir.exists():
+        _stdx_path = static_dir
+        return _stdx_path
+
+    # 下载并解压
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    zip_path = cache_dir / 'cangjie-stdx.zip'
+
+    try:
+        if not zip_path.exists():
+            print(f'  📦 正在下载 stdx 扩展库...')
+            urllib.request.urlretrieve(STDX_DOWNLOAD_URL, str(zip_path))
+            print(f'  ✅ stdx 下载完成')
+
+        print(f'  📦 正在解压 stdx...')
+        stdx_dir.mkdir(parents=True, exist_ok=True)
+        with zipfile.ZipFile(str(zip_path), 'r') as zf:
+            zf.extractall(str(stdx_dir))
+        print(f'  ✅ stdx 解压完成: {static_dir}')
+
+        if static_dir.exists():
+            _stdx_path = static_dir
+            return _stdx_path
+        else:
+            print(f'  ⚠️ stdx 目录结构异常')
+            return None
+    except Exception as e:
+        print(f'  ⚠️ stdx 下载/解压失败: {e}')
+        return None
 
 
 # ============================================================
@@ -25,6 +85,19 @@ CJPM_TOML_TEMPLATE = """\
   output-type = "{output_type}"
 
 [dependencies]
+"""
+
+CJPM_TOML_WITH_STDX_TEMPLATE = """\
+[package]
+  cjc-version = "1.0.5"
+  name = "{name}"
+  version = "1.0.0"
+  output-type = "{output_type}"
+
+[dependencies]
+
+[target.x86_64-unknown-linux-gnu.bin-dependencies]
+  path-option = ["{stdx_path}"]
 """
 
 CJPM_TOML_MACRO_MODULE_TEMPLATE = """\
@@ -232,9 +305,21 @@ def _create_standard_project(tc: TestCase, proj_dir: Path, pkg_name: str):
     else:
         output_type = 'executable'
 
-    toml_content = CJPM_TOML_TEMPLATE.format(
-        name=pkg_name, output_type=output_type
-    )
+    if tc.needs_stdx:
+        stdx_path = _get_stdx_path()
+        if stdx_path:
+            toml_content = CJPM_TOML_WITH_STDX_TEMPLATE.format(
+                name=pkg_name, output_type=output_type,
+                stdx_path=str(stdx_path),
+            )
+        else:
+            toml_content = CJPM_TOML_TEMPLATE.format(
+                name=pkg_name, output_type=output_type
+            )
+    else:
+        toml_content = CJPM_TOML_TEMPLATE.format(
+            name=pkg_name, output_type=output_type
+        )
     (proj_dir / 'cjpm.toml').write_text(toml_content, encoding='utf-8')
 
     for rel_path, code in tc.files.items():
