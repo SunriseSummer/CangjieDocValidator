@@ -39,13 +39,13 @@ interface InputStream {
 
 输入流读取示例：
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-import std.io.InputStream
+import std.io.*
 
 main() {
-    let input: InputStream = ...
+    let input: InputStream = ByteArrayStream()
     let buf = Array<Byte>(256, repeat: 0)
     while (input.read(buf) > 0) {
         println(buf)
@@ -81,13 +81,13 @@ interface OutputStream {
 
 输出流写入示例：
 
-<!-- check:skip -->
+<!-- check:run -->
 
 ```cangjie
-import std.io.OutputStream
+import std.io.*
 
 main() {
-    let output: OutputStream = ...
+    let output: OutputStream = ByteArrayStream()
     let buf = Array<Byte>(256, repeat: 111)
     output.write(buf)
     output.flush()

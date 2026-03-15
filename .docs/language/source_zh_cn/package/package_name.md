@@ -2,11 +2,10 @@
 
 在仓颉编程语言中，包声明以关键字 `package` 开头，后接 root 包至当前包由 `.` 分隔路径上所有包的包名。包名必须是合法的普通标识符（不含原始标识符）。例如：
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 package pkg1      // root 包 pkg1
-package pkg1.sub1 // root 包 pkg1 的子包 sub1
 ```
 
 > **注意：**

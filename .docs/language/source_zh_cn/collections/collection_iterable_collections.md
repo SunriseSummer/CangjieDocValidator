@@ -6,23 +6,21 @@ Range、Array、ArrayList 都是通过 Iterable 来支持 for-in 语法的。
 
 Iterable 是如下形式（只展示了核心代码）的一个内置 interface。
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
 interface Iterable<T> {
     func iterator(): Iterator<T>
-    ...
 }
 ```
 
 iterator 函数要求返回的 Iterator 类型是如下形式（只展示了核心代码）的另一个内置 interface。
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
 interface Iterator<T> <: Iterable<T> {
     mut func next(): Option<T>
-    ...
 }
 ```
 

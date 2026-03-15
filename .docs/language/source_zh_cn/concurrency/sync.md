@@ -51,16 +51,16 @@ class AtomicInt8 {
 
 类似的，其他整数类型对应的原子操作类型有：
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
-class AtomicInt16 {...}
-class AtomicInt32 {...}
-class AtomicInt64 {...}
-class AtomicUInt8 {...}
-class AtomicUInt16 {...}
-class AtomicUInt32 {...}
-class AtomicUInt64 {...}
+class AtomicInt16 {}
+class AtomicInt32 {}
+class AtomicInt64 {}
+class AtomicUInt8 {}
+class AtomicUInt16 {}
+class AtomicUInt32 {}
+class AtomicUInt64 {}
 ```
 
 下方示例演示了如何在多线程程序中，使用原子操作实现计数：
@@ -180,7 +180,7 @@ true
 
 `Mutex` 提供的主要成员函数如下：
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 public class Mutex <: UniqueLock {
@@ -448,13 +448,21 @@ public interface Condition {
 
 `wait` 方法接受一个可选参数 `timeout`。需要注意的是，业界很多常用的常规操作系统不保证调度的实时性，因此无法保证一个线程会被阻塞“精确的 N 纳秒”——可能会观察到与系统相关的不精确情况。此外，当前语言规范明确允许实现产生虚假唤醒——在这种情况下，`wait` 返回值是由实现决定的——可能为 `true` 或 `false`。因此鼓励开发者始终将 `wait` 包在一个循环中：
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
-synchronized (obj) {
-  while (<condition is not true>) {
-    obj.wait()
-  }
+import std.sync.*
+
+let obj = Mutex()
+let cond = obj.condition()
+var ready = false
+
+func example() {
+    synchronized (obj) {
+        while (!ready) {
+            cond.wait()
+        }
+    }
 }
 ```
 
@@ -746,7 +754,7 @@ in main, count = 10
 
 使用 core 包中的 `ThreadLocal` 可以创建并使用线程局部变量，每一个线程都有它独立的一个存储空间来保存这些线程局部变量。因此，在每个线程可以安全地访问他们各自的线程局部变量，而不受其他线程的影响。
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 public class ThreadLocal<T> {

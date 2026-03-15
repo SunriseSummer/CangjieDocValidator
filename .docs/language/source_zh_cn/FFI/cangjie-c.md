@@ -275,15 +275,17 @@ main() {
   }
   ```
 
-  <!-- check:skip -->
+  <!-- check:build_only -->
 
   ```cangjie
   foreign func getCount(): Int64
   // Cangjie invokes the preceding C language logic
-  spawn {
-      let r1 = unsafe { getCount() }  // r1 equals 1
-      sleep(Duration.second * 10)
-      let r2 = unsafe { getCount() }  // r2 may not be equal to 2
+  func example() {
+      spawn {
+          let r1 = unsafe { getCount() }  // r1 equals 1
+          sleep(Duration.second * 10)
+          let r2 = unsafe { getCount() }  // r2 may not be equal to 2
+      }
   }
   ```
 
@@ -502,13 +504,18 @@ void cfoo2(int a[3]) { ... }
 
 调用 `CFunc` 时，需要通过 `inout` 修饰 `VArray` 类型变量：
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
-var a: VArray<Int32, $3> = [1, 2, 3]
-unsafe {
-    cfoo1(inout a)
-    cfoo2(inout a)
+foreign func cfoo1(a: CPointer<Int32>): Unit
+foreign func cfoo2(a: CPointer<Int32>): Unit
+
+func example() {
+    var a: VArray<Int32, $3> = [1, 2, 3]
+    unsafe {
+        cfoo1(inout a)
+        cfoo2(inout a)
+    }
 }
 ```
 

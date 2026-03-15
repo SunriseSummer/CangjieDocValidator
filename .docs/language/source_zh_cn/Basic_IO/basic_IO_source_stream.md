@@ -148,11 +148,10 @@ main() {
 
 File 类定义：
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 public class File <: Resource & IOStream & Seekable {
-    ...
 }
 ```
 
@@ -197,11 +196,14 @@ let file = File("./tempFile.txt", Write)
 
 try-with-resource 语法使用示例：
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
-try (file2 = File("./tempFile.txt", Read)) {
-    ...
-    // 结束使用后自动释放文件
+import std.fs.*
+
+func example() {
+    try (file2 = File("./tempFile.txt", Read)) {
+        // 结束使用后自动释放文件
+    }
 }
 ```
