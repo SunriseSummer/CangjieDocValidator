@@ -374,7 +374,7 @@ class Rectangle {
 
 <!-- compile.error -error-->
 
-<!-- check:build_only -->
+<!-- check:compile_error -->
 
 ```cangjie
 package a

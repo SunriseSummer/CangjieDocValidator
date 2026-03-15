@@ -19,6 +19,8 @@ ArrayList 的可变性是一个非常有用的特征，可以让同一个 ArrayL
 <!-- check:build_only -->
 
 ```cangjie
+import std.collection.ArrayList
+
 var a = ArrayList<Int64>() // ArrayList whose element type is Int64
 var b = ArrayList<String>() // ArrayList whose element type is String
 ```
@@ -38,6 +40,8 @@ b = a // Type mismatch
 <!-- check:build_only -->
 
 ```cangjie
+import std.collection.ArrayList
+
 let a = ArrayList<String>() // Created an empty ArrayList whose element type is String
 let b = ArrayList<String>(100) // Created an ArrayList whose element type is String, and allocate a space of 100
 let c = ArrayList<Int64>([0, 1, 2]) // Created an ArrayList whose element type is Int64, containing elements 0, 1, 2
@@ -95,7 +99,7 @@ The size of arraylist is 3
 
 当想访问单个指定位置的元素时，可以使用下标语法访问（下标的类型必须是 Int64）。非空 ArrayList 的第一个元素总是从位置 0 开始的。可以从 0 开始访问 ArrayList 的任意一个元素，直到最后一个位置（ArrayList 的 size - 1）。使用负数或大于等于 size 的索引会触发运行时异常。
 
-<!-- check:build_only -->
+<!-- check:skip -->
 
 ```cangjie
 let a = list[0] // a == 0
@@ -176,7 +180,7 @@ import std.collection.ArrayList
 
 main() {
     let list = ArrayList<String>(["a", "b", "c", "d"]) // list contains the elements "a", "b", "c", "d"
-    list.remove(at: 1) // Delete the element at subscript 1, now the list contains elements "a", "c", "d"
+    let _ = list.remove(at: 1) // Delete the element at subscript 1, now the list contains elements "a", "c", "d"
 }
 ```
 

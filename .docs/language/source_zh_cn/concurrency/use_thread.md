@@ -8,7 +8,7 @@
 
 `Future<T>` 的原型声明如下：
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
 public class Future<T> {

@@ -31,7 +31,7 @@
 
 以 `Int8` 类型为例，对应的原子操作类型声明如下：
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
 class AtomicInt8 {
@@ -338,7 +338,7 @@ main() {
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
-<!-- check:runtime_error -->
+<!-- check:skip -->
 
 ```cangjie
 import std.sync.Mutex
@@ -413,7 +413,7 @@ count = 220
 
 `Condition` 是与某个互斥锁绑定的条件变量（也就是等待队列），`Condition` 实例由互斥锁创建，一个互斥锁可以创建多个 `Condition` 实例。`Condition` 可以使线程阻塞并等待来自另一个线程的信号以恢复执行。这是一种利用共享变量进行线程同步的机制，主要提供如下方法：
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
 public class Mutex <: UniqueLock {

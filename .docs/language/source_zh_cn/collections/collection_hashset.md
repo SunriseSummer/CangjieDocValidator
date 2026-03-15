@@ -15,6 +15,8 @@ import std.collection.*
 <!-- check:build_only -->
 
 ```cangjie
+import std.collection.HashSet
+
 var a = HashSet<Int64>() // HashSet whose element type is Int64
 var b = HashSet<String>() // HashSet whose element type is String
 ```
@@ -34,6 +36,8 @@ b = a // Type mismatch
 <!-- check:build_only -->
 
 ```cangjie
+import std.collection.HashSet
+
 let a = HashSet<String>() // Created an empty HashSet whose element type is String
 let b = HashSet<String>(100) // Created a HashSet whose capacity is 100
 let c = HashSet<Int64>([0, 1, 2]) // Created a HashSet whose element type is Int64, containing elements 0, 1, 2
@@ -96,6 +100,8 @@ The size of hashset is 3
 <!-- check:build_only -->
 
 ```cangjie
+import std.collection.HashSet
+
 let mySet = HashSet<Int64>([0, 1, 2])
 let a = mySet.contains(0) // a == true
 let b = mySet.contains(-1) // b == false
@@ -136,7 +142,7 @@ import std.collection.HashSet
 main() {
     let set1 = HashSet<Int64>([0, 1, 2])
     let set2 = set1
-    set2.add(3)
+    let _ = set2.add(3)
     // set1 contains elements 0, 1, 2, 3
     // set2 contains elements 0, 1, 2, 3
 }
@@ -151,6 +157,6 @@ import std.collection.HashSet
 
 main() {
     let mySet = HashSet<Int64>([0, 1, 2, 3])
-    mySet.remove(1) // mySet contains elements 0, 2, 3
+    let _ = mySet.remove(1) // mySet contains elements 0, 2, 3
 }
 ```

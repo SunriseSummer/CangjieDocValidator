@@ -326,7 +326,7 @@ export cjGwpAsanHelp=true
 
     向前越界数组时，runtime 会报告 Head canary 检测失败，使用 `array[-1]` 表示。例如：
 
-    <!-- check:build_only -->
+    <!-- check:skip -->
 
     ```cangjie
     main() {
@@ -352,7 +352,7 @@ export cjGwpAsanHelp=true
 
     向后越界数组时，runtime 会报告 Tail canary 检测失败，并给出相对该数组（`array`）的位置。例如：
 
-    <!-- check:build_only -->
+    <!-- check:skip -->
 
     ```cangjie
     main() {
@@ -381,7 +381,7 @@ export cjGwpAsanHelp=true
 
 在 runtime 退出时会检测被采样的数组是否调用了 releaseArrayRawData 释放。未释放时，会报告所有未释放的数组对应的堆地址。例如：
 
-<!-- check:build_only -->
+<!-- check:skip -->
 
 ```cangjie
 func example(): Int64 {

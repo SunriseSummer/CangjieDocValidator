@@ -51,7 +51,7 @@ src
 
 则 `a.cj`、`b.cj`、`c.cj`、`main.cj` 中的包声明可以为:
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
 // a.cj
@@ -60,7 +60,7 @@ src
 package default.directory_0.directory_1
 ```
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
 // b.cj
@@ -69,7 +69,7 @@ package default.directory_0.directory_1
 package default.directory_0.directory_1
 ```
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
 // c.cj
