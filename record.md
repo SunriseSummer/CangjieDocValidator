@@ -110,16 +110,18 @@ project_dir/
 
 | 标注类型 | 数量 | 说明 |
 |---------|------|------|
-| `check:run` | 235 | 编译并运行验证 |
-| `check:build_only` | 204 | 仅编译验证 |
+| `check:run` | 237 | 编译并运行验证 |
+| `check:build_only` | 224 | 仅编译验证 |
 | `check:compile_error` | 130 | 预期编译失败 |
-| `check:ast` | 81 | tree-sitter 语法解析检查 |
-| `check:skip` | 73 | 跳过（伪代码/特殊环境/死锁示例等） |
+| `check:ast` | 85 | tree-sitter 语法解析检查（跨包引用等无法独立编译的代码块） |
+| `check:skip` | 45 | 跳过（多包伪代码/特殊环境/死锁示例等） |
 | `check:runtime_error` | 6 | 预期运行时错误 |
 
 主要优化措施：
-- 将顶层赋值/表达式语句代码块包装在 `main()` 中，从 `check:skip` 提升为 `check:run`（collections, basic_data_type, concurrency, error_handle 目录共 25 个块）
-- 将自包含的声明代码块从 `check:ast` 提升为 `check:build_only`（实际编译验证，共 65 个块）
+- 将包含 `...` 伪代码的代码块替换为具体的可编译代码（如 `HashMap<K,V> = ...` → `HashMap<K,V>()`）
+- 将顶层赋值/表达式语句代码块包装在 `main()` 或函数中，从 `check:skip` 提升为 `check:run`/`check:build_only`
+- 将自包含的声明代码块从 `check:ast` 提升为 `check:build_only`（实际编译验证）
+- 将误标为 ````cangjie` 的测试输出文本改为 ````text`（Appendix/compile_options.md）
 - 添加 stdx 自动下载支持（`project.py`），使 Net 章节 HTTP/WebSocket 示例可实际编译运行
 - stdx 下载地址：`https://github.com/SunriseSummer/CangjieSDK/releases/download/1.0.5/cangjie-stdx-linux-x64-1.0.5.1.zip`
 
@@ -129,21 +131,21 @@ project_dir/
 |------|--------|---------|---------|
 | first_understanding/ | 1 | 1 | `<!-- verify -->` → `<!-- check:run -->` |
 | basic_programming_concepts/ | 3 | 35 | const G 和 Planet 合并为 project=const_gravity |
-| basic_data_type/ | 10 | 46 | 顶层赋值包装为 main()，提升为 check:run/build_only |
+| basic_data_type/ | 10 | 46 | 顶层赋值包装为 main()；三引号/原始字符串示例包装为 build_only |
 | function/ | 10 | 89 | 操作符重载 Point 类与 main 合并为 project=overloadOperator |
-| collections/ | 4 | 11 | 顶层方法调用/赋值包装为 main()，提升为 check:run |
+| collections/ | 4 | 11 | 伪代码 `...` 替换为具体代码，提升为 build_only/run |
 | class_and_interface/ | 5 | 71 | 跨包访问修饰符示例标注；接口继承合并为 project=myInt |
 | struct/ | 3 | 24 | 跨包访问修饰符示例标注 |
 | enum_and_pattern_match/ | 5 | 45 | 类型模式 4 块合并为 project=mergeCase |
 | generic/ | 9 | 26 | composition 函数与调用合并为 project=composition |
 | error_handle/ | 3 | 16 | try-catch 包装为 main()；异常示例改为 runtime_error |
-| concurrency/ | 5 | 21 | 原子操作包装为 main()；死锁/非法解锁正确标注 |
+| concurrency/ | 5 | 21 | API 文档改为 ast；伪代码替换为具体代码；死锁正确标注 |
 | extension/ | 4 | 24 | 直接扩展/接口扩展合并为项目；跨包示例标注 |
-| Basic_IO/ | 3 | 7 | 标准输入/文件依赖改为 skip；其余改为 build_only |
-| FFI/ | 1 | 13 | VArray 参数/@C struct 标注；需外部库的改为 skip |
+| Basic_IO/ | 3 | 7 | 伪代码替换为 ByteArrayStream 等；文件操作改为 build_only |
+| FFI/ | 1 | 13 | @C struct 改为 build_only；顶层 unsafe/spawn 包装为函数 |
 | Macro/ | 8 | 10 | 语法可解析的标注 ast；宏特殊语法改为 skip |
 | Net/ | 3 | 2 | stdx 示例改为 check:run（自动下载 stdx 支持） |
-| Appendix/ | 3 | 1 | 语法可解析的标注；需特殊编译选项的保留 skip |
+| Appendix/ | 3 | 1 | 误标输出改为 text；unsafe 示例改为 build_only |
 | reflect_and_annotation/ | 2 | 18 | 溢出异常和反射异常改为 runtime_error |
 | compile_and_build/ | 2 | 10 | 语法可解析的标注 |
 

@@ -51,7 +51,7 @@ class AtomicInt8 {
 
 类似的，其他整数类型对应的原子操作类型有：
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
 class AtomicInt16 {}

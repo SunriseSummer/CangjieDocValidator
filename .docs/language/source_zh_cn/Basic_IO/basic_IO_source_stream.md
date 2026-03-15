@@ -152,6 +152,7 @@ File 类定义：
 
 ```cangjie
 public class File <: Resource & IOStream & Seekable {
+    // 完整 API 请参考《仓颉编程语言库 API》
 }
 ```
 
