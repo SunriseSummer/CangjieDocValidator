@@ -106,15 +106,15 @@ project_dir/
 
 ### 3.3 language/source_zh_cn 目录全量标注（本次新增）
 
-共处理约 90 个含代码块的 Markdown 文件，为约 730 个代码块添加了 `<!-- check:XXX -->` 标注。使用 Cangjie SDK 1.0.5 和 tree-sitter-cangjie v1.0.5.3 进行编译运行和语法检查。最终统计：
+共处理约 90 个含代码块的 Markdown 文件，为约 730 个代码块添加了 `<!-- check:XXX -->` 标注。使用 Cangjie SDK 1.0.5 和 tree-sitter-cangjie v1.0.5.4 进行编译运行和语法检查。最终统计：
 
 | 标注类型 | 数量 | 说明 |
 |---------|------|------|
-| `check:run` | 234 | 编译并运行验证 |
-| `check:build_only` | 210 | 仅编译验证 |
+| `check:run` | 233 | 编译并运行验证 |
+| `check:build_only` | 189 | 仅编译验证 |
 | `check:compile_error` | 133 | 预期编译失败 |
-| `check:ast` | 93 | tree-sitter 语法解析检查（跨包引用等无法独立编译的代码块） |
-| `check:skip` | 51 | 跳过（多包伪代码/特殊环境/死锁示例等） |
+| `check:ast` | 108 | tree-sitter 语法解析检查（跨包引用等无法独立编译的代码块） |
+| `check:skip` | 53 | 跳过（多包伪代码/特殊环境/宏语法等） |
 | `check:runtime_error` | 5 | 预期运行时错误 |
 
 主要优化措施：

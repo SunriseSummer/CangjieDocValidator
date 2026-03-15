@@ -183,7 +183,7 @@ class C {
   <!-- verify -macro7 -->
   <!-- cfg="--compile-macro" -->
 
-  <!-- check:ast -->
+  <!-- check:skip -->
 
   ```cangjie
   // file macro_definition.cj
@@ -280,7 +280,7 @@ class C {
 <!-- run -macro72 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 macro package define

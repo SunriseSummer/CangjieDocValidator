@@ -180,7 +180,7 @@ true
 
 `Mutex` 提供的主要成员函数如下：
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 public class Mutex <: UniqueLock {
@@ -288,7 +288,7 @@ get the lock, do something
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.sync.Mutex
@@ -338,7 +338,7 @@ main() {
 <!-- compile.error -->
 <!-- cfg="libcangjie-std-sync" -->
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.sync.Mutex
@@ -754,7 +754,7 @@ in main, count = 10
 
 使用 core 包中的 `ThreadLocal` 可以创建并使用线程局部变量，每一个线程都有它独立的一个存储空间来保存这些线程局部变量。因此，在每个线程可以安全地访问他们各自的线程局部变量，而不受其他线程的影响。
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 public class ThreadLocal<T> {

@@ -186,7 +186,7 @@ public func test(a: String, b: String): String {
 <!-- run -pkg1 -->
 <!-- cfg="-lprod -L . --test" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 package test

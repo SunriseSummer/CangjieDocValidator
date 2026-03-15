@@ -1,7 +1,7 @@
 # 测试报告
 
 - **扫描目录**: `.docs/language/source_zh_cn/`
-- **生成时间**: 2026-03-15 06:52:53 UTC
+- **生成时间**: 2026-03-15 16:17:04 UTC
 - **文档文件数**: 106
 
 ## 总览
@@ -9,8 +9,8 @@
 | 指标 | 数量 |
 |------|------|
 | ❌ 测试总数 | 657 |
-| ✅ 通过 | 653 |
-| ❌ 失败 | 4 |
+| ✅ 通过 | 656 |
+| ❌ 失败 | 1 |
 | ⏭️ 跳过 | 51 |
 | ⚠️ 未标注 | 0 |
 
@@ -34,18 +34,12 @@
 | `--obf-config <file>` | `ast` | ✅ PASS |
 | `--test-only` <sup>[frontend]</sup> | `run` | ✅ PASS |
 
-### ❌ `.docs/language/source_zh_cn/Appendix/tokenkind_type.md`
-
-| 测试用例 | 类型 | 结果 |
-|----------|------|------|
-| TokenKind 类型 | `ast` | ❌ FAIL |
-
 ### ✅ `.docs/language/source_zh_cn/Basic_IO/basic_IO_overview.md`
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
-| 输入流 | `build_only` | ✅ PASS |
-| 输出流 | `build_only` | ✅ PASS |
+| 输入流 | `ast` | ✅ PASS |
+| 输出流 | `ast` | ✅ PASS |
 
 ### ✅ `.docs/language/source_zh_cn/Basic_IO/basic_IO_process_stream.md`
 
@@ -58,7 +52,7 @@
 | 字符串流 | `run` | ✅ PASS |
 | 字符串流 | `run` | ✅ PASS |
 
-### ✅ `.docs/language/source_zh_cn/Basic_IO/basic_IO_source_stream.md`
+### ❌ `.docs/language/source_zh_cn/Basic_IO/basic_IO_source_stream.md`
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
@@ -70,7 +64,7 @@
 | 常规文件操作 | `run` | ✅ PASS |
 | 常规文件操作 | `build_only` | ✅ PASS |
 | 常规文件操作 | `build_only` | ✅ PASS |
-| 文件流操作 | `run` | ✅ PASS |
+| 文件流操作 | `run` | ❌ FAIL |
 | 文件流操作 | `build_only` | ✅ PASS |
 
 ### ✅ `.docs/language/source_zh_cn/FFI/cangjie-c.md`
@@ -160,7 +154,7 @@
 | 非属性宏 | `ast` | ✅ PASS |
 | 非属性宏 | `ast` | ✅ PASS |
 | 非属性宏 | `ast` | ✅ PASS |
-| 非属性宏 | `ast` | ✅ PASS |
+| 属性宏 | `ast` | ✅ PASS |
 | 属性宏 | `ast` | ✅ PASS |
 | 宏定义中嵌套宏调用 | `ast` | ✅ PASS |
 | 宏调用中嵌套宏调用 | `ast` | ✅ PASS |
@@ -181,6 +175,7 @@
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
+| 快速幂的计算 | `ast` | ✅ PASS |
 | 快速幂的计算 | `ast` | ✅ PASS |
 | 快速幂的计算 | `ast` | ✅ PASS |
 | 快速幂的计算 | `ast` | ✅ PASS |
@@ -478,7 +473,7 @@
 |----------|------|------|
 | ArrayList | `ast` | ✅ PASS |
 | ArrayList | `ast` | ✅ PASS |
-| ArrayList | `build_only` | ✅ PASS |
+| ArrayList | `ast` | ✅ PASS |
 | ArrayList | `compile_error` | ✅ PASS |
 | 访问 ArrayList 成员 | `run` | ✅ PASS |
 | 访问 ArrayList 成员 | `run` | ✅ PASS |
@@ -496,7 +491,7 @@
 |----------|------|------|
 | HashMap | `ast` | ✅ PASS |
 | HashMap | `ast` | ✅ PASS |
-| HashMap | `build_only` | ✅ PASS |
+| HashMap | `ast` | ✅ PASS |
 | HashMap | `compile_error` | ✅ PASS |
 | 访问 HashMap 成员 | `run` | ✅ PASS |
 | 访问 HashMap 成员 | `run` | ✅ PASS |
@@ -514,7 +509,7 @@
 |----------|------|------|
 | HashSet | `ast` | ✅ PASS |
 | HashSet | `ast` | ✅ PASS |
-| HashSet | `build_only` | ✅ PASS |
+| HashSet | `ast` | ✅ PASS |
 | HashSet | `compile_error` | ✅ PASS |
 | 访问 HashSet 成员 | `run` | ✅ PASS |
 | 访问 HashSet 成员 | `run` | ✅ PASS |
@@ -527,8 +522,8 @@
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
-| Iterable 和 Collections | `build_only` | ✅ PASS |
-| Iterable 和 Collections | `build_only` | ✅ PASS |
+| Iterable 和 Collections | `ast` | ✅ PASS |
+| Iterable 和 Collections | `ast` | ✅ PASS |
 | Iterable 和 Collections | `run` | ✅ PASS |
 | Iterable 和 Collections | `run` | ✅ PASS |
 | Iterable 和 Collections | `run` | ✅ PASS |
@@ -573,21 +568,21 @@
 | 线程睡眠指定时长 sleep | `ast` | ✅ PASS |
 | 线程睡眠指定时长 sleep | `run` | ✅ PASS |
 
-### ❌ `.docs/language/source_zh_cn/concurrency/sync.md`
+### ✅ `.docs/language/source_zh_cn/concurrency/sync.md`
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
 | 原子操作 Atomic | `ast` | ✅ PASS |
 | 原子操作 Atomic | `ast` | ✅ PASS |
-| 可重入互斥锁 Mutex | `ast` | ❌ FAIL |
 | Condition | `ast` | ✅ PASS |
-| 线程局部变量 ThreadLocal | `ast` | ❌ FAIL |
 | 原子操作 Atomic | `run` | ✅ PASS |
 | 原子操作 Atomic | `run` | ✅ PASS |
 | 原子操作 Atomic | `run` | ✅ PASS |
 | 可重入互斥锁 Mutex | `run` | ✅ PASS |
 | 可重入互斥锁 Mutex | `run` | ✅ PASS |
+| 可重入互斥锁 Mutex | `build_only` | ✅ PASS |
 | 可重入互斥锁 Mutex | `runtime_error` | ✅ PASS |
+| 可重入互斥锁 Mutex | `build_only` | ✅ PASS |
 | 可重入互斥锁 Mutex | `run` | ✅ PASS |
 | Condition | `build_only` | ✅ PASS |
 | Condition | `run` | ✅ PASS |
@@ -603,12 +598,11 @@
 |----------|------|------|
 | 终止线程 | `run` | ✅ PASS |
 
-### ❌ `.docs/language/source_zh_cn/concurrency/use_thread.md`
+### ✅ `.docs/language/source_zh_cn/concurrency/use_thread.md`
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
 | 使用 `Future<T>` 等待线程结束并获取返回值 | `ast` | ✅ PASS |
-| 访问线程属性 | `ast` | ❌ FAIL |
 | 使用 `Future<T>` 等待线程结束并获取返回值 | `run` | ✅ PASS |
 | 使用 `Future<T>` 等待线程结束并获取返回值 | `run` | ✅ PASS |
 | 使用 `Future<T>` 等待线程结束并获取返回值 | `run` | ✅ PASS |
@@ -1050,6 +1044,7 @@
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
+| 测试框架内置编译标记 | `ast` | ✅ PASS |
 | 确保正确使用整数运算溢出策略的内置编译标记 | `runtime_error` | ✅ PASS |
 | 确保正确使用整数运算溢出策略的内置编译标记 | `compile_error` | ✅ PASS |
 | 确保正确使用整数运算溢出策略的内置编译标记 | `run` | ✅ PASS |
@@ -1120,55 +1115,37 @@
 
 ## 失败详情
 
-### ❌ tokenkind_type__TokenKind_类型__block1
+### ❌ basic_IO_source_stream__文件流操作__block9
 
-- **来源**: `.docs/language/source_zh_cn/Appendix/tokenkind_type.md` > TokenKind 类型
-- **类型**: `ast`
-- **错误**: Syntax errors found: line 164:12
-
-编译输出:
-
-```
-tree-sitter detected 1 syntax error(s):
-  line 164:12 - line 165:7
-```
-
-### ❌ sync__可重入互斥锁_Mutex__block6
-
-- **来源**: `.docs/language/source_zh_cn/concurrency/sync.md` > 可重入互斥锁 Mutex
-- **类型**: `ast`
-- **错误**: Syntax errors found: line 3:4
+- **来源**: `.docs/language/source_zh_cn/Basic_IO/basic_IO_source_stream.md` > 文件流操作
+- **类型**: `run`
+- **错误**: Build failed unexpectedly
 
 编译输出:
 
 ```
-tree-sitter detected 1 syntax error(s):
-  line 3:4 - line 3:17
-```
+[31merror[0m: 'exists' is not a member of class 'File'
+ [36m==>[0m /home/runner/work/CangjieDocValidator/CangjieDocValidator/check_output/Basic_IO/basic_IO_source_stream__文件流操作__block9/src/main.cj:8:14:
+  [36m| [0m
+[36m8[0m [36m| [0m    if (File.exists("./tempFile.txt")) {[0m
+  [36m| [0m             [31m^^^^^^ [0m
+  [36m| [0m
 
-### ❌ sync__线程局部变量_ThreadLocal__block20
+[31merror[0m: 'delete' is not a member of class 'File'
+ [36m==>[0m /home/runner/work/CangjieDocValidator/CangjieDocValidator/check_output/Basic_IO/basic_IO_source_stream__文件流操作__block9/src/main.cj:9:14:
+  [36m| [0m
+[36m9[0m [36m| [0m        File.delete("./tempFile.txt")[0m
+  [36m| [0m             [31m^^^^^^ [0m
+  [36m| [0m
 
-- **来源**: `.docs/language/source_zh_cn/concurrency/sync.md` > 线程局部变量 ThreadLocal
-- **类型**: `ast`
-- **错误**: Syntax errors found: line 3:4
+[31merror[0m: 'delete' is not a member of class 'File'
+  [36m==>[0m /home/runner/work/CangjieDocValidator/CangjieDocValidator/check_output/Basic_IO/basic_IO_source_stream__文件流操作__block9/src/main.cj:18:10:
+   [36m| [0m
+[36m18[0m [36m| [0m    File.delete("./tempFile.txt")[0m
+   [36m| [0m         [31m^^^^^^ [0m
+   [36m| [0m
 
-编译输出:
-
-```
-tree-sitter detected 1 syntax error(s):
-  line 3:4 - line 3:17
-```
-
-### ❌ use_thread__访问线程属性__block6
-
-- **来源**: `.docs/language/source_zh_cn/concurrency/use_thread.md` > 访问线程属性
-- **类型**: `ast`
-- **错误**: Syntax errors found: line 3:4; line 3:11
-
-编译输出:
-
-```
-tree-sitter detected 2 syntax error(s):
-  line 3:4 - line 9:37
-  line 3:11 - line 6:18
+3 errors generated, 3 errors printed.
+Error: failed to compile package `basic_io_source_stream_________block9`, return code is 1
+Error: cjpm build failed
 ```

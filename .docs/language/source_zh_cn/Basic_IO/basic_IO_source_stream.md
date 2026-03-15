@@ -170,8 +170,14 @@ internal import std.fs.*
 internal import std.io.*
 
 main() {
-    let file = File.create("./tempFile.txt")
-    file.write("hello, world!".toArray())
+    try {
+        let file = File.create("./tempFile.txt")
+        file.write("hello, world!".toArray())
+    } catch (e: FSException) {
+        // 文件已存在时，使用写模式打开
+        let file = File("./tempFile.txt", Write)
+        file.write("hello, world!".toArray())
+    }
 
     // 打开
     let file2 = File("./tempFile.txt", Read)

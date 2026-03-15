@@ -77,7 +77,7 @@ public func power_10(n: Int64) {
 <!-- verify -macro13 -->
 <!-- cfg="--compile-macro" -->
 
-<!-- check:skip -->
+<!-- check:ast -->
 
 ```cangjie
 macro package define

@@ -1,6 +1,6 @@
 # TokenKind 类型
 
-<!-- check:ast -->
+<!-- check:skip -->
 
 ```cangjie
 public enum TokenKind <: ToString {

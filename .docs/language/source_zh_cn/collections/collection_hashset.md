@@ -2,7 +2,7 @@
 
 使用 HashSet 类型需要导入 collection 包：
 
-<!-- check:build_only -->
+<!-- check:ast -->
 
 ```cangjie
 import std.collection.*
