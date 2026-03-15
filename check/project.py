@@ -30,9 +30,11 @@ _stdx_path: Optional[Path] = None
 
 
 def _get_stdx_path() -> Optional[Path]:
-    """获取 stdx 库路径，首次调用时自动下载解压。
+    """获取 stdx 扩展库的静态库子目录路径，首次调用时自动下载解压。
 
-    返回 stdx 的 static 库目录路径，或在下载失败时返回 None。
+    返回 stdx 解压后的静态库目录完整路径
+    (如 ~/.cache/cangjie-doc-validator/cangjie-stdx/linux_x86_64_cjnative/static/stdx)，
+    下载或解压失败时返回 None。
     """
     global _stdx_path
     if _stdx_path is not None:
@@ -66,7 +68,7 @@ def _get_stdx_path() -> Optional[Path]:
             _stdx_path = static_dir
             return _stdx_path
         else:
-            print(f'  ⚠️ stdx 目录结构异常')
+            print(f'  ⚠️ stdx 预期目录不存在: {static_dir}')
             return None
     except Exception as e:
         print(f'  ⚠️ stdx 下载/解压失败: {e}')
@@ -305,6 +307,9 @@ def _create_standard_project(tc: TestCase, proj_dir: Path, pkg_name: str):
     else:
         output_type = 'executable'
 
+    toml_content = CJPM_TOML_TEMPLATE.format(
+        name=pkg_name, output_type=output_type
+    )
     if tc.needs_stdx:
         stdx_path = _get_stdx_path()
         if stdx_path:
@@ -312,14 +317,6 @@ def _create_standard_project(tc: TestCase, proj_dir: Path, pkg_name: str):
                 name=pkg_name, output_type=output_type,
                 stdx_path=str(stdx_path),
             )
-        else:
-            toml_content = CJPM_TOML_TEMPLATE.format(
-                name=pkg_name, output_type=output_type
-            )
-    else:
-        toml_content = CJPM_TOML_TEMPLATE.format(
-            name=pkg_name, output_type=output_type
-        )
     (proj_dir / 'cjpm.toml').write_text(toml_content, encoding='utf-8')
 
     for rel_path, code in tc.files.items():
