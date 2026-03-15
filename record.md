@@ -106,29 +106,46 @@ project_dir/
 
 ### 3.3 language/source_zh_cn 目录全量标注（本次新增）
 
-共处理约 90 个含代码块的 Markdown 文件，为约 600 个代码块添加了 `<!-- check:XXX -->` 标注。使用 tree-sitter-cangjie v1.0.5.3 进行语法检查，能解析的代码块标注为 `check:ast`，不能解析的标注为 `check:skip`（详见 issue.md #8、#12、#14~#17）。主要工作包括：
+共处理约 90 个含代码块的 Markdown 文件，为约 730 个代码块添加了 `<!-- check:XXX -->` 标注。使用 tree-sitter-cangjie v1.0.5.3 进行语法检查。最终统计：
 
-| 目录 | 文件数 | 测试用例数 | 主要处理 |
-|------|--------|-----------|---------|
+| 标注类型 | 数量 | 说明 |
+|---------|------|------|
+| `check:run` | 235 | 编译并运行验证 |
+| `check:build_only` | 204 | 仅编译验证 |
+| `check:compile_error` | 130 | 预期编译失败 |
+| `check:ast` | 81 | tree-sitter 语法解析检查 |
+| `check:skip` | 73 | 跳过（伪代码/特殊环境/死锁示例等） |
+| `check:runtime_error` | 6 | 预期运行时错误 |
+
+主要优化措施：
+- 将顶层赋值/表达式语句代码块包装在 `main()` 中，从 `check:skip` 提升为 `check:run`（collections, basic_data_type, concurrency, error_handle 目录共 25 个块）
+- 将自包含的声明代码块从 `check:ast` 提升为 `check:build_only`（实际编译验证，共 65 个块）
+- 添加 stdx 自动下载支持（`project.py`），使 Net 章节 HTTP/WebSocket 示例可实际编译运行
+- stdx 下载地址：`https://github.com/SunriseSummer/CangjieSDK/releases/download/1.0.5/cangjie-stdx-linux-x64-1.0.5.1.zip`
+
+各目录处理详情：
+
+| 目录 | 文件数 | 代码块数 | 主要处理 |
+|------|--------|---------|---------|
 | first_understanding/ | 1 | 1 | `<!-- verify -->` → `<!-- check:run -->` |
 | basic_programming_concepts/ | 3 | 35 | const G 和 Planet 合并为 project=const_gravity |
-| basic_data_type/ | 10 | 46 | 顶层赋值(#8)/三单引号(#12)/字节字面量(#14)等不支持的改为 skip |
+| basic_data_type/ | 10 | 46 | 顶层赋值包装为 main()，提升为 check:run/build_only |
 | function/ | 10 | 89 | 操作符重载 Point 类与 main 合并为 project=overloadOperator |
-| collections/ | 4 | 11 | 顶层方法调用/赋值(#8)标记为 skip |
-| class_and_interface/ | 5 | 71 | 跨包访问修饰符示例改为 ast；接口继承 3 块合并为 project=myInt |
-| struct/ | 3 | 24 | 跨包访问修饰符示例改为 ast |
+| collections/ | 4 | 11 | 顶层方法调用/赋值包装为 main()，提升为 check:run |
+| class_and_interface/ | 5 | 71 | 跨包访问修饰符示例标注；接口继承合并为 project=myInt |
+| struct/ | 3 | 24 | 跨包访问修饰符示例标注 |
 | enum_and_pattern_match/ | 5 | 45 | 类型模式 4 块合并为 project=mergeCase |
 | generic/ | 9 | 26 | composition 函数与调用合并为 project=composition |
-| error_handle/ | 3 | 16 | try-with-resources 异常示例改为 runtime_error |
-| concurrency/ | 5 | 21 | 死锁/非法解锁等示例正确标注为 skip/runtime_error |
-| extension/ | 4 | 24 | 直接扩展/接口扩展合并为项目；跨包示例改为 ast |
-| Basic_IO/ | 3 | 7 | 标准输入依赖示例改为 skip；文件操作改为 ast |
-| FFI/ | 1 | 13 | VArray 参数/@C struct 改为 ast；需外部库的改为 skip |
-| Macro/ | 8 | 10 | 语法可解析的改为 ast；宏特殊语法(#17)改为 skip |
-| Net/ | 3 | 2 | 需要 stdx 的示例改为 skip |
-| Appendix/ | 3 | 1 | 语法可解析的改为 ast；需要特殊编译选项的保留 skip |
+| error_handle/ | 3 | 16 | try-catch 包装为 main()；异常示例改为 runtime_error |
+| concurrency/ | 5 | 21 | 原子操作包装为 main()；死锁/非法解锁正确标注 |
+| extension/ | 4 | 24 | 直接扩展/接口扩展合并为项目；跨包示例标注 |
+| Basic_IO/ | 3 | 7 | 标准输入/文件依赖改为 skip；其余改为 build_only |
+| FFI/ | 1 | 13 | VArray 参数/@C struct 标注；需外部库的改为 skip |
+| Macro/ | 8 | 10 | 语法可解析的标注 ast；宏特殊语法改为 skip |
+| Net/ | 3 | 2 | stdx 示例改为 check:run（自动下载 stdx 支持） |
+| Appendix/ | 3 | 1 | 语法可解析的标注；需特殊编译选项的保留 skip |
 | reflect_and_annotation/ | 2 | 18 | 溢出异常和反射异常改为 runtime_error |
-| compile_and_build/ | 2 | 10 | 语法可解析的改为 ast |
+| compile_and_build/ | 2 | 10 | 语法可解析的标注 |
 
 ## 四、模块化拆分
 
