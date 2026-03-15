@@ -113,8 +113,8 @@ project_dir/
 | `check:run` | 233 | 编译并运行验证 |
 | `check:build_only` | 189 | 仅编译验证 |
 | `check:compile_error` | 133 | 预期编译失败 |
-| `check:ast` | 108 | tree-sitter 语法解析检查（跨包引用等无法独立编译的代码块） |
-| `check:skip` | 53 | 跳过（多包伪代码/特殊环境/宏语法等） |
+| `check:ast` | 110 | tree-sitter 语法解析检查（跨包引用等无法独立编译的代码块） |
+| `check:skip` | 51 | 跳过（多包伪代码/特殊环境/宏语法等） |
 | `check:runtime_error` | 5 | 预期运行时错误 |
 
 主要优化措施：

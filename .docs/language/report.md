@@ -1,16 +1,16 @@
 # 测试报告
 
 - **扫描目录**: `.docs/language/source_zh_cn/`
-- **生成时间**: 2026-03-15 16:17:04 UTC
+- **生成时间**: 2026-03-15 16:24:47 UTC
 - **文档文件数**: 106
 
 ## 总览
 
 | 指标 | 数量 |
 |------|------|
-| ❌ 测试总数 | 657 |
-| ✅ 通过 | 656 |
-| ❌ 失败 | 1 |
+| ✅ 测试总数 | 657 |
+| ✅ 通过 | 657 |
+| ❌ 失败 | 0 |
 | ⏭️ 跳过 | 51 |
 | ⚠️ 未标注 | 0 |
 
@@ -52,7 +52,7 @@
 | 字符串流 | `run` | ✅ PASS |
 | 字符串流 | `run` | ✅ PASS |
 
-### ❌ `.docs/language/source_zh_cn/Basic_IO/basic_IO_source_stream.md`
+### ✅ `.docs/language/source_zh_cn/Basic_IO/basic_IO_source_stream.md`
 
 | 测试用例 | 类型 | 结果 |
 |----------|------|------|
@@ -64,7 +64,7 @@
 | 常规文件操作 | `run` | ✅ PASS |
 | 常规文件操作 | `build_only` | ✅ PASS |
 | 常规文件操作 | `build_only` | ✅ PASS |
-| 文件流操作 | `run` | ❌ FAIL |
+| 文件流操作 | `run` | ✅ PASS |
 | 文件流操作 | `build_only` | ✅ PASS |
 
 ### ✅ `.docs/language/source_zh_cn/FFI/cangjie-c.md`
@@ -1112,40 +1112,3 @@
 | mut 函数的使用限制 | `compile_error` | ✅ PASS |
 | mut 函数的使用限制 | `compile_error` | ✅ PASS |
 | mut 函数的使用限制 | `compile_error` | ✅ PASS |
-
-## 失败详情
-
-### ❌ basic_IO_source_stream__文件流操作__block9
-
-- **来源**: `.docs/language/source_zh_cn/Basic_IO/basic_IO_source_stream.md` > 文件流操作
-- **类型**: `run`
-- **错误**: Build failed unexpectedly
-
-编译输出:
-
-```
-[31merror[0m: 'exists' is not a member of class 'File'
- [36m==>[0m /home/runner/work/CangjieDocValidator/CangjieDocValidator/check_output/Basic_IO/basic_IO_source_stream__文件流操作__block9/src/main.cj:8:14:
-  [36m| [0m
-[36m8[0m [36m| [0m    if (File.exists("./tempFile.txt")) {[0m
-  [36m| [0m             [31m^^^^^^ [0m
-  [36m| [0m
-
-[31merror[0m: 'delete' is not a member of class 'File'
- [36m==>[0m /home/runner/work/CangjieDocValidator/CangjieDocValidator/check_output/Basic_IO/basic_IO_source_stream__文件流操作__block9/src/main.cj:9:14:
-  [36m| [0m
-[36m9[0m [36m| [0m        File.delete("./tempFile.txt")[0m
-  [36m| [0m             [31m^^^^^^ [0m
-  [36m| [0m
-
-[31merror[0m: 'delete' is not a member of class 'File'
-  [36m==>[0m /home/runner/work/CangjieDocValidator/CangjieDocValidator/check_output/Basic_IO/basic_IO_source_stream__文件流操作__block9/src/main.cj:18:10:
-   [36m| [0m
-[36m18[0m [36m| [0m    File.delete("./tempFile.txt")[0m
-   [36m| [0m         [31m^^^^^^ [0m
-   [36m| [0m
-
-3 errors generated, 3 errors printed.
-Error: failed to compile package `basic_io_source_stream_________block9`, return code is 1
-Error: cjpm build failed
-```
