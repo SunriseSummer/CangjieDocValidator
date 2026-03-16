@@ -89,7 +89,7 @@ func countWords(text: String): Int64 {
     var count: Int64 = 1
     var inSpace = false
     for (ch in text.runes()) {
-        if (ch == ' ' || ch == '\t') {
+        if (ch == r' ' || ch == r'\t') {
             if (!inSpace) {
                 count++
                 inSpace = true
@@ -103,10 +103,10 @@ func countWords(text: String): Int64 {
 
 main() {
     let documents = [
-        "仓颉是华为推出的编程语言",
-        "它支持多范式编程包括函数式和面向对象",
-        "并发模型基于轻量级线程",
-        "标准库提供丰富的集合和 IO 工具"
+        "Cangjie is a programming language by Huawei",
+        "It supports multi-paradigm including functional and OOP",
+        "Concurrency uses lightweight threads",
+        "Standard library has rich collections and IO tools"
     ]
 
     let futures = ArrayList<Future<Int64>>()
@@ -126,10 +126,10 @@ main() {
 
 <!-- expected_output:
 文档 0: 7 词
-文档 1: 8 词
-文档 2: 6 词
+文档 1: 7 词
+文档 2: 4 词
 文档 3: 8 词
-总计: 29 词
+总计: 26 词
 -->
 
 ---
@@ -424,6 +424,13 @@ main() {
 
 `CharQueue` 是 AIChatPro 流式输出的核心数据结构，提供线程安全的字符缓冲区。
 
+`CharQueue` 本质上是一个用 `Mutex` 保护的 `ArrayList<Rune>`。它有三个核心操作：
+- `addMany(str)` — 生产者把新字符推入队列
+- `poll()` — 消费者取出一个字符（返回 `?Rune`，空队列时返回 `None`）
+- `isFinished()` — 判断是否"完成"：`finished` 标志已设置 **且** 队列已空
+
+注意 `setFinished()` 和 `isFinished()` 的分离设计：生产者调用 `setFinished()` 表示"不再写入"，但消费者继续消费直到队列彻底为空，这样就不会丢失最后几个字符。
+
 <!-- check:build_only -->
 ```cangjie
 import std.sync.*
@@ -666,8 +673,8 @@ main() {
 
 <!-- expected_output:
 写入完成: true
-总字节数: 14
-读取长度: 14
+总字节数: 21
+读取长度: 21
 -->
 
 ---

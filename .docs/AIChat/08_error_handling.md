@@ -178,11 +178,11 @@ API Key 缺失, 模型: kimi
 
 <!-- check:run -->
 ```cangjie
-class AppError <: Exception {
+open class AppError <: Exception {
     public init(msg: String) { super(msg) }
 }
 
-class NetworkError <: AppError {
+open class NetworkError <: AppError {
     let statusCode: Int64
     public init(code: Int64) {
         super("Network error: HTTP ${code}")
@@ -295,9 +295,14 @@ API Key 未设置，请先配置
 
 ### 3.2 Option 链式操作
 
+`Option` 的真正威力在于可以"链式"组合：`??` 运算符可以串联多个可选值，`?.` 可以对 `Option` 内的值直接调用方法。
+
+`Int64.parse()` 来自 `std.convert` 包，可以将字符串解析为整数，解析失败时抛出异常：
+
 <!-- check:run -->
 ```cangjie
 import std.collection.HashMap
+import std.convert.*
 
 func parsePort(portStr: ?String): Int64 {
     // Option 链：先检查是否存在，再解析

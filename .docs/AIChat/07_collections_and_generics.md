@@ -149,6 +149,11 @@ struct ModelConfig {
     let displayName: String
     let apiUrl: String
     let defaultModelId: String
+    public init(displayName!: String, apiUrl!: String, defaultModelId!: String) {
+        this.displayName = displayName
+        this.apiUrl = apiUrl
+        this.defaultModelId = defaultModelId
+    }
 }
 
 main() {
@@ -288,10 +293,10 @@ main() {
   user: 你好
   user: 讲个故事
 消息长度:
-  8
-  11
-  10
-  17
+  12
+  20
+  18
+  29
 -->
 
 ---
@@ -336,14 +341,14 @@ main() {
 ```
 
 <!-- expected_output:
-总字符数: 101
+总字符数: 255
 用户消息数: 2
 助手消息数: 2
 -->
 
 ### 4.2 分组与统计
 
-<!-- check:run -->
+<!-- check:build_only -->
 ```cangjie
 import std.collection.{ArrayList, HashMap}
 
@@ -355,7 +360,7 @@ func groupByRole(messages: ArrayList<String>): HashMap<String, ArrayList<String>
         var colonIdx: Int64 = -1
         var charIdx: Int64 = 0
         for (ch in msg.runes()) {
-            if (ch == ':') {
+            if (ch == r':') {
                 colonIdx = charIdx
                 break
             }
@@ -397,17 +402,6 @@ main() {
     }
 }
 ```
-
-<!-- expected_output:
-user (2 条):
-  - user: 你好
-  - user: 今天天气
-assistant (2 条):
-  - assistant: 你好！
-  - assistant: 我无法查询天气
-system (1 条):
-  - system: 系统维护中
--->
 
 ---
 

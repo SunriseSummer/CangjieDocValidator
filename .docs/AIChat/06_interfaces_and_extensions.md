@@ -202,12 +202,7 @@ extend String {
     }
 
     func isBlank(): Bool {
-        for (ch in this.runes()) {
-            if (ch != ' ' && ch != '\t' && ch != '\n' && ch != '\r') {
-                return false
-            }
-        }
-        return true
+        this.trimAscii().isEmpty()
     }
 }
 
@@ -223,8 +218,8 @@ main() {
 ```
 
 <!-- expected_output:
-这是一条非常非常长的【更...
-这是一条非常非常长的 AI 回复【更多】
+这是一条非常非常长的...
+这是一条非常非常长的 AI 回【更多】
 true
 true
 false

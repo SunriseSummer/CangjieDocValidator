@@ -198,7 +198,21 @@ main() {
 ```
 
 <!-- expected_output:
-{"model":"moonshot-v1-8k","stream":true,"temperature":0.7,"messages":[{"role":"system","content":"你是一名专业的 AI 助手"},{"role":"user","content":"你好！"}]}
+{
+  "model": "moonshot-v1-8k",
+  "stream": true,
+  "temperature": 0.7,
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是一名专业的 AI 助手"
+    },
+    {
+      "role": "user",
+      "content": "你好！"
+    }
+  ]
+}
 -->
 
 ### 4.2 使用 JsonWriter 流式构建
@@ -272,13 +286,12 @@ func extractContent(jsonStr: String): String {
 
 main() {
     // 模拟 AI SSE 流中的 JSON 片段
-    let mockResponses = [
-        """{"choices":[{"delta":{"content":"你好！"}}]}""",
-        """{"choices":[{"delta":{"content":"我是 AI 助手。"}}]}""",
-        """{"choices":[{"delta":{"content":"有什么可以帮你？"}}]}""",
-        """{"choices":[{"delta":{}}]}""",              // 无 content（finish 帧）
-        """{"choices":[{"finish_reason":"stop"}]}"""   // 结束帧
-    ]
+    let r1 = "{\"choices\":[{\"delta\":{\"content\":\"你好！\"}}]}"
+    let r2 = "{\"choices\":[{\"delta\":{\"content\":\"我是 AI 助手。\"}}]}"
+    let r3 = "{\"choices\":[{\"delta\":{\"content\":\"有什么可以帮你？\"}}]}"
+    let r4 = "{\"choices\":[{\"delta\":{}}]}"
+    let r5 = "{\"choices\":[{\"finish_reason\":\"stop\"}]}"
+    let mockResponses = [r1, r2, r3, r4, r5]
 
     let sb = StringBuilder()
     for (resp in mockResponses) {
@@ -318,31 +331,23 @@ class SseParser {
     // 从字节流中解析 SSE，每条 data 行调用一次 onData 回调
     public static func parseStream(body: InputStream, onData: (String) -> Unit): Unit {
         let buf = Array<UInt8>(4096, repeat: 0)
-        let lineBuf = StringBuilder()
+        var pending = ""
 
         var bytesRead = body.read(buf)
         while (bytesRead > 0) {
-            let chunk = String.fromUtf8(buf[0..bytesRead])
-            for (ch in chunk.runes()) {
-                if (ch == '\n') {
-                    let line = lineBuf.toString()
-                    lineBuf.clear()
-                    if (line.startsWith("data: ")) {
-                        var dataIdx: Int64 = 6
-                        var data = ""
-                        var charIdx: Int64 = 0
-                        for (c in line.runes()) {
-                            if (charIdx >= dataIdx) { data = data + c.toString() }
-                            charIdx++
-                        }
-                        if (data != "[DONE]" && !data.isEmpty()) {
-                            onData(data)
-                        }
+            pending = pending + String.fromUtf8(buf[0..bytesRead])
+            let lines = pending.split("\n")
+            // 处理所有完整行（最后一行可能不完整，留到下次）
+            for (i in 0..(lines.size - 1)) {
+                let line = lines[i].trimAscii()
+                if (line.startsWith("data: ")) {
+                    let data = line[6..line.size]
+                    if (data != "[DONE]" && !data.isEmpty()) {
+                        onData(data)
                     }
-                } else if (ch != '\r') {
-                    lineBuf.append(ch)
                 }
             }
+            pending = lines[lines.size - 1]
             bytesRead = body.read(buf)
         }
     }
@@ -400,6 +405,10 @@ src/
 └── repl/
     └── runner.cj            # ReplRunner (package aichat.repl)
 ```
+
+每个子包职责单一，相互之间通过 `import` 引用。下面我们逐一实现每个文件。
+
+> **阅读提示**：这些代码块是完整项目的各个片段，直接按照文件路径组合即可运行。每一节都有注释解释关键设计决策。
 
 ### 6.1 配置类型
 
@@ -710,30 +719,22 @@ import std.io.InputStream
 public class SseParser {
     public static func parseStream(body: InputStream, onData: (String) -> Unit): Unit {
         let buf = Array<UInt8>(4096, repeat: 0)
-        let lineBuf = StringBuilder()
+        var pending = ""
 
         var bytesRead = body.read(buf)
         while (bytesRead > 0) {
-            let chunk = String.fromUtf8(buf[0..bytesRead])
-            for (ch in chunk.runes()) {
-                if (ch == '\n') {
-                    let line = lineBuf.toString()
-                    lineBuf.clear()
-                    if (line.startsWith("data: ")) {
-                        var data = ""
-                        var charIdx: Int64 = 0
-                        for (c in line.runes()) {
-                            if (charIdx >= 6) { data = data + c.toString() }
-                            charIdx++
-                        }
-                        if (data != "[DONE]" && !data.isEmpty()) {
-                            onData(data)
-                        }
+            pending = pending + String.fromUtf8(buf[0..bytesRead])
+            let lines = pending.split("\n")
+            for (i in 0..(lines.size - 1)) {
+                let line = lines[i].trimAscii()
+                if (line.startsWith("data: ")) {
+                    let data = line[6..line.size]
+                    if (data != "[DONE]" && !data.isEmpty()) {
+                        onData(data)
                     }
-                } else if (ch != '\r') {
-                    lineBuf.append(ch)
                 }
             }
+            pending = lines[lines.size - 1]
             bytesRead = body.read(buf)
         }
     }
@@ -942,7 +943,7 @@ public class ReplRunner {
         )
 
         let queue = CharQueue()
-        let engine = StreamEngine(queue: queue, mtx: mtx)
+        let engine = StreamEngine(queue, mtx)
 
         print("\nAI> ")
         let displayFuture = engine.startDisplay()
