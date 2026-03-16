@@ -388,9 +388,7 @@ main() {
 {"role": "user", "content": "你好"}
 {"role": "system", "content": "你是仓颉语言助手"}
 {"role": "assistant", "content": "你好，我是 AI 助手"}
-
 清洗后: 请帮我写一个 'Hello World'
-
 请求体长度: 166 字节
 消息数: 2
 -->

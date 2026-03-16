@@ -506,7 +506,6 @@ main() {
 ⚙️ 系统 → API: "system"
 👤 用户 → API: "user"
 🤖 AI 助手 → API: "assistant"
-
 === 命令解析 ===
 [命令] 可用命令:
   /help          显示此帮助

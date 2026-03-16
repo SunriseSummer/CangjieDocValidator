@@ -93,7 +93,21 @@ main() {
 ```cangjie
 import stdx.net.http.*
 import stdx.net.tls.*
-import std.io.{ByteBuffer, readToEnd}
+import std.io.InputStream
+import std.collection.ArrayList
+
+func readBodyString(body: InputStream): String {
+    let chunks = ArrayList<String>()
+    let buf = Array<UInt8>(8192, repeat: 0)
+    var n = body.read(buf)
+    while (n > 0) {
+        chunks.add(String.fromUtf8(buf[0..n]))
+        n = body.read(buf)
+    }
+    let sb = StringBuilder()
+    for (chunk in chunks) { sb.append(chunk) }
+    return sb.toString()
+}
 
 func fetchJson(url: String): String {
     var tlsConfig = TlsClientConfig()
@@ -112,8 +126,7 @@ func fetchJson(url: String): String {
         throw Exception("HTTP 错误: ${resp.status}")
     }
 
-    let bytes = readToEnd(resp.body)
-    return String.fromUtf8(bytes)
+    return readBodyString(resp.body)
 }
 
 main() {
@@ -571,7 +584,7 @@ public class ConversationHistory {
             messages.remove(at: 0)
             if (messages.size > 0) { messages.remove(at: 0) }
         }
-        messages.add(ChatMessage(role: role, content: content))
+        messages.add(ChatMessage(role, content))
     }
 
     public func toArrayList(): ArrayList<ChatMessage> {
@@ -674,7 +687,6 @@ public class CharQueue {
 package aichat.stream
 
 import std.sync.*
-import std.time.*
 
 public class StreamEngine {
     private let queue: CharQueue
@@ -870,10 +882,9 @@ public class KimiModel <: BaseChatModel {
 ```cangjie
 package aichat.repl
 
-import std.io.*
 import std.sync.*
-import aichat.config.{ConfigManager, ConfigError}
-import aichat.models.{BaseChatModel, ChatMessage, ChatRequest, ConversationHistory}
+import aichat.config.ConfigManager
+import aichat.models.{BaseChatModel, ChatRequest, ConversationHistory}
 import aichat.stream.{CharQueue, StreamEngine}
 
 public class ReplRunner {
@@ -890,13 +901,11 @@ public class ReplRunner {
 
     public func run(): Unit {
         printBanner()
-        let stdin = getStdIn()
-        let reader = BufferedReader(stdin)
 
         while (true) {
             print("\n你> ")
-            let line = reader.readLine() ?? break
-            let input = line.trimEnd()
+            let line = readln()
+            let input = line.trimAscii()
             if (input.isEmpty()) { continue }
 
             if (input.startsWith("/")) {
@@ -938,8 +947,8 @@ public class ReplRunner {
 
         let messages = history.toArrayList()
         let request = ChatRequest(
-            model: currentModel.getModelId(),
-            messages: messages
+            currentModel.getModelId(),
+            messages
         )
 
         let queue = CharQueue()

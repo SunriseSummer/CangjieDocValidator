@@ -597,7 +597,7 @@ class StreamEngine {
 main() {
     let queue = CharQueue()
     let mtx = Mutex()
-    let engine = StreamEngine(queue: queue, mtx: mtx)
+    let engine = StreamEngine(queue, mtx)
 
     let tokens = ["仓颉", "语言", "的", "并发", "模型", "非常", "优雅", "！"]
 
