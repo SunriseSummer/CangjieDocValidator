@@ -126,6 +126,26 @@ main() {
 }
 ```
 
+<!-- expected_output:
+>>> 启动博客后端 API...
+>>> Incoming Request: /posts
+Processing GET /posts ...
+HTTP 200 OK
+Content-Type: application/json
+[{"id": 1, "title": "Hello Cangjie"},{"id": 2, "title": "Web Dev"},]
+>>> Incoming Request: /posts/new
+Processing POST /posts/new ...
+Service: 文章 'New Article' 已创建
+HTTP 200 OK
+Content-Type: application/json
+{"status": "created"}
+>>> Incoming Request: /posts
+Processing GET /posts ...
+HTTP 200 OK
+Content-Type: application/json
+[{"id": 1, "title": "Hello Cangjie"},{"id": 2, "title": "Web Dev"},{"id": 3, "title": "New Article"},]
+-->
+
 ## 终章：架构师之路
 
 恭喜！你不仅学会了仓颉语言的语法，更重要的是，你通过构建 `CangjieWeb` 框架，深入理解了：

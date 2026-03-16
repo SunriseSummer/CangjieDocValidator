@@ -74,6 +74,12 @@ main() {
 }
 ```
 
+<!-- expected_output:
+读取配置: {"region":"star-port","maxVehicles":200}
+Region=star-port, MaxVehicles=200
+{"id":"O-190","weight":12.500000,"priority":4}
+-->
+
 ## 工程化提示
 
 *   配置分层加载（默认/文件/环境变量）更稳健。

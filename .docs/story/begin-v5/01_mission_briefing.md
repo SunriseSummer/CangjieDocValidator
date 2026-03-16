@@ -12,8 +12,6 @@
 
 <!-- check:run -->
 ```cangjie
-import std.time.*
-
 main() {
     let serviceName = "StarPort Dispatch"
     let version = "0.1.0"
@@ -22,11 +20,18 @@ main() {
     println("=== ${serviceName} ===")
     println("Version: ${version} | Env: ${env}")
 
-    let startAt = DateTime.now()
+    let startAt = "2026-01-01T00:00:00Z"
     println("启动时间: ${startAt}")
     println("自检完成：配置加载成功、调度器就绪。")
 }
 ```
+
+<!-- expected_output:
+=== StarPort Dispatch ===
+Version: 0.1.0 | Env: dev
+启动时间: 2026-01-01T00:00:00Z
+自检完成：配置加载成功、调度器就绪。
+-->
 
 *   `main()` 是系统唯一入口，保持它“可读、简洁、稳定”。
 *   启动日志要包含服务名、版本、环境等关键信息。

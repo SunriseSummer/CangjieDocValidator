@@ -91,6 +91,13 @@ main() {
 }
 ```
 
+<!-- expected_output:
+Adele 的销量: 30000000
+=== 销量榜单 ===
+Adele: 30000000
+Taylor Swift: 50000000
+-->
+
 ## 3. 动态歌单 (ArrayList)
 
 用户的"我喜欢的音乐"列表是随时变化的，使用 `ArrayList` 可以高效增删，同时保持顺序。
