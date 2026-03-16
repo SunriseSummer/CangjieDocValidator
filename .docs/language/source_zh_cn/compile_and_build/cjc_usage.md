@@ -16,7 +16,7 @@ cjc [option] file...
 
 假如有一个名为 `hello.cj` 的仓颉文件：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 main() {

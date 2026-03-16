@@ -27,7 +27,7 @@ Stream 主要面向处理原始二进制数据，Stream 中最小的数据单元
 
 InputStream 接口定义：
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 interface InputStream {
@@ -39,11 +39,13 @@ interface InputStream {
 
 输入流读取示例：
 
+<!-- check:skip -->
+
 ```cangjie
-import std.io.InputStream
+import std.io.*
 
 main() {
-    let input: InputStream = ...
+    let input: InputStream = ByteArrayStream()
     let buf = Array<Byte>(256, repeat: 0)
     while (input.read(buf) > 0) {
         println(buf)
@@ -63,6 +65,8 @@ main() {
 
 OutputStream 接口定义：
 
+<!-- check:ast -->
+
 ```cangjie
 interface OutputStream {
     func write(buffer: Array<Byte>): Unit
@@ -77,11 +81,13 @@ interface OutputStream {
 
 输出流写入示例：
 
+<!-- check:skip -->
+
 ```cangjie
-import std.io.OutputStream
+import std.io.*
 
 main() {
-    let output: OutputStream = ...
+    let output: OutputStream = ByteArrayStream()
     let buf = Array<Byte>(256, repeat: 111)
     output.write(buf)
     output.flush()

@@ -8,7 +8,7 @@
 
 1. 抛出异常（throwing）：当整数运算溢出时，抛出异常。
 
-    <!-- compile -->
+    <!-- check:runtime_error -->
 
     ```cangjie
     @OverflowThrowing
@@ -26,7 +26,7 @@
 
     需要注意的是，对于整数溢出行为是 throwing 的场景，若整数溢出可提前在编译期检测出来，则编译器会直接给出报错。
 
-    <!-- compile.error -->
+    <!-- check:compile_error -->
 
     ```cangjie
     @OverflowThrowing
@@ -42,7 +42,7 @@
 
 2. 高位截断（wrapping）：当整数运算的结果超出用于接收它的内存空间所能表示的数据范围时，则截断超出该内存空间的部分。
 
-    <!-- compile -->
+    <!-- check:run -->
 
     ```cangjie
     @OverflowWrapping
@@ -66,7 +66,7 @@
 
 3. 饱和（saturating）：当整数运算溢出时，选择对应固定精度的极值作为结果。
 
-    <!-- compile -->
+    <!-- check:run -->
 
     ```cangjie
     @OverflowSaturating
@@ -89,7 +89,7 @@
 
 【反例】
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 // 计算结果被高位截断
@@ -103,7 +103,7 @@ func operation(a: Int32, b: Int32): Int32 {
 
 【正例】
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 // 安全
@@ -173,6 +173,8 @@ main(): Int64 {
 <!-- run -pkg1 -->
 <!-- cfg="-p prod --mock=on --output-type=dylib" -->
 
+<!-- check:build_only -->
+
 ```cangjie
 package prod
 
@@ -183,6 +185,8 @@ public func test(a: String, b: String): String {
 
 <!-- run -pkg1 -->
 <!-- cfg="-lprod -L . --test" -->
+
+<!-- check:ast -->
 
 ```cangjie
 package test
@@ -232,7 +236,7 @@ public class TestA {
 
 下面的例子定义了一个自定义注解 `@Version`，并用其修饰 `A`, `B` 和 `C`。在 `main` 中，通过反射获取到类上的 `@Version` 注解信息，并将其打印出来。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 package pkg
@@ -275,7 +279,7 @@ main() {
 
 下面的例子中定义了一个拥有无参 `const init` 的自定义注解 `@Marked`，使用时 `@Marked` 和 `@Marked[]` 这两种写法均可。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 package pkg
@@ -315,6 +319,8 @@ B is Marked
 <!-- verify.error -->
 <!-- cfg="--Marked" -->
 
+<!-- check:compile_error -->
+
 ```cangjie
 @Marked
 @Marked // Error
@@ -325,7 +331,7 @@ class A {}
 
 下面的例子中，`A` 被 `@Marked` 注解修饰，`B` 继承 `A`，但是 `B` 没有 `A` 的注解。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 package pkg
@@ -360,7 +366,7 @@ A is Marked
 
 自定义注解可以用在类型声明（`class`、`struct`、`enum`、`interface`）、成员函数/构造函数中的参数、构造函数声明、成员函数声明、成员变量声明、成员属性声明。也可以限制自己可以使用的位置，这样可以减少开发者的误用，这类注解需要在声明 `@Annotation` 时标注 `target` 参数，参数类型为 `Array<AnnotationKind>`。其中，`AnnotationKind` 是标准库中定义的 `enum`。当没有限定 target 的时候，该自定义注解可以用在以上全部位置。当限定 target 时，只能用在声明的列表中。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 public enum AnnotationKind {
@@ -375,7 +381,7 @@ public enum AnnotationKind {
 
 下面的例子中，自定义注解通过 `target` 限定只能用在成员函数上，用在其他位置会编译报错。
 
-<!--compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 @Annotation[target: [MemberFunction]]

@@ -11,7 +11,7 @@
 
 开发者不可以通过继承仓颉语言内置的 Error 或其子类来自定义异常，但是可以继承内置的 Exception 或其子类来自定义异常，例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 open class FatherException <: Exception {

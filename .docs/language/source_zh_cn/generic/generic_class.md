@@ -4,7 +4,7 @@
 
 `Map` 类型中的键值对 `Node` 类型就可以使用泛型类来定义：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 open class Node<K, V> where K <: Hashable & Equatable<K> {
@@ -24,7 +24,7 @@ open class Node<K, V> where K <: Hashable & Equatable<K> {
 
 由于泛型类的静态成员变量的内存是共享的，因此，静态成员变量或属性的类型声明和表达式中不能引用类型参数或包含未实例化泛型类型表达式。另外，静态变量或属性初始化表达式中不能调用泛型类的静态成员函数或属性。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class A<T> {}

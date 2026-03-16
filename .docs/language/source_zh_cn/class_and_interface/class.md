@@ -8,7 +8,7 @@
 
 `class` 类型的定义以关键字 `class` 开头，后跟 `class` 的名字，接着是定义在一对花括号中的 `class` 定义体。`class` 定义体中可以定义一系列的成员变量、成员属性（参见[属性](prop.md)）、静态初始化器、构造函数、成员函数和操作符函数（详见[操作符重载](../function/operator_overloading.md)）。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class Rectangle {
@@ -34,7 +34,7 @@ class Rectangle {
 
 使用 `abstract` 修饰的类为抽象类，与普通类不同的是，在抽象类中除了可以定义普通的函数，还允许声明抽象函数（没有函数体）。抽象类定义时的 `open` 修饰符是可选的，也可以使用 `sealed` 修饰符修饰抽象类。`sealed` 修饰符表示该抽象类只能在本包被继承，详见 [class 的继承小节](#class-的继承)。下例中在抽象类 `AbRectangle` 中定义了抽象函数 `foo`。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 abstract class AbRectangle {
@@ -52,7 +52,7 @@ abstract class AbRectangle {
 
 `class` 成员变量分为实例成员变量和静态成员变量，静态成员变量使用 `static` 修饰符修饰，没有静态初始化器时必须有初值，只能通过类型名访问，参考如下示例：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class Rectangle {
@@ -65,7 +65,7 @@ let l = Rectangle.height // l = 20
 
 实例成员变量定义时可以不设置初值（但必须标注类型），也可以设置初值，只能通过对象（即类的实例）访问，参考如下示例：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class Rectangle {
@@ -85,7 +85,7 @@ let l = rec.height // l = 20
 
 静态初始化器以关键字组合 `static init` 开头，后跟无参参数列表和函数体，且不能被访问修饰符修饰。函数体中必须完成对所有未初始化的静态成员变量的初始化，否则编译报错。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class Rectangle {
@@ -98,7 +98,7 @@ class Rectangle {
 
 一个 `class` 中最多允许定义一个静态初始化器，否则报重定义错误。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class Rectangle {
@@ -118,7 +118,7 @@ class Rectangle {
 
 普通构造函数以关键字 `init` 开头，后跟参数列表和函数体，函数体中必须完成所有未初始化实例成员变量的初始化，否则编译报错。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class Rectangle {
@@ -133,7 +133,7 @@ class Rectangle {
 
 一个类中可以定义多个普通构造函数，但它们必须构成重载（参见[函数重载](../function/function_overloading.md)），否则报重定义错误。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class Rectangle {
@@ -161,7 +161,7 @@ class Rectangle {
 
 使用主构造函数通常可以简化 `class` 的定义，例如，上述包含一个 `init` 构造函数的 `Rectangle` 可以简化为如下定义：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class Rectangle {
@@ -171,7 +171,7 @@ class Rectangle {
 
 主构造函数的参数列表中也可以定义普通形参，例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class Rectangle {
@@ -185,7 +185,7 @@ class Rectangle {
 2. 如果构造函数体内未显式调用父类构造函数或本类其他构造函数，则调用父类的无参构造函数 `super()`，如果父类没有无参构造函数，则报错；
 3. 执行构造函数体内的代码。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func foo(x: Int64): Int64 {
@@ -224,7 +224,7 @@ init B finished
 
 如果 `class` 定义中不存在自定义构造函数（包括主构造函数），并且所有实例成员变量都有初始值，则会自动为其生成一个无参构造函数（调用此无参构造函数会创建一个所有实例成员变量的值均等于其初值的对象）；否则，不会自动生成此无参构造函数。例如，对于如下 `class` 定义，编译器会为其自动生成一个无参构造函数：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class Rectangle {
@@ -246,7 +246,7 @@ let r = Rectangle() // r.width = 10，r.height = 20
 
 `class` 支持定义终结器，当类的实例被垃圾回收时，会触发该函数。终结器的函数名固定为 `~init`，通常用于释放系统资源。如下示例中的 `unsafe`，详见 [unsafe 小节](../FFI/cangjie-c.md)：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class C {
@@ -277,7 +277,7 @@ class C {
 11. 如果对象在初始化过程中抛出异常，这样未完整初始化的对象的终结器不会执行。
 12. 依赖终结器的同步行为属于未定义行为。例如，下例中 `main` 函数通过 `while (Test.t0 != 0)` 等待 `Test` 类中的终结器修改 `t0` 的值，属于未定义行为。
 
-    <!-- run -->
+    <!-- check:run -->
 
     ```cangjie
     import std.collection.ArrayList
@@ -329,7 +329,7 @@ class C {
 
 下例中，`area` 是实例成员函数，`typeName` 是静态成员函数。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class Rectangle {
@@ -350,7 +350,7 @@ class Rectangle {
 
 非抽象函数必须有函数体，在函数体中可以通过 `this` 访问实例成员变量，例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class Rectangle {
@@ -373,6 +373,8 @@ class Rectangle {
 - `public` 表示模块内外均可见。
 
 <!-- compile.error -error-->
+
+<!-- check:compile_error -->
 
 ```cangjie
 package a
@@ -402,6 +404,8 @@ func samePkgFunc() {
 ```
 
 <!-- compile.error -error-->
+
+<!-- check:ast -->
 
 ```cangjie
 package b
@@ -433,7 +437,7 @@ main() {
 
 如果实例成员函数没有声明返回类型，并且只存在返回 `This` 类型表达式时，当前函数的返回类型会推断为 `This`。示例如下：
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 open class C1 {
@@ -469,7 +473,7 @@ main() {
 
 定义了 `class` 类型后，即可通过调用其构造函数来创建对象（通过 `class` 类型名调用构造函数）。例如，下例中通过 `Rectangle(10, 20)` 创建 `Rectangle` 类型的对象并赋值给变量 `r`。创建对象之后，可以通过对象访问（`public` 修饰的）实例成员变量和实例成员函数。例如，下例中通过 `r.width` 和 `r.height` 可分别访问 `r` 中 `width` 和 `height` 的值，通过 `r.area()` 可以调用成员函数 `area`。
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 class Rectangle {
@@ -496,7 +500,7 @@ main() {
 
 如果希望通过对象去修改成员变量的值（不鼓励这种方式，最好还是通过成员函数去修改），需要将 `class` 类型中的成员变量定义为可变成员变量（即使用 `var` 定义）。举例如下：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 class Rectangle {
@@ -522,7 +526,7 @@ main() {
 
 不同于 `struct`，对象在赋值或传参时，不会将对象进行复制，多个变量指向的是同一个对象，通过一个变量去修改对象中成员的值，其他变量中对应的成员变量也会被修改。以赋值为例，下面的例子中，将 `r1` 赋值给 `r2` 之后，修改 `r1` 的 `width` 和 `height` 的值，`r2` 的 `width` 和 `height` 值也同样会被修改。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 class Rectangle {
@@ -555,7 +559,7 @@ main() {
 
 可以在子类定义处通过 `<:` 指定其继承的父类，但要求父类必须是可继承的。例如，下面的例子中，`class` A 使用 `open` 修饰，是可以被类 B 继承的，但是因为类 B 是不可继承的，所以 C 在继承 B 的时候会报错。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 open class A {
@@ -573,7 +577,7 @@ class C <: B { // Error, 'B' is not inheritable
 
 `class` 仅支持单继承，因此下面这样一个类继承两个类的代码是不合法的（`&` 是类实现多个接口时的语法，详见[接口](interface.md)）。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 open class A {
@@ -593,7 +597,7 @@ class C <: A & B { // Error, 'C' can only inherit one class
 
 因为子类是继承自父类的，所以子类的对象天然可以当做父类的对象使用，但是反之不然。例如，下例中 B 是 A 的子类，那么 B 类型的对象可以赋值给 A 类型的变量，但是 A 类型的对象不能赋值给 B 类型的变量。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 open class A {
@@ -607,7 +611,7 @@ class B <: A {
 let a: A = B() // OK: subclass objects can be assigned to superclass variables
 ```
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 open class A {
@@ -623,7 +627,7 @@ let b: B = A() // Error, superclass objects can not be assigned to subclass vari
 
 `class` 定义的类型不允许继承类型本身。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class A <: A {}  // Error, 'A' inherits itself
@@ -631,7 +635,7 @@ class A <: A {}  // Error, 'A' inherits itself
 
 抽象类可以使用 `sealed` 修饰符，表示被修饰的类定义只能在本定义所在的包内被其他类继承。`sealed` 已经蕴含了 `public`/`open` 的语义，因此定义 sealed abstract class 时若提供 `public`/`open` 修饰符，编译器将会告警。`sealed` 的子类可以不是 `sealed` 类，仍可被 `open`/`sealed` 修饰，或不使用任何继承性修饰符。若 `sealed` 类的子类被 `open` 修饰，则其子类可在包外被继承。`sealed` 的子类可以不被 `public` 修饰。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 package A
@@ -646,7 +650,7 @@ public sealed abstract class S3 <: C1 {}  // OK
 open class S4 <: C1 {}   // OK
 ```
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 package B
@@ -661,7 +665,7 @@ sealed class SS3 {} // Error, 'sealed' cannot be used on non-abstract class
 
 子类的 `init` 构造函数可以使用 `super(args)` 的形式调用父类构造函数，或使用 `this(args)` 的形式调用本类其他构造函数，但两者之间只能调用一个。如果调用，必须在构造函数体内的第一个表达式处，在此之前不能有任何表达式或声明。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 open class A {
@@ -685,7 +689,7 @@ class B <: A {
 
 如果子类的构造函数没有显式调用父类构造函数，也没有显式调用其他构造函数，编译器会在该构造函数体的开始处插入直接父类的无参构造函数的调用。如果此时父类没有无参构造函数，则会编译报错。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 open class A {
@@ -715,7 +719,7 @@ open class C <: B {
 
 子类中可以覆盖（override）父类中的同名非抽象实例成员函数，即在子类中为父类中的某个实例成员函数定义新的实现。覆盖时，要求父类中的成员函数使用 `open` 修饰，子类中的同名函数使用 `override` 修饰，其中 `override` 是可选的。例如，下面的例子中，子类 B 中的函数 `f` 覆盖了父类 A 中的函数 `f`。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 open class A {
@@ -747,7 +751,7 @@ I am subclass
 
 对于静态函数，子类中可以重定义父类中的同名非抽象静态函数，即在子类中为父类中的某个静态函数定义新的实现。重定义时，要求子类中的同名静态函数使用 `redef` 修饰，其中 `redef` 是可选的。例如，下面的例子中，子类 D 中的函数 `foo` 重定义了父类 C 中的函数 `foo`。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 open class C {
@@ -777,7 +781,7 @@ I am class D
 
 如果抽象函数或 `open` 修饰的函数有命名形参，那么实现函数或 `override` 修饰的函数也需要保持同样的命名形参。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 open class A {
@@ -806,7 +810,7 @@ main() {
 
 还需要注意的是，当实现或重定义的函数为泛型函数时，子类型函数的类型变元约束需要比父类型中对应函数更宽松或相同。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 open class A {}

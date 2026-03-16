@@ -6,7 +6,7 @@
 
 示例代码如下：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.sync.SyncCounter

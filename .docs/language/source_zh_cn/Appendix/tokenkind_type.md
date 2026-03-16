@@ -1,5 +1,7 @@
 # TokenKind 类型
 
+<!-- check:skip -->
+
 ```cangjie
 public enum TokenKind <: ToString {
     DOT|                      /*  "."           */

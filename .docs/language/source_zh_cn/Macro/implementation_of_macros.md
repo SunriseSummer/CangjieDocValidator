@@ -8,6 +8,8 @@
 
 <!-- code_no_check -->
 
+<!-- check:skip -->
+
 ```cangjie
 import std.ast.*
 
@@ -20,6 +22,8 @@ public macro MacroName(args: Tokens): Tokens {
 
 <!-- code_no_check -->
 
+<!-- check:skip -->
+
 ```cangjie
 @MacroName(...)
 ```
@@ -29,6 +33,8 @@ public macro MacroName(args: Tokens): Tokens {
 当宏作用于声明时，一般可以省略括号。参考如下示例：
 
 <!-- code_no_check -->
+
+<!-- check:skip -->
 
 ```cangjie
 @MacroName func name() {}        // Before a FuncDecl
@@ -57,6 +63,8 @@ class C {
 对于输入的特殊说明，可以参考如下示例：
 
 <!-- code_no_check -->
+
+<!-- check:skip -->
 
 ```cangjie
 // Illegal input Tokens
@@ -88,6 +96,8 @@ class C {
   <!-- verify -macro6 -->
   <!-- cfg="--compile-macro" -->
 
+  <!-- check:ast -->
+
   ```cangjie
   macro package macro_definition
 
@@ -102,6 +112,8 @@ class C {
   宏调用文件 `macro_call.cj`
 
   <!-- verify -macro6 -->
+
+  <!-- check:ast -->
 
   ```cangjie
   package macro_calling
@@ -122,6 +134,8 @@ class C {
 
   <!-- code_no_check -->
 
+  <!-- check:ast -->
+
   ```cangjie
   let a: Int64 = @testDef(1 + 2)
   ```
@@ -130,6 +144,8 @@ class C {
 
   <!-- code_no_check -->
 
+  <!-- check:ast -->
+
   ```cangjie
   let a: Int64 = 1 + 2
   ```
@@ -137,6 +153,8 @@ class C {
   也就是说，可执行程序中的代码实际变为了：
 
   <!-- code_no_check -->
+
+  <!-- check:ast -->
 
   ```cangjie
   main(): Int64 {
@@ -165,6 +183,8 @@ class C {
   <!-- verify -macro7 -->
   <!-- cfg="--compile-macro" -->
 
+  <!-- check:skip -->
+
   ```cangjie
   // file macro_definition.cj
   macro package macro_definition
@@ -186,6 +206,8 @@ class C {
   宏调用文件 `macro_call.cj`
 
   <!-- verify -macro7 -->
+
+  <!-- check:ast -->
 
   ```cangjie
   package macro_calling
@@ -217,6 +239,8 @@ class C {
 
   <!-- code_no_check -->
 
+  <!-- check:ast -->
+
   ```cangjie
   @ModifyFunc
   func myFunc() {
@@ -227,6 +251,8 @@ class C {
   经过宏展开后，得到如下代码：
 
   <!-- code_no_check -->
+
+  <!-- check:ast -->
 
   ```cangjie
   func myFunc(id: Int64) {
@@ -254,6 +280,8 @@ class C {
 <!-- run -macro72 -->
 <!-- cfg="--compile-macro" -->
 
+<!-- check:ast -->
+
 ```cangjie
 macro package define
 
@@ -268,6 +296,8 @@ public macro Foo(attrTokens: Tokens, inputTokens: Tokens): Tokens {
 带属性的宏与不带属性的宏的调用类似，属性宏调用时新增的入参 attrTokens 通过 [] 传入，其调用形式为：
 
 <!-- run -macro72 -->
+
+<!-- check:skip -->
 
 ```cangjie
 import define.Foo
@@ -288,6 +318,8 @@ main() {}
 - 宏 Foo 调用，当参数是 struct Data 时，与 `[]` 内的属性 `public` 进行拼接，经过宏展开后，得到
 
   <!-- code_no_check -->
+
+  <!-- check:ast -->
 
   ```cangjie
   public struct Data {
@@ -310,6 +342,8 @@ main() {}
     - 输入的内容中，若希望 "@" 作为输入的 `Token` 则必须使用转义符号 "\\" 对其进行转义。
 
     <!-- code_no_check -->
+
+    <!-- check:skip -->
 
     ```cangjie
     // Illegal attribute Tokens
@@ -343,6 +377,8 @@ main() {}
 <!-- compile -macro8 -->
 <!-- cfg="--compile-macro" -->
 
+<!-- check:skip -->
+
 ```cangjie
 macro package pkg1
 
@@ -362,6 +398,8 @@ public macro getIdent(attr:Tokens, input:Tokens):Tokens {
 
 <!-- compile -macro8 -->
 <!-- cfg="--compile-macro" -->
+
+<!-- check:skip -->
 
 ```cangjie
 macro package pkg2
@@ -387,6 +425,8 @@ public macro Prop(input:Tokens):Tokens {
 
 <!-- compile -macro8 -->
 
+<!-- check:ast -->
+
 ```cangjie
 package pkg3
 
@@ -406,6 +446,8 @@ main() {
 
 <!-- code_no_check -->
 
+<!-- check:skip -->
+
 ```cangjie
 public macro Prop(input:Tokens):Tokens {
     let v = parseDecl(input)
@@ -424,6 +466,8 @@ public macro Prop(input:Tokens):Tokens {
 会先被展开成如下代码，再进行编译。
 
 <!-- code_no_check -->
+
+<!-- check:skip -->
 
 ```cangjie
 public macro Prop(input: Tokens): Tokens {
@@ -454,6 +498,8 @@ public macro Prop(input: Tokens): Tokens {
 <!-- run -macro9 -->
 <!-- cfg="--compile-macro" -->
 
+<!-- check:ast -->
+
 ```cangjie
 macro package pkg1
 
@@ -472,6 +518,8 @@ public macro Bar(input: Tokens): Tokens {
 
 <!-- run -macro9 -->
 <!-- cfg="--compile-macro" -->
+
+<!-- check:ast -->
 
 ```cangjie
 macro package pkg2
@@ -492,6 +540,8 @@ public macro addToMul(inputTokens: Tokens): Tokens {
 `pkg3` 包中使用上面定义的三个宏：
 
 <!-- run -macro9 -->
+
+<!-- check:ast -->
 
 ```cangjie
 package pkg3
@@ -528,6 +578,8 @@ main(): Int64 {
 
 <!-- code_no_check -->
 
+<!-- check:skip -->
+
 ```cangjie
 var a = @foo(@foo1(2 * 3)+@foo2(1 + 3))  // foo1, foo2 have to be defined.
 
@@ -552,6 +604,8 @@ struct Data{
 <!-- compile.error -macro92 -->
 <!-- cfg="--compile-macro" -->
 
+<!-- check:ast -->
+
 ```cangjie
 public macro Outer(input: Tokens): Tokens {
     return input
@@ -568,6 +622,8 @@ public macro Inner(input: Tokens): Tokens {
 <!-- compile.error -macro92 -->
 <!-- cfg="--debug-macro" -->
 
+<!-- check:skip -->
+
 ```cangjie
 @Outer var a = 0
 @Inner var b = 0 // Error, The macro call 'Inner' should with the surround code contains a call 'Outer'.
@@ -581,6 +637,8 @@ public macro Inner(input: Tokens): Tokens {
 
 <!-- run -macro10 -->
 <!-- cfg="--compile-macro" -->
+
+<!-- check:skip -->
 
 ```cangjie
 macro package define
@@ -622,6 +680,8 @@ public macro Inner(input: Tokens): Tokens {
 <!-- run -macro11 -->
 <!-- cfg="--compile-macro" -->
 
+<!-- check:skip -->
+
 ```cangjie
 import define.*
 
@@ -641,6 +701,8 @@ main(): Int64 {
 在上面的代码中，`Outer` 接收两个 `Inner` 宏发送来的变量名，自动为类添加如下内容：
 
 <!-- code_no_check -->
+
+<!-- check:ast -->
 
 ```cangjie
 public func getCnt() {

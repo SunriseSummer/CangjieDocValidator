@@ -8,6 +8,8 @@
 
 <!-- code_no_check -->
 
+<!-- check:skip -->
+
 ```cangjie
 Token(k: TokenKind)
 Token(k: TokenKind, v: String)
@@ -15,11 +17,9 @@ Token(k: TokenKind, v: String)
 
 下面给出一些`Token`构造的例子：
 
-<!-- compile -->
+<!-- check:ast -->
 
 ```cangjie
-import std.ast.*
-
 let tk1 = Token(TokenKind.ADD)   // '+' 运算符
 let tk2 = Token(TokenKind.FUNC)   // func 关键字
 let tk3 = Token(TokenKind.IDENTIFIER, "x")   // x 标识符
@@ -32,6 +32,8 @@ let tk5 = Token(TokenKind.STRING_LITERAL, "xyz")  // 字符串字面量
 一个 `Tokens` 代表由多个 `Token` 组成的序列。可以通过 `Token` 数组直接构造 `Tokens`。下面是 3 种基本的构造 `Tokens` 实例的方式：
 
 <!-- code_no_check -->
+
+<!-- check:skip -->
 
 ```cangjie
 Tokens()   // 构造空列表
@@ -50,7 +52,7 @@ Tokens(tks: ArrayList<Token>)
 
 在下面的案例中，使用构造函数直接构造 `Token` 和 `Tokens`，然后打印详细的调试信息：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.ast.*
@@ -88,7 +90,7 @@ description: integer_literal, token_id: 140, token_literal_value: 2, fileID: 1, 
 
 下面的例子展示 `Array` 和基础数据类型的插值：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.ast.*
@@ -131,7 +133,7 @@ s = "Hello"
 
 下面是一些 `quote` 表达式内包含这些特殊 `Token` 的例子：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 import std.ast.*

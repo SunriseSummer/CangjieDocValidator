@@ -132,7 +132,7 @@ func bar() {
 - 如果重命名后的名字与当前包顶层作用域的其他名字存在冲突，且这些名字对应的声明均为函数类型，则参与函数重载，否则报重定义的错误。
 - 支持 `import pkg as newPkgName` 的形式对包名进行重命名，以解决不同模块中同名包的命名冲突问题。
 
-    <!-- check:ast -->
+    <!-- check:build_only -->
 
     ```cangjie
     // a.cj
@@ -140,7 +140,7 @@ func bar() {
     public func f1() {}
     ```
 
-    <!-- check:ast -->
+    <!-- check:build_only -->
 
     ```cangjie
     // d.cj
@@ -148,7 +148,7 @@ func bar() {
     public func f3() {}
     ```
 
-    <!-- check:ast -->
+    <!-- check:build_only -->
 
     ```cangjie
     // b.cj
@@ -156,7 +156,7 @@ func bar() {
     public func f2() {}
     ```
 
-    <!-- check:ast -->
+    <!-- check:build_only -->
 
     ```cangjie
     // c.cj

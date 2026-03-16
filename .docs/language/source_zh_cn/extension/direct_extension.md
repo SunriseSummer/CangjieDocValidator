@@ -4,6 +4,8 @@
 
 <!-- verify -printSize -->
 
+<!-- check:run project=printSize -->
+
 ```cangjie
 extend String {
     public func printSize() {
@@ -17,6 +19,8 @@ extend String {
 当为 `String` 扩展了 `printSize` 函数之后，就能在当前 `package` 内对 `String` 的实例访问该函数，就像是 `String` 本身具备该函数。
 
 <!-- verify -printSize -->
+
+<!-- check:run project=printSize -->
 
 ```cangjie
 main() {
@@ -39,7 +43,7 @@ the size is 3
 
 例如下面所示的 `Foo<T>`：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class Foo<T> where T <: ToString {}
@@ -54,7 +58,7 @@ extend Foo<Bar> {} // Error, generics type arguments do not match the constraint
 
 例如下面所示的 `MyList<T>`：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class MyList<T> {
@@ -75,7 +79,7 @@ extend<T, R> MyList<T, R> {}    // Error, type argument's number does not match 
 
 如下面的代码所示，使用扩展语法，约束了 T1 和 T2 在支持 equals 的情况下，Pair 也可以实现 equals 函数。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 class Pair<T1, T2> {

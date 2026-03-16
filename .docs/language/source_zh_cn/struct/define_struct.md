@@ -2,7 +2,7 @@
 
 `struct` 类型的定义以关键字 `struct` 开头，后跟 `struct` 的名字，接着是定义在一对花括号中的 `struct` 定义体。`struct` 定义体中可以定义一系列的成员变量、成员属性（参见[属性](../class_and_interface/prop.md)）、静态初始化器、构造函数和成员函数。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 struct Rectangle {
@@ -32,7 +32,7 @@ struct Rectangle {
 
 实例成员变量定义时可以不设置初值（但必须标注类型，如上例中的 `width` 和 `height`），也可以设置初值，例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 struct Rectangle {
@@ -47,7 +47,7 @@ struct Rectangle {
 
 静态初始化器以关键字组合 `static init` 开头，后跟无参参数列表和函数体，且不能被访问修饰符修饰。函数体中必须完成对所有未初始化的静态成员变量的初始化，否则编译报错。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 struct Rectangle {
@@ -60,7 +60,7 @@ struct Rectangle {
 
 一个 `struct` 中最多允许定义一个静态初始化器，否则报重定义错误。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 struct Rectangle {
@@ -80,7 +80,7 @@ struct Rectangle {
 
 普通构造函数以关键字 `init` 开头，后跟参数列表和函数体，函数体中必须完成对所有未初始化的实例成员变量的初始化（如果参数名和成员变量名无法区分，可以在成员变量前使用 `this` 加以区分，`this` 表示 `struct` 的当前实例），否则编译报错。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 struct Rectangle {
@@ -95,7 +95,7 @@ struct Rectangle {
 
 一个 `struct` 中可以定义多个普通构造函数，但它们必须构成重载（参见[函数重载](../function/function_overloading.md)），否则报重定义错误。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 struct Rectangle {
@@ -123,7 +123,7 @@ struct Rectangle {
 
 使用主构造函数通常可以简化 `struct` 的定义，例如，上述包含一个 `init` 构造函数的 `Rectangle` 可以简化为如下定义：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 struct Rectangle {
@@ -133,7 +133,7 @@ struct Rectangle {
 
 主构造函数的参数列表中也可以定义普通形参，例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 struct Rectangle {
@@ -143,7 +143,7 @@ struct Rectangle {
 
 如果 `struct` 定义中不存在自定义构造函数（包括主构造函数），并且所有实例成员变量都有初始值，则会自动为其生成一个无参构造函数（调用此无参构造函数会创建一个所有实例成员变量的值均等于其初值的对象）；否则，不会自动生成此无参构造函数。例如，对于如下 `struct` 定义，注释中给出了自动生成的无参构造函数：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 struct Rectangle {
@@ -162,7 +162,7 @@ struct Rectangle {
 
 下例中，`area` 是实例成员函数，`typeName` 是静态成员函数。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 struct Rectangle {
@@ -181,7 +181,7 @@ struct Rectangle {
 
 实例成员函数中可以通过 `this` 访问实例成员变量，例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 struct Rectangle {
@@ -205,7 +205,7 @@ struct Rectangle {
 
 下面的例子中，`width` 是 `public` 修饰的成员，在类外可以访问，`height` 是缺省访问修饰符的成员，仅在当前包及子包可见，其他包无法访问。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 package a
@@ -233,6 +233,8 @@ func samePkgFunc() {
 <!-- cfg="-p b --output-type=staticlib" -->
 <!-- cfg="liba.a" -->
 
+<!-- check:ast -->
+
 ```cangjie
 package b
 import a.*
@@ -248,7 +250,7 @@ main() {
 
 递归和互递归定义的 `struct` 均是非法的。例如：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 struct R1 { // Error, 'R1' recursively references itself

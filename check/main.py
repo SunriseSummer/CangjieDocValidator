@@ -24,7 +24,7 @@ from .parser import extract_code_blocks
 from .assembler import blocks_to_testcases, make_project_name
 from .project import create_cjpm_project
 from .runner import run_testcase, check_ast
-from .report import generate_report
+from .report import generate_report, generate_extract_report
 
 
 def main():
@@ -58,6 +58,7 @@ def main():
     unannotated_warnings = []
     errors = []
     all_results = []
+    all_blocks = []
 
     print(f"📖 扫描文档目录: {scan_dir}")
     print(f"📁 输出目录: {output_base}")
@@ -65,6 +66,7 @@ def main():
 
     for md_file in md_files:
         blocks, unannotated = extract_code_blocks(md_file)
+        all_blocks.extend(blocks)
 
         if unannotated:
             unannotated_total += len(unannotated)
@@ -197,7 +199,21 @@ def main():
     save_json(args, all_results, unannotated_warnings)
 
     # 生成测试报告
-    if not args.extract_only:
+    report_dir = getattr(args, 'report_dir', None)
+    if args.extract_only:
+        report_path = generate_extract_report(
+            output_dir=output_base,
+            scan_dir=scan_dir,
+            all_blocks=all_blocks,
+            unannotated_warnings=unannotated_warnings,
+            skipped=skipped,
+            md_files=md_files,
+            report_dir=report_dir,
+        )
+        print(f"\n📝 标注分析报告已生成: {report_path}")
+        if report_dir:
+            print(f"📝 报告副本: {Path(report_dir) / 'report.md'}")
+    else:
         report_path = generate_report(
             output_dir=output_base,
             scan_dir=scan_dir,
@@ -205,8 +221,11 @@ def main():
             unannotated_warnings=unannotated_warnings,
             skipped=skipped,
             md_files=md_files,
+            report_dir=report_dir,
         )
         print(f"\n📝 测试报告已生成: {report_path}")
+        if report_dir:
+            print(f"📝 报告副本: {Path(report_dir) / 'report.md'}")
 
     # 清理
     if args.clean and output_base.exists():

@@ -6,7 +6,7 @@
 
 例如，下面的例子中对 A 的直接扩展前使用了 `public` 修饰，将编译报错。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 public class A {}
@@ -22,7 +22,7 @@ public extend A {}  // Error, expected no modifier before extend
 - 使用 `static` 修饰的成员，只能通过类型名访问，不能通过实例对象访问。
 - 对 `struct` 类型的扩展可以定义 `mut` 函数。
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 package p1
@@ -46,7 +46,7 @@ main() {
 
 扩展内的成员定义不支持使用 `open`、`override`、`redef` 修饰。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class Foo {
@@ -71,7 +71,7 @@ extend Foo {
 
 只能在 `package a` 或者在 `package b` 中为 `Foo` 实现 `Bar`。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 // package a
@@ -91,7 +91,7 @@ extend Foo <: Bar {} // Error
 
 扩展的实例成员与类型定义处一样可以使用 `this`，`this` 的功能保持一致。同样也可以省略 `this` 访问成员。扩展的实例成员不能使用 `super`。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class A {
@@ -108,7 +108,7 @@ extend A {
 
 扩展不能访问被扩展类型中 `private` 修饰的成员。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class A {
@@ -126,7 +126,7 @@ extend A {
 
 扩展不能遮盖被扩展类型的任何成员。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class A {
@@ -140,7 +140,7 @@ extend A {
 
 扩展也不允许遮盖其他扩展增加的任何成员。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class A {}
@@ -156,7 +156,7 @@ extend A {
 
 在同一个包内，对同一类型可以扩展多次，并且在扩展中可以直接调用被扩展类型的其他扩展中非 `private` 修饰的函数。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class Foo {}
@@ -182,7 +182,7 @@ extend Foo { // OK
 
 示例：假设对同一个类型 `E<X>` 的两个扩展分别为扩展 `1` 和扩展 `2` ，`X` 的约束在扩展 `1` 中比扩展 `2` 中更严格，那么扩展 `1` 中的函数和属性对扩展 `2` 均不可见，反之，扩展 `2` 中的函数和属性对扩展 `1` 可见。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 open class A {}
@@ -216,6 +216,8 @@ extend<X> E<X> <: I2 where X <: A   { // extension 2
 对于直接扩展，当扩展与被扩展的类型在同一个包中，扩展是否导出，由被扩展类型与泛型约束（如果有）的访问修饰符同时决定，当所有的泛型约束都是导出类型（修饰符与导出规则，详见[顶层声明的可见性](../package/toplevel_access.md)章节）时，该扩展将被导出。当扩展与被扩展类型不在同一个包中时，该扩展不会导出。
 
 如以下代码所示，`Foo` 是导出的，`f1` 函数所在的扩展由于不导出泛型约束，故该扩展不会被导出；`f2` 和 `f3` 函数所在的扩展的泛型约束均被导出，故该扩展被导出；`f4` 函数所在的扩展包含多个泛型约束，且泛型约束中 `I1` 未被导出，故该扩展不会被导出；`f5` 函数所在的扩展包含多个泛型约束，所有的泛型约束均是导出的，故该扩展会被导出。
+
+<!-- check:skip -->
 
 ```cangjie
 // package a.b
@@ -281,6 +283,8 @@ main() {
 
 如下代码所示，在包 `a` 中，虽然接口访问修饰符为 `private`，但 `Foo` 的扩展仍然会被导出。
 
+<!-- check:build_only -->
+
 ```cangjie
 // package a
 package a
@@ -294,6 +298,8 @@ extend<T> Foo<T> <: I0 {}
 ```
 
 当在其他包中为 `Foo` 类型扩展时，扩展是否导出由实现接口和泛型约束的访问修饰符决定。实现接口至少存在一个导出的接口，且所有的泛型约束均可导出时，该扩展将被导出。
+
+<!-- check:ast -->
 
 ```cangjie
 // package b
@@ -333,6 +339,8 @@ extend<T> Foo<T> <: I4 & I3 where T <: I2 {}
 <!-- compile.error -access_rules3 -->
 <!-- cfg="-p a --output-type=staticlib" -->
 
+<!-- check:build_only -->
+
 ```cangjie
 // package a
 package a
@@ -342,6 +350,8 @@ public class Foo {}
 
 <!-- compile.error -access_rules3 -->
 <!-- cfg="-p b --output-type=staticlib" -->
+
+<!-- check:ast -->
 
 ```cangjie
 // package b
@@ -368,6 +378,8 @@ extend Foo <: I1 & I2 {
 <!-- cfg="-p c --output-type=staticlib" -->
 <!-- cfg="liba.a libb.a" -->
 
+<!-- check:ast -->
+
 ```cangjie
 // package c
 package c
@@ -389,7 +401,7 @@ main() {
 
 而对于接口扩展，需要同时导入被扩展的类型、扩展的接口和泛型约束（如果有）才能使用。因此在 `package c` 中，需要同时导入 `Foo` 和 `I` 才能使用对应扩展中的函数 `g`。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 // package a
@@ -399,6 +411,8 @@ extend Foo {
     public func f() {}
 }
 ```
+
+<!-- check:ast -->
 
 ```cangjie
 // package b
@@ -414,6 +428,8 @@ extend Foo <: I {
     }
 }
 ```
+
+<!-- check:ast -->
 
 ```cangjie
 // package c

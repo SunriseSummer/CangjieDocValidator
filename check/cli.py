@@ -66,6 +66,10 @@ def build_parser() -> argparse.ArgumentParser:
         help='跳过 check:ast 语法解析检查',
     )
     parser.add_argument(
+        '--report-dir', metavar='DIR',
+        help='将测试报告额外输出到指定目录',
+    )
+    parser.add_argument(
         '--verbose', '-v', action='store_true',
         help='显示详细输出',
     )

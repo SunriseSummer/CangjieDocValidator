@@ -17,7 +17,7 @@
 
 在以下示例中，函数 `foo` 内定义了一个嵌套函数 `nestAdd`，可以在 `foo` 内调用该嵌套函数 `nestAdd`，也可以将嵌套函数 `nestAdd` 作为返回值返回，在 `foo` 外对其进行调用：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func foo() {

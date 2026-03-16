@@ -31,8 +31,7 @@
 
 对于整数类型字面量，如果它的值超出了上下文要求的整数类型的表示范围，编译器将会报错。
 
-<!-- compile.error -->
-
+<!-- check:compile_error -->
 ```cangjie
 let x: Int8 = 128          // Error, 128 out of the range of Int8
 let y: UInt8 = 256         // Error, 256 out of the range of UInt8
@@ -50,8 +49,7 @@ let z: Int32 = 0x8000_0000 // Error, 0x8000_0000 out of the range of Int32
 
 加入了后缀的整数字面量可以通过以下方式使用：
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
 var x = 100i8  // x is 100 with type Int8
 var y = 0x10u64 // y is 16 with type UInt64
@@ -62,13 +60,14 @@ var z = 0o432i32  // z is 282 with type Int32
 
 仓颉编程语言支持字符字节字面量，以方便使用 ASCII 码表示 `UInt8` 类型的值。字符字节字面量由字符 b、一对标识首尾的单引号、以及一个 `ASCII` 字符组成，例如：
 
-<!-- compile -->
-
+<!-- check:run -->
 ```cangjie
-var a = b'x'                    // a is 120 with type UInt8
-var b = b'\n'                   // b is 10 with type UInt8
-var c = b'\u{78}'               // c is 120 with type UInt8
-c = b'\u{90}' - b'\u{66}' + c   // c is 162 with type UInt8
+main() {
+    var a = b'x'                    // a is 120 with type UInt8
+    var b = b'\n'                   // b is 10 with type UInt8
+    var c = b'\u{78}'               // c is 120 with type UInt8
+    c = b'\u{90}' - b'\u{66}' + c   // c is 162 with type UInt8
+}
 ```
 
 `b'x'` 表示类型为 UInt8 大小是 120 的字面值。另外还可以通过 `b'\u{78}'` 这种转义形式表示类型为 `UInt8`，16 进制大小为 0x78 或 10 进制大小为 120 的字面值。需要注意的是，`\u` 内部最多有两位 16 进制数，并且值必须小于 256（十进制）。

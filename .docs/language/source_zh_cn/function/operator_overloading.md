@@ -33,6 +33,8 @@
 
     <!-- run -overloadOperater -->
 
+    <!-- check:run project=overloadOperator -->
+
     ```cangjie
     open class Point {
         var x: Int64 = 0
@@ -55,6 +57,8 @@
 
     <!-- run -overloadOperater -->
 
+    <!-- check:run project=overloadOperator -->
+
     ```cangjie
     main() {
         let p1 = Point(8, 24)
@@ -67,7 +71,7 @@
 
    索引操作符取值形式 `[]` 内的参数序列对应操作符重载的非命名参数，可以是 1 个或多个，可以是任意类型。不可以有其他命名参数。返回类型可以是任意类型。
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     class A {
@@ -87,7 +91,7 @@
 
    需要注意的是，value 只是一种特殊的标记，在索引操作符赋值时并不需要使用命名参数的形式调用。
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     class A {
@@ -106,7 +110,7 @@
 
 4. 函数调用操作符（`()`）重载函数，输入参数和返回值类型可以是任意类型。示例如下：
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     open class A {
@@ -123,7 +127,7 @@
 
    不能使用 `this` 或 `super` 调用 `()` 操作符重载函数。示例如下：
 
-    <!-- compile.error -->
+    <!-- check:compile_error -->
 
     ```cangjie
     open class A {
@@ -153,7 +157,7 @@
 
    对于枚举类型，当构造器形式和 `()` 操作符重载函数形式都满足时，优先匹配构造器形式。示例如下：
 
-    <!-- compile -->
+    <!-- check:run -->
 
     ```cangjie
     enum E {
@@ -204,7 +208,7 @@
 
 - 一旦在某个类型上重载了除关系操作符（`<`、`<=`、`>`、`>=`、`==` 和 `!=`）之外的其他二元操作符，并且操作符函数的返回类型与左操作数的类型一致或是其子类型，那么此类型支持对应的复合赋值操作符。当操作符函数的返回类型与左操作数的类型不一致且不是其子类型时，在使用对应的复合赋值符号时将报类型不匹配错误。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 open class MyClass {
@@ -228,7 +232,7 @@ main() {
 - 仓颉编程语言不支持自定义操作符，即不允许定义除上表中所列 `operator` 之外的其他操作符函数。
 - 对于类型 `T`，如果 `T` 已默认支持上述某些可重载操作符，那么通过扩展方式再次为其实现相同签名的操作符函数将报重定义错误。例如：为数值类型重载其已支持的同签名算术操作符、位操作符或关系操作符，为 `Rune` 重载同签名的关系操作符，或为 `Bool` 类型重载同签名的逻辑操作符、判等或不等操作符，均会报重定义错误。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 extend Int64 {

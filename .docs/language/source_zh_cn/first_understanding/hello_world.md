@@ -4,7 +4,7 @@
 
 首先，请在适当目录下新建一个名为 `hello.cj` 的文本文件，并向文件中写入以下仓颉代码：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 // hello.cj

@@ -12,7 +12,7 @@
 
 这几个编译标记可以在任意表达式内部使用，只要能符合类型检查规则即可。示例如下：
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 func test1() {
@@ -55,6 +55,8 @@ char* foo()
 仓颉文件 `main.cj`：
 
 <!-- code_no_check -->
+
+<!-- check:ast -->
 
 ```cangjie
 @FastNative
@@ -106,7 +108,7 @@ this is an example
 
 使用示例如下：
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 @Frozen
@@ -127,7 +129,7 @@ public class testClass {
 
 仓颉语言内部提供 `@Attribute` 标记，开发者通过内置的 `@Attribute` 来对某个声明设置属性值，从而达到标记声明的目的。属性值可以是 `identifier` 或者 `string`，下面是一个简单的例子，这段示例代码为变量 `cnt` 添加了一个 `identifier` 类型的属性 `State`，为变量 `bcnt` 添加了一个 `string` 类型的属性 `"Binding"`。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 @Attribute[State] var cnt = 0       // identifier
@@ -140,6 +142,8 @@ public class testClass {
 
 <!-- run -macro0 -->
 <!-- cfg="--compile-macro" -->
+
+<!-- check:ast -->
 
 ```cangjie
 public macro Component(input: Tokens): Tokens {
@@ -157,6 +161,8 @@ public macro Component(input: Tokens): Tokens {
 <!-- run -macro0 -->
 <!-- cfg="--debug-macro" -->
 
+<!-- check:skip -->
+
 ```cangjie
 @Component(
     @Attribute[State] var cnt = 0
@@ -167,7 +173,7 @@ public macro Component(input: Tokens): Tokens {
 
 `@Deprecated` 表示此 API 已废弃，虽然暂时可用，但未来将被移除或更改，建议其他开发者不要调用此 API。例如：
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 @Deprecated["用boo代替", since: "1.3.4"]
@@ -214,7 +220,7 @@ warning: function 'foo' is deprecated since 1.3.4. 用boo代替
 - `since!: ?String` - 废弃版本。
 - `strict!: Bool` - 默认值为 `false`，在被该标记修饰的 API 的调用处会触发警告。如果设置为 `true`，则会触发编译错误。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 @Deprecated["Use Macro2", since: "1990", strict: true]

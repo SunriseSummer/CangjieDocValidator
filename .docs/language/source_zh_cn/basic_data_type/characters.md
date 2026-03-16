@@ -8,8 +8,7 @@
 
 **单个字符**的字符字面量举例：
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
 let a: Rune = r'a'
 let b: Rune = r"b"
@@ -17,8 +16,7 @@ let b: Rune = r"b"
 
 **转义字符**是指在一个字符序列中对后面的字符进行另一种解释的字符。转义字符使用转义符号 `\` 开头，后面加需要转义的字符。举例如下：
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
 let slash: Rune = r'\\'
 let newLine: Rune = r'\n'
@@ -27,8 +25,7 @@ let tab: Rune = r'\t'
 
 **通用字符**以 `\u` 开头，后面加上定义在一对花括号中的 1~8 个十六进制数，即可表示对应的 Unicode 值代表的字符。举例如下：
 
-<!-- verify -->
-
+<!-- check:run -->
 ```cangjie
 main() {
     let he: Rune = r'\u{4f60}'
@@ -37,6 +34,9 @@ main() {
     print(llo)
 }
 ```
+<!-- expected_output:
+你好
+-->
 
 编译并执行上述代码，输出结果为：
 

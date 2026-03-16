@@ -6,7 +6,7 @@
 
 在声明全局泛型函数时，只需要在函数名后使用尖括号声明类型形参，然后就可以在函数形参、返回类型及函数体中对这一类型形参进行引用。例如 `id` 函数定义为：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func id<T>(a: T): T {
@@ -20,6 +20,8 @@ func id<T>(a: T): T {
 
 <!-- verify -composition -->
 
+<!-- check:run project=composition -->
+
 ```cangjie
 func composition<T1, T2, T3>(f: (T1) -> T2, g: (T2) -> T3): (T1) -> T3 {
     return {x: T1 => g(f(x))}
@@ -29,6 +31,8 @@ func composition<T1, T2, T3>(f: (T1) -> T2, g: (T2) -> T3): (T1) -> T3 {
 因为可以被用来复合的函数是任意类型，例如可以是 `(Int32) -> Bool, (Bool) -> Int64` 的复合，也可以是 `(Int64) -> Rune, (Rune) -> Int8` 的复合，所以才需要使用泛型函数。
 
 <!-- verify -composition -->
+
+<!-- check:run project=composition -->
 
 ```cangjie
 func times2(a: Int64): Int64 {
@@ -60,7 +64,7 @@ main() {
 
 局部函数也可以是泛型函数。例如泛型函数 `id` 可以嵌套定义在其他函数中：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func foo(a: Int64) {
@@ -86,7 +90,7 @@ true
 
 class、struct 与 enum 的成员函数可以是泛型的。例如：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 class A {
@@ -129,7 +133,7 @@ false
 
 在为类型使用 extend 声明进行扩展时，扩展中的函数也可以是泛型的，例如可以为 `Int64` 类型增加一个泛型成员函数：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 extend Int64 {
@@ -156,7 +160,7 @@ twelve
 
 interface、class、struct、enum 与 extend 中可以定义静态泛型函数，例如下例 `ToPair` class 中从 `ArrayList` 中返回一个元组：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.collection.ArrayList

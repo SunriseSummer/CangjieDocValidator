@@ -23,6 +23,8 @@ root_path
 <!-- run -macro0 -->
 <!-- cfg="--compile-macro" -->
 
+<!-- check:ast -->
+
 ```cangjie
 // macros/m.cj
 // In this file, we define the macro Inner, Outer.
@@ -42,6 +44,8 @@ public macro Outer(input: Tokens) {
 宏调用放在 _src_ 子目录下：
 
 <!-- run -macro0 -->
+
+<!-- check:skip -->
 
 ```cangjie
 // src/demo.cj
@@ -101,6 +105,8 @@ cjc src/demo.cj -o demo.exe --import-path ./target --output-dir ./target
 <!-- compile -macro1 -->
 <!-- cfg="--compile-macro" -->
 
+<!-- check:ast -->
+
 ```cangjie
 macro package define
 import std.ast.*
@@ -141,6 +147,8 @@ public macro B(input: Tokens) {
 
 <!-- code_no_check -->
 
+<!-- check:ast -->
+
 ```cangjie
 public func diagReport(level: DiagReportLevel, tokens: Tokens, message: String, hint: String): Unit
 ```
@@ -158,6 +166,8 @@ public func diagReport(level: DiagReportLevel, tokens: Tokens, message: String, 
 
 <!-- compile.error -macro2 -->
 <!-- cfg="--compile-macro" -->
+
+<!-- check:ast -->
 
 ```cangjie
 // macro_definition.cj
@@ -180,6 +190,8 @@ public macro testDef(input: Tokens): Tokens {
 宏调用文件：
 
 <!-- compile.error -macro2 -->
+
+<!-- check:ast -->
 
 ```cangjie
 // macro_call.cj
@@ -227,6 +239,8 @@ error: This expression is not allowed to contain identifier
 <!-- compile -macro3 -->
 <!-- cfg="--compile-macro" -->
 
+<!-- check:skip -->
+
 ```cangjie
 macro package define
 
@@ -265,6 +279,8 @@ public macro Inner(input: Tokens): Tokens {
 <!-- compile -macro3 -->
 <!-- cfg="--debug-macro" -->
 
+<!-- check:skip -->
+
 ```cangjie
 import define.*
 
@@ -300,6 +316,8 @@ cjc --debug-macro demo.cj --import-path ./target
 
 <!-- code_no_check -->
 
+<!-- check:ast -->
+
 ```cangjie
 // demo.cj.macrocall
 /* ===== Emitted by MacroCall @Outer in demo.cj:3:1 ===== */
@@ -320,6 +338,8 @@ cjc --debug-macro demo.cj --import-path ./target
 
   <!-- code_no_check -->
 
+  <!-- check:skip -->
+
   ```cangjie
   // before expansion
   @M{} - 2 // macro M return 2
@@ -337,6 +357,8 @@ cjc --debug-macro demo.cj --import-path ./target
 
   <!-- code_no_check -->
 
+  <!-- check:compile_error -->
+
   ```cangjie
   public macro M(input: Tokens) {
       let a = @M2(1+2) // M2 is in macro M, not suitable for debug mode.
@@ -347,6 +369,8 @@ cjc --debug-macro demo.cj --import-path ./target
 - 不支持带括号宏的调试。
 
   <!-- code_no_check -->
+
+  <!-- check:ast -->
 
   ```cangjie
   // main.cj

@@ -2,7 +2,7 @@
 
 使用 HashMap 类型需要导入 collection 包：
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 import std.collection.*
@@ -14,14 +14,18 @@ HashMap 是一种哈希表，提供对其包含的元素的快速访问。表中
 
 仓颉使用 `HashMap<K, V>` 表示 HashMap 类型，K 表示 HashMap 的键类型，K 必须是实现了 Hashable 和 `Equatable<K>` 接口的类型，例如数值或 String。V 表示 HashMap 的值类型，V 可以是任意类型。
 
+<!-- check:ast -->
+
 ```cangjie
-var a: HashMap<Int64, Int64> = ... // HashMap whose key type is Int64 and value type is Int64
-var b: HashMap<String, Int64> = ... // HashMap whose key type is String and value type is Int64
+var a = HashMap<Int64, Int64>() // HashMap whose key type is Int64 and value type is Int64
+var b = HashMap<String, Int64>() // HashMap whose key type is String and value type is Int64
 ```
 
 元素类型不相同的 HashMap 是不相同的类型，所以它们之间不可以互相赋值。
 
 因此以下例子是不合法的。
+
+<!-- check:compile_error -->
 
 ```cangjie
 b = a // Type mismatch
@@ -29,7 +33,7 @@ b = a // Type mismatch
 
 仓颉中可以使用构造函数的方式构造一个指定的 HashMap。
 
-<!-- run -->
+<!-- check:ast -->
 
 ```cangjie
 let a = HashMap<String, Int64>() // Created an empty HashMap whose key type is String and value type is Int64
@@ -45,7 +49,7 @@ let e = HashMap<Int64, Int64>(10, {x: Int64 => (x, x * x)}) // Created a HashMap
 
 需要注意的是，HashMap 并不保证按插入元素的顺序排列，因此遍历的顺序和插入的顺序可能不同。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.collection.HashMap
@@ -68,7 +72,7 @@ The key is c, the value is 2
 
 当需要知道某个 HashMap 包含的元素个数时，可以使用 size 属性获得对应信息。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 import std.collection.HashMap
@@ -91,21 +95,32 @@ The size of hashmap is 3
 
 当想判断 HashMap 中是否包含某个键时，可以使用 contains 函数。如果该键存在会返回 true，否则返回 false。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
-let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
-let a = map.contains("a") // a == true
-let b = map.contains("d") // b == false
+import std.collection.HashMap
+
+main() {
+    let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
+    let a = map.contains("a") // a == true
+    let b = map.contains("d") // b == false
+    println("contains a: ${a}, contains d: ${b}")
+}
 ```
 
 当想访问指定键对应的元素时，可以使用下标语法访问（下标的类型必须是键类型）。使用不存在的键作为索引会触发运行时异常。
 
+<!-- check:run -->
+
 ```cangjie
-let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
-let a = map["a"] // a == 0
-let b = map["b"] // b == 1
-let c = map["d"] // Runtime exceptions
+import std.collection.HashMap
+
+main() {
+    let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
+    let a = map["a"] // a == 0
+    let b = map["b"] // b == 1
+    println("a = ${a}, b = ${b}")
+}
 ```
 
 ## 修改 HashMap
@@ -116,53 +131,73 @@ HashMap 的可变性是一个非常有用的特征，可以让同一个 HashMap 
 
 可以使用下标语法对某个键对应的值进行修改。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
-let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
-map["a"] = 3
+import std.collection.HashMap
+
+main() {
+    let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
+    map["a"] = 3
+}
 ```
 
 HashMap 是引用类型，HashMap 在作为表达式使用时不会拷贝副本，同一个 HashMap 实例的所有引用都会共享同样的数据。
 
 因此对 HashMap 元素的修改会影响到该实例的所有引用。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
-let map1 = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
-let map2 = map1
-map2["a"] = 3
-// map1 contains the elements ("a", 3), ("b", 1), ("c", 2)
-// map2 contains the elements ("a", 3), ("b", 1), ("c", 2)
+import std.collection.HashMap
+
+main() {
+    let map1 = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
+    let map2 = map1
+    map2["a"] = 3
+    // map1 contains the elements ("a", 3), ("b", 1), ("c", 2)
+    // map2 contains the elements ("a", 3), ("b", 1), ("c", 2)
+}
 ```
 
 如果需要将单个键值对添加到 HashMap 里，请使用 add 函数。如果希望同时添加多个键值对，可以使用 `add(all!: Collection<(K, V)>)` 函数。当键不存在时，add 函数会执行添加的操作，当键存在时，add 函数会将新的值覆盖旧的值。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
-let map = HashMap<String, Int64>()
-map.add("a", 0) // map contains the element ("a", 0)
-map.add("b", 1) // map contains the elements ("a", 0), ("b", 1)
-let map2 = HashMap<String, Int64>([("c", 2), ("d", 3)])
-map.add(all: map2) // map contains the elements ("a", 0), ("b", 1), ("c", 2), ("d", 3)
+import std.collection.HashMap
+
+main() {
+    let map = HashMap<String, Int64>()
+    map.add("a", 0) // map contains the element ("a", 0)
+    map.add("b", 1) // map contains the elements ("a", 0), ("b", 1)
+    let map2 = HashMap<String, Int64>([("c", 2), ("d", 3)])
+    map.add(all: map2) // map contains the elements ("a", 0), ("b", 1), ("c", 2), ("d", 3)
+}
 ```
 
 除了使用 add 函数以外，也可以使用赋值的方式直接将新的键值对添加到 HashMap。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
-let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
-map["d"] = 3 // map contains the elements ("a", 0), ("b", 1), ("c", 2), ("d", 3)
+import std.collection.HashMap
+
+main() {
+    let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2)])
+    map["d"] = 3 // map contains the elements ("a", 0), ("b", 1), ("c", 2), ("d", 3)
+}
 ```
 
 从 HashMap 中删除元素，可以使用 remove 函数，需要指定删除的键。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
-let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2), ("d", 3)])
-map.remove("d") // map contains the elements ("a", 0), ("b", 1), ("c", 2)
+import std.collection.HashMap
+
+main() {
+    let map = HashMap<String, Int64>([("a", 0), ("b", 1), ("c", 2), ("d", 3)])
+    let _ = map.remove("d") // map contains the elements ("a", 0), ("b", 1), ("c", 2)
+}
 ```

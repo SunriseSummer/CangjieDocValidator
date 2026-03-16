@@ -6,7 +6,7 @@
 
 **含匹配值的 match 表达式**：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -36,7 +36,7 @@ x = 0
 
 `match` 表达式的穷尽性保证了一定存在和待匹配值相匹配的 `case` 分支。下面的例子将编译报错，因为所有的 `case` 并没有覆盖 `x` 的所有可能取值：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 func nonExhaustive(x: Int64) {
@@ -50,7 +50,7 @@ func nonExhaustive(x: Int64) {
 
 如果被匹配值的类型包含 `enum` 类型且该 `enum` 为 `non-exhaustive enum`，则其在匹配时需要使用可匹配所有构造器的模式，如通配符模式 `_` 和绑定模式。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 enum T {
@@ -88,7 +88,7 @@ func baz(a: T) {
 
 在下面的例子中，使用到了 `enum` 模式，详见 [enum 模式](../enum_and_pattern_match/pattern_overview.md#enum-模式)章节。当 `RGBColor` 的构造器的参数值大于等于 `0` 时，输出它们的值；当参数值小于 `0` 时，即满足第一个 `case` 的 `where cond`，则认为它们的值等于 `0`：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 enum RGBColor {
@@ -116,7 +116,7 @@ Green = 0
 
 **没有匹配值的 match 表达式**：
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 main() {
@@ -153,7 +153,7 @@ x < 0
 
 下面分别举例说明。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 let x = 2
@@ -168,7 +168,7 @@ let s: String = match (x) {
 
 再来看一个没有上下文类型信息的例子：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 let x = 2

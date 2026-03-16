@@ -8,8 +8,7 @@
 
 下面的例子展示了布尔字面量的使用：
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
 let a: Bool = true
 let b: Bool = false

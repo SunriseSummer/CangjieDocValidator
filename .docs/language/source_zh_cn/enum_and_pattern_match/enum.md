@@ -12,7 +12,7 @@
 
 每个 `enum` 中至少存在一个有名字的构造器。有名字的构造器可以没有参数（即“无参构造器”），也可以携带若干个参数（即“有参构造器”）。如下示例代码定义了一个名为 `RGBColor` 的 `enum` 类型，它有 3 个构造器：`Red`、`Green` 和 `Blue`，分别表示 RGB 色彩模式中的红色、绿色和蓝色。每个构造器有一个 `UInt8` 类型的参数，用来表示每个颜色的亮度级别。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 enum RGBColor {
@@ -22,7 +22,7 @@ enum RGBColor {
 
 仓颉支持同一个 `enum` 中定义多个同名构造器，但是要求这些构造器的参数个数不同（认为没有参数的构造器的参数个数等于 `0`），例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 enum RGBColor {
@@ -33,7 +33,7 @@ enum RGBColor {
 
 每个 `enum` 中最多只有一个没有名字的 `...` 构造器，且 `...` 只能是最后一个构造器。拥有 `...` 构造器的 `enum` 称为 `non-exhaustive enum`。由于没有名字，这个构造器不能被直接匹配，在解构时，需要使用可匹配所有构造器的模式，如通配符模式 `_` 或绑定模式，具体可参见[match 表达式的定义](./match.md#match-表达式的定义) 。例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 enum T {
@@ -43,7 +43,7 @@ enum T {
 
 `enum` 支持递归定义，例如，下面的例子中使用 `enum` 定义了一种表达式（即 `Expr`），此表达式只能有 3 种形式：单独的一个数字 `Num`（携带一个 `Int64` 类型的参数）、加法表达式 `Add`（携带两个 `Expr` 类型的参数）、减法表达式 `Sub`（携带两个 `Expr` 类型的参数）。对于 `Add` 和 `Sub` 这两个构造器，其参数中递归地使用到了 `Expr` 自身。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 enum Expr {
@@ -55,7 +55,7 @@ enum Expr {
 
 另外，在 `enum` 体中还可以定义一系列成员函数、操作符函数（详见[操作符重载](../function/operator_overloading.md)）和成员属性（详见[属性](../class_and_interface/prop.md)），但是要求构造器、成员函数、成员属性之间不能重名。例如，下面的例子在 `RGBColor` 中定义了一个名为 `printType` 的函数，它会输出字符串 `RGBColor`：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 enum RGBColor {
@@ -77,7 +77,7 @@ enum RGBColor {
 
 下例中，`RGBColor` 中定义了三个构造器，其中有两个无参构造器（`Red` 和 `Green`）和一个有参构造器（`Blue(UInt8)`），`main` 中定义了三个 `RGBColor` 类型的变量 `r`，`g` 和 `b`，其中，`r` 的值使用 `RGBColor.Red` 进行初始化，`g` 的值直接使用 `Green` 进行初始化，`b` 的值使用 `Blue(100)` 进行初始化：
 
-<!-- compile -->
+<!-- check:run -->
 
 ```cangjie
 enum RGBColor {
@@ -95,7 +95,7 @@ main() {
 
 下面的例子中，只有构造器 `Blue(UInt8)` 可以不带类型名使用，`Red` 和 `Green(UInt8)` 皆会因为名字冲突而不能直接使用，必须加上类型名 `RGBColor`。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 let Red = 1
@@ -119,7 +119,7 @@ let b = Blue(100)            // OK: can be uniquely identified as an enum constr
 
 如下的例子中，只有构造器 `Blue` 会因为名称冲突而不能直接使用，必须加上类型名 `RGBColor`。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 class Blue {}

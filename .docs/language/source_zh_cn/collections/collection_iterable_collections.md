@@ -6,19 +6,21 @@ Range、Array、ArrayList 都是通过 Iterable 来支持 for-in 语法的。
 
 Iterable 是如下形式（只展示了核心代码）的一个内置 interface。
 
+<!-- check:ast -->
+
 ```cangjie
 interface Iterable<T> {
     func iterator(): Iterator<T>
-    ...
 }
 ```
 
 iterator 函数要求返回的 Iterator 类型是如下形式（只展示了核心代码）的另一个内置 interface。
 
+<!-- check:ast -->
+
 ```cangjie
 interface Iterator<T> <: Iterable<T> {
     mut func next(): Option<T>
-    ...
 }
 ```
 
@@ -26,39 +28,45 @@ interface Iterator<T> <: Iterable<T> {
 
 假设有这样一段 for-in 代码，如下所示。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
-let list = [1, 2, 3]
-for (i in list) {
-    println(i)
+main() {
+    let list = [1, 2, 3]
+    for (i in list) {
+        println(i)
+    }
 }
 ```
 
 它等价于如下形式的 while 代码。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
-let list = [1, 2, 3]
-var it = list.iterator()
-while (true) {
-    match (it.next()) {
-        case Some(i) => println(i)
-        case None => break
+main() {
+    let list = [1, 2, 3]
+    var it = list.iterator()
+    while (true) {
+        match (it.next()) {
+            case Some(i) => println(i)
+            case None => break
+        }
     }
 }
 ```
 
 另外一种常见的遍历 Iterable 类型的方法是在 while 表达式的条件中使用模式匹配，比如上面 while 代码的另一种等价写法是：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
-let list = [1, 2, 3]
-var it = list.iterator()
-while (let Some(i) <- it.next()) {
-    println(i)
+main() {
+    let list = [1, 2, 3]
+    var it = list.iterator()
+    while (let Some(i) <- it.next()) {
+        println(i)
+    }
 }
 ```
 

@@ -10,8 +10,7 @@
 
 下面的例子展示了浮点字面量的使用：
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
 let a: Float32 = 3.14       // a is 3.140000 with type Float32
 let b: Float32 = 2e3        // b is 2000.000000 with type Float32
@@ -32,8 +31,7 @@ let g: Float64 = 0x.2p4     // g is 2.000000 with type Float64
 
 加入了后缀的浮点数字面量可以像下面的方式来使用：
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
 let a = 3.14f32   // a is 3.140000 with type Float32
 let b = 2e3f32    // b is 2000.000000 with type Float32

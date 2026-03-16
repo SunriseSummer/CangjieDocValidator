@@ -28,7 +28,7 @@
 
 示例 1：闭包 `add`，捕获了 `let` 声明的局部变量 `num`，之后通过返回值返回到 `num` 定义的作用域之外，调用 `add` 时仍可正常访问 `num`。
 
-<!-- verify -->
+<!-- check:run -->
 
 ```cangjie
 func returnAddNum(): (Int64) -> Int64 {
@@ -54,7 +54,7 @@ main() {
 
 示例 2：捕获的变量必须在闭包定义时可见。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 func f() {
@@ -75,6 +75,8 @@ func f() {
 
 <!-- compile.error -error-->
 
+<!-- check:compile_error -->
+
 ```cangjie
 func f() {
     let x: Int64
@@ -88,7 +90,7 @@ func f() {
 
 示例 4：如果捕获的变量是引用类型，可修改其可变实例成员变量的值。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 class C {
@@ -113,7 +115,7 @@ main() {
 
 示例 5：为了防止捕获了 `var` 声明变量的闭包逃逸，这类闭包只能被调用，不能作为一等公民使用，包括不能赋值给变量，不能作为实参或返回值使用，不能直接将闭包的名字作为表达式使用。其中，闭包逃逸是指在函数执行完毕后仍然可以在函数外部被调用的闭包。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 func f() {
@@ -138,6 +140,8 @@ func f() {
 
 <!-- compile.error -error-->
 
+<!-- check:compile_error -->
+
 ```cangjie
 func h(){
     var x = 1
@@ -153,7 +157,7 @@ func h(){
 
 示例 6.2：`g` 捕获了 `var` 声明的变量 `x`，`f` 调用了 `g`。但 `g` 捕获的 `x` 在 `f` 内定义，`f` 没有捕获其他 `var` 声明的变量。因此，`f` 仍作为一等公民使用：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func h(){
@@ -169,7 +173,7 @@ func h(){
 
 示例 7：静态成员变量和全局变量的访问，不属于变量捕获，因此访问了 `var` 修饰的全局变量、静态成员变量的函数或 lambda 仍可作为一等公民使用。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 class C {

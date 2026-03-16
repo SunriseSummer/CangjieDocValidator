@@ -4,7 +4,7 @@
 
 `Option` 类型被定义为一个泛型 `enum` 类型，定义如下（这里仅需要知道尖括号中的 `T` 是一个类型形参，当 `T` 为不同类型时会得到不同的 `Option` 类型即可。关于泛型的详细介绍，可参见[泛型](../generic/generic_overview.md)）：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 enum Option<T> {
@@ -19,7 +19,7 @@ enum Option<T> {
 
 下面的例子展示了如何定义 `Option` 类型的变量：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 let a: Option<Int64> = Some(100)
@@ -30,7 +30,7 @@ let d: ?String = None
 
 另外，虽然 `T` 和 `Option<T>` 是不同的类型，但是当明确知道某个位置需要的是 `Option<T>` 类型的值时，可以直接传一个 `T` 类型的值，编译器会用 `Option<T>` 类型的 `Some` 构造器将 `T` 类型的值封装成 `Option<T>` 类型的值（注意：这里并不是类型转换）。例如，下面的定义是合法的（等价于上例中变量 `a`，`b` 和 `c` 的定义）：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 let a: Option<Int64> = 100
@@ -40,7 +40,7 @@ let c: Option<String> = "100"
 
 在上下文没有明确的类型要求时，无法使用 `None` 直接构造出想要的类型，此时应使用 `None<T>` 这样的语法来构造 `Option<T>` 类型的数据，例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 let a = None<Int64> // a: Option<Int64>

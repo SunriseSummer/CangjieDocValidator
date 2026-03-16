@@ -12,8 +12,7 @@
 
 用于将左操作数的值修改为右操作数的值，要求右操作数的类型是左操作数类型的子类型。对赋值表达式求值时，总是先计算 `=` 右边的表达式，再计算 `=` 左边的表达式，最后进行赋值。
 
-<!-- compile.error -->
-
+<!-- check:compile_error -->
 ```cangjie
 main(): Int64 {
     var a = 1
@@ -29,8 +28,7 @@ main(): Int64 {
 
 多赋值表达式是一种特殊的赋值表达式，多赋值表达式等号左边必须是一个 tuple（[元组](tuple.md)） ，这个 tuple 里面的元素必须都是左值，等号右边的表达式也必须是 tuple 类型，右边 tuple 每个元素的类型必须是对应位置左值类型的子类型。**值得注意的是当左侧 tuple 中出现 _ 时，表示忽略等号右侧 tuple 对应位置处的求值结果**（意味着这个位置处的类型检查总是可以通过的）。多赋值表达式可以将右边的 tuple 类型的值，一次性赋值给左边 tuple 内的对应左值，省去逐个赋值的代码。
 
-<!-- run -->
-
+<!-- check:run -->
 ```cangjie
 main(): Int64 {
     var a: Int64
@@ -49,8 +47,7 @@ main(): Int64 {
 
 一元负号（`-`）的操作数只能是数值类型的表达式。一元前缀负号表达式的值等于操作数取负的值，类型和操作数的类型相同：
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
     let num1: Int64 = 8
     let num2 = -num1 // num2 = -8, 其数据类型为“Int64”。
@@ -65,8 +62,7 @@ main(): Int64 {
 > - 整数取余运算 `a % b` 的值定义为 `a - b * (a / b)`。
 > - 加法操作符也可用于字符串的拼接。
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
     let a = 2 + 3    // a = 5
     let b = 3 - 1    // b = 2
@@ -92,8 +88,7 @@ main(): Int64 {
 > 当左操作类型为 Int64 时，右操作数只能为 UInt64 类型，表达式的类型为 Int64。
 > 当左操作类型为 Float64 时，右操作数只能为 Int64 类型或 Float64 类型，表达式的类型为 Float64。
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
     let p1 = 2 ** 3                  // p1 = 8
     let p2 = 2 ** UInt64(3 ** 2)     // p2 = 512
@@ -107,9 +102,9 @@ main(): Int64 {
 
 仓颉编程语言也提供 `**=`、`*=`、`/=`、`%=`、`+=`、`-=`、`<<=`、`>>=`、`&=`、`^=`、`|=`、`&&=` 和 `||=` 复合赋值操作符，简单示例如下：
 
-<!-- compile -->
-
+<!-- check:run -->
 ```cangjie
+main() {
     var a: Int64 = 10
     a += 2   // a = 12
     a -= 2   // a = 10
@@ -118,12 +113,12 @@ main(): Int64 {
     a /= 10  // a = 20
     a %= 6   // a = 2
     a <<= 2  // a = 8
+}
 ```
 
 对于复合赋值表达式求值时，总是先计算 `=` 左边的表达式的左值，然后根据这个左值取右值，然后将该右值与 `=` 右边的表达式做计算（若有短路规则会继续遵循短路规则），最后赋值。因为复合赋值表达式也是一个赋值表达式，所以复合赋值操作符也是非结合的。复合赋值表达式同样要求两个操作数的类型相同。
 
-<!-- compile -->
-
+<!-- check:run -->
 ```cangjie
 func foo(p: Point): Point {
     p.x += 10
@@ -154,8 +149,7 @@ main() {
 
 关系表达式举例：
 
-<!-- compile -->
-
+<!-- check:run -->
 ```cangjie
 main(): Int64 {
     3 < 4        // true
@@ -170,8 +164,7 @@ main(): Int64 {
 
 对于元组类型，当且仅当所有元素均支持使用 `==` 进行值判等（使用 `!=` 进行值判不等）时，此元组类型才支持使用 `==` 进行值判等（使用 `!=` 进行值判不等）；否则，此元组类型不支持 `==` 和 `!=`（如果使用 `==` 和 `!=`，编译报错）。两个同类型的元组实例相等，当且仅当相同位置（index）的元素全部相等（意味着它们的长度相等）。
 
-<!-- compile.error -->
-
+<!-- check:compile_error -->
 ```cangjie
     var isTrue: Bool = (1, 3) == (0, 2) // false
     isTrue = (1, "123") == (1.0, 2)      // 编译错误，两个操作数的类型不一致
@@ -186,8 +179,7 @@ coalescing 操作符使用 `??` 表示，`??` 是二元中缀操作符。coalesc
 
 coalescing 表达式使用举例：
 
-<!-- run -->
-
+<!-- check:run -->
 ```cangjie
 main(): Int64 {
     let v1 = Option<Int64>.Some(100)
@@ -210,8 +202,7 @@ main(): Int64 {
 
 逻辑非（`!`）是一元操作符，它的作用是对其操作数的布尔值取反：`!false` 的值等于 `true`，`!true` 的值等于 `false`。
 
-<!-- compile -->
-
+<!-- check:build_only -->
 ```cangjie
     var a: Bool = true     // a = true
     var b: Bool = !a       // b = false
@@ -220,9 +211,9 @@ main(): Int64 {
 
 逻辑与（`&&`）和逻辑或（`||`）均是二元操作符。对于表达式 `expr1 && expr2`，只有当 `expr1` 和 `expr2` 的值均等于 `true` 时，它的值才等于 `true`；对于表达式 `expr1 || expr2`，只有当 `expr1` 和 `expr2` 的值均等于 `false` 时，它的值才等于 `false`。
 
-<!-- compile -->
-
+<!-- check:run -->
 ```cangjie
+main() {
     var a: Bool = true && true    // a = true
     var b: Bool = true && false   // b = false
     var c: Bool = false && false  // c = false
@@ -232,12 +223,12 @@ main(): Int64 {
     b = true || false             // b = true
     c = false || false            // c = false
     d = false || true             // d = true
+}
 ```
 
 逻辑与（`&&`）和逻辑或（`||`）采用短路求值策略：计算 `expr1 && expr2` 时，当 `expr1=false` 则无需对 `expr2` 求值，整个表达式的值为 `false`；计算 `expr1 || expr2` 时，当 `expr1=true` 则无需对 `expr2` 求值，整个表达式的值为 `true`。
 
-<!-- run -->
-
+<!-- check:run -->
 ```cangjie
 func isEven(a: Int64): Bool {
     if((a % 2) == 0) {
@@ -271,9 +262,9 @@ main() {
 
 另外，如果右移或左移的位数（右操作数）等于或者大于操作数的宽度，则为移位越界，如果编译时可以检测到则报错，否则运行时抛出异常。
 
-<!-- compile -->
-
+<!-- check:run -->
 ```cangjie
+main() {
     var a = !10                 // -11，符合移位和补齐规则
     a = !20                     // -21，符合移位和补齐规则
     a = 10 << 1                 // 20，符合移位和补齐规则
@@ -285,6 +276,7 @@ main() {
     a = 10 ^ 15                 // 5
     a = 10 | 15                 // 15
     a = (1 ^ (8 & 15)) | 24     // 25
+}
 ```
 
 ## 自增自减操作符
@@ -299,8 +291,7 @@ main() {
 
 自增（自减）表达式举例：
 
-<!-- compile.error -->
-
+<!-- check:compile_error -->
 ```cangjie
     var i: Int32 = 5
     i++              // i = 6

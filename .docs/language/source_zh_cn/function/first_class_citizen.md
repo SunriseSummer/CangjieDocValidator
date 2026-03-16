@@ -6,7 +6,7 @@
 
 例如：
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func hello(): Unit {
@@ -20,7 +20,7 @@ func hello(): Unit {
 
 - 示例：函数名为 `display`，其类型是 `(Int64) -> Unit`，表示该函数有一个参数，参数类型为 `Int64`，返回类型为 `Unit`。
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     func display(a: Int64): Unit {
@@ -30,7 +30,7 @@ func hello(): Unit {
 
 - 示例：函数名为 `add`，其类型是 `(Int64, Int64) -> Int64`，表示该函数有两个参数，两个参数类型均为 `Int64`，返回类型为 `Int64`。
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     func add(a: Int64, b: Int64): Int64 {
@@ -40,7 +40,7 @@ func hello(): Unit {
 
 - 示例：函数名为 `returnTuple`，其类型是 `(Int64, Int64) -> (Int64, Int64)`，两个参数类型均为 `Int64`, 返回类型为元组类型：`(Int64, Int64)`。
 
-    <!-- compile -->
+    <!-- check:build_only -->
 
     ```cangjie
     func returnTuple(a: Int64, b: Int64): (Int64, Int64) {
@@ -52,7 +52,7 @@ func hello(): Unit {
 
 可以为函数类型标记显式的类型参数名，下面例子中的 `name` 和 `price` 就是类型参数名。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 func showFruitPrice(name: String, price: Int64) {
@@ -68,7 +68,7 @@ main() {
 
 另外对于一个函数类型，只允许统一写类型参数名，或者统一不写类型参数名，不能交替存在。
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 let handler: (name: String, Int64) -> Int64   // Error
@@ -78,7 +78,7 @@ let handler: (name: String, Int64) -> Int64   // Error
 
 示例：函数名为 `printAdd`，其类型是 `((Int64, Int64) -> Int64, Int64, Int64) -> Unit`，表示该函数有三个参数，参数类型分别为函数类型 `(Int64, Int64) -> Int64` 和两个 `Int64`，返回类型为 `Unit`。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func printAdd(add: (Int64, Int64) -> Int64, a: Int64, b: Int64): Unit {
@@ -92,7 +92,7 @@ func printAdd(add: (Int64, Int64) -> Int64, a: Int64, b: Int64): Unit {
 
 如下示例中，函数名为 `returnAdd`，其类型是 `() -> (Int64, Int64) -> Int64`，表示该函数无参数，返回类型为函数类型 `(Int64, Int64) -> Int64`。注意，`->` 是右结合的。
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 func add(a: Int64, b: Int64): Int64 {
@@ -113,7 +113,7 @@ main() {
 
 函数名本身也是表达式，它的类型为对应的函数类型。
 
-<!-- compile -->
+<!-- check:build_only -->
 
 ```cangjie
 func add(p1: Int64, p2: Int64): Int64 {
@@ -127,7 +127,7 @@ let f: (Int64, Int64) -> Int64 = add
 
 若一个函数在当前作用域中被重载（参见[函数重载](./function_overloading.md)），那么直接使用该函数名作为表达式可能产生歧义，如果产生歧义编译器会报错，例如：
 
-<!-- compile.error -->
+<!-- check:compile_error -->
 
 ```cangjie
 func add(i: Int64, j: Int64) {

@@ -16,7 +16,7 @@
 
 导入 io 包示例：
 
-<!-- run -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.io.*
@@ -30,7 +30,7 @@ import std.io.*
 
 BufferedInputStream 构造示例：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.io.{ByteBuffer, BufferedInputStream}
@@ -58,7 +58,7 @@ main(): Unit {
 
 BufferedOutputStream 构造示例：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.io.{ByteBuffer, BufferedOutputStream, readToEnd}
@@ -89,7 +89,7 @@ main(): Unit {
 
 导入 io 包示例：
 
-<!-- run -->
+<!-- check:build_only -->
 
 ```cangjie
 import std.io.*
@@ -101,7 +101,7 @@ import std.io.*
 
 StringReader 使用示例：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.io.{ByteBuffer, StringReader}
@@ -124,7 +124,7 @@ main(): Unit {
 
 StringWriter 使用示例：
 
-<!-- run -->
+<!-- check:run -->
 
 ```cangjie
 import std.io.{ByteBuffer, StringWriter, readToEnd}
