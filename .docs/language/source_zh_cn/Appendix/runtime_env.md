@@ -326,16 +326,16 @@ export cjGwpAsanHelp=true
 
     向前越界数组时，runtime 会报告 Head canary 检测失败，使用 `array[-1]` 表示。例如：
 
-    <!-- check:skip -->
+    <!-- check:build_only -->
 
     ```cangjie
     main() {
         unsafe {
-            let array = Array<UInt8>(4, item: 0)
+            let array = Array<UInt8>(4, repeat: 0)
             let cp = acquireArrayRawData(array)
             // array 数组实际可访问的范围是 [0, 4)，而下述写操作访问了第 -2 个字节，导致仓颉堆内存向前溢出 2 个字节。错误报告中使用 array[-1] 表示该向前越界行为。
             cp.pointer.read(-2)
-            releaseArrayRawData(array)
+            releaseArrayRawData(cp)
         }
     }
     ```
@@ -352,17 +352,17 @@ export cjGwpAsanHelp=true
 
     向后越界数组时，runtime 会报告 Tail canary 检测失败，并给出相对该数组（`array`）的位置。例如：
 
-    <!-- check:skip -->
+    <!-- check:build_only -->
 
     ```cangjie
     main() {
         unsafe {
-            let array = Array<UInt8>(4, item: 0)
+            let array = Array<UInt8>(4, repeat: 0)
             let cp = acquireArrayRawData(array)
 
             // array 数组实际可访问的范围是 [0, 4)，而下述写操作访问了第 6 个字节，导致仓颉堆内存向前溢出 2 个字节。错误报告中使用 array[size+1] 表示该向后越界行为。
             cp.pointer.read(5)
-            releaseArrayRawData(array)
+            releaseArrayRawData(cp)
         }
     }
     ```
@@ -381,12 +381,12 @@ export cjGwpAsanHelp=true
 
 在 runtime 退出时会检测被采样的数组是否调用了 releaseArrayRawData 释放。未释放时，会报告所有未释放的数组对应的堆地址。例如：
 
-<!-- check:skip -->
+<!-- check:build_only -->
 
 ```cangjie
 func example(): Int64 {
     unsafe {
-        let array = Array<UInt8>(4, item: 0)
+        let array = Array<UInt8>(4, repeat: 0)
         let cp = acquireArrayRawData(array)
         cp.pointer.read()
 

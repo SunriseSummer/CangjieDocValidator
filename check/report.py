@@ -89,7 +89,8 @@ def generate_report(
             results = file_results[src_file]
             file_fail = sum(1 for r in results if r['status'] == 'FAIL')
             file_icon = '✅' if file_fail == 0 else '❌'
-            lines.append(f'### {file_icon} `{src_file}`\n')
+            rel = _relative_path(src_file, scan_dir)
+            lines.append(f'### {file_icon} `{rel}`\n')
             lines.append('| 测试用例 | 类型 | 结果 |')
             lines.append('|----------|------|------|')
             for r in results:
@@ -111,8 +112,9 @@ def generate_report(
         lines.append('## 失败详情\n')
         for r in failed_results:
             lines.append(f'### ❌ {r["name"]}\n')
+            rel_src = _relative_path(r["source_file"], scan_dir)
             lines.append(
-                f'- **来源**: `{r["source_file"]}` > {r["heading"]}'
+                f'- **来源**: `{rel_src}` > {r["heading"]}'
             )
             lines.append(f'- **类型**: `{r["directive"]}`')
             lines.append(f'- **错误**: {r["error"]}')
@@ -134,6 +136,7 @@ def generate_report(
         lines.append('| 文件 | 行号 | 章节 | 代码预览 |')
         lines.append('|------|------|------|----------|')
         for filepath, line_no, heading, preview in unannotated_warnings:
+            rel_fp = _relative_path(filepath, scan_dir)
             safe_preview = (
                 (preview or '')
                 .replace('|', '\\|')
@@ -141,7 +144,7 @@ def generate_report(
                 .replace('`', "'")[:60]
             )
             lines.append(
-                f'| `{filepath}` | {line_no} | {heading} '
+                f'| `{rel_fp}` | {line_no} | {heading} '
                 f'| `{safe_preview}` |'
             )
         lines.append('')

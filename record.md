@@ -214,3 +214,55 @@ project_dir/
 ## 七、安全扫描
 
 - CodeQL 扫描结果：0 个告警，无安全问题
+
+## 八、文档标注复查与修复（本次）
+
+### 8.1 背景
+
+对 `.docs/language/source_zh_cn/` 下全部 106 篇文档进行标注复查，验证每个代码块的标注类型与代码内容、上下文是否匹配。
+
+### 8.2 发现的问题与修复
+
+**`Appendix/runtime_env.md` — 3 处示例代码 API 调用错误**
+
+该文档展示 GWP-ASan 堆内存检测示例时，使用了错误的 API：
+
+1. `Array<UInt8>(4, item: 0)` — `item:` 是不存在的具名参数，正确应为 `repeat: 0`
+2. `releaseArrayRawData(array)` — 参数类型错误，`releaseArrayRawData` 接受 `CPointerHandle`（即 `acquireArrayRawData` 的返回值），而非原始 `Array`，正确应为 `releaseArrayRawData(cp)`
+
+**修复结果**：三处代码块现可正常编译通过，标注从 `check:skip` 升级为 `check:build_only`（不执行运行，因其目的是演示堆内存异常检测的触发条件）。
+
+### 8.3 check/report.py 优化
+
+`generate_report()` 函数中，文件详情区段的标题、失败详情的来源路径、未标注代码块的文件路径，现均使用相对路径（相对于 `scan_dir`），与 `generate_extract_report()` 的显示风格保持一致。
+
+之前输出形如：
+```
+### ✅ `.docs/language/source_zh_cn/Appendix/compile_options.md`
+```
+现在输出形如：
+```
+### ✅ `Appendix/compile_options.md`
+```
+
+### 8.4 测试结果
+
+全量编译运行测试（Cangjie SDK 1.0.5 + tree-sitter-cangjie v1.0.5.4）：
+
+- 测试用例：660 个
+- 通过：660 个（相比前次 +3）
+- 失败：0 个（相比前次 -4）
+- 跳过：48 个（相比前次 -3）
+
+| 标注类型 | 数量 | 说明 |
+|---------|------|------|
+| `check:run` | 233 | 编译并运行验证 |
+| `check:build_only` | 192 | 仅编译验证（含本次新增 3 个 runtime_env 示例） |
+| `check:compile_error` | 130 | 预期编译失败 |
+| `check:ast` | 110 | tree-sitter 语法解析检查 |
+| `check:skip` | 48 | 跳过（多包伪代码/特殊环境/死锁示例等） |
+| `check:runtime_error` | 5 | 预期运行时错误 |
+
+### 8.5 安全扫描
+
+- CodeQL 扫描结果：0 个告警，无安全问题
