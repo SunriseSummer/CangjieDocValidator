@@ -94,6 +94,11 @@ main() {
 响应内容: <h1>Hello Cangjie Web</h1>
 -->
 
+```bash
+收到请求: GET /home
+响应内容: <h1>Hello Cangjie Web</h1>
+```
+
 **代码解析：**
 
 - `let path` / `let method`：用 `let` 声明为不可变字段，确保请求的路径和方法在创建后不会被意外修改，体现了"不变性优先"原则。

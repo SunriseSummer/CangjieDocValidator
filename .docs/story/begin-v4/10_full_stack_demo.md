@@ -154,6 +154,26 @@ Content-Type: application/json
 [{"id": 1, "title": "Hello Cangjie"},{"id": 2, "title": "Web Dev"},{"id": 3, "title": "New Article"},]
 -->
 
+```bash
+>>> 启动博客后端 API...
+>>> Incoming Request: /posts
+Processing GET /posts ...
+HTTP 200 OK
+Content-Type: application/json
+[{"id": 1, "title": "Hello Cangjie"},{"id": 2, "title": "Web Dev"},]
+>>> Incoming Request: /posts/new
+Processing POST /posts/new ...
+Service: 文章 'New Article' 已创建
+HTTP 200 OK
+Content-Type: application/json
+{"status": "created"}
+>>> Incoming Request: /posts
+Processing GET /posts ...
+HTTP 200 OK
+Content-Type: application/json
+[{"id": 1, "title": "Hello Cangjie"},{"id": 2, "title": "Web Dev"},{"id": 3, "title": "New Article"},]
+```
+
 **代码解析：**
 
 - **`interface BlogService`**：定义服务层契约，`BlogController` 只依赖这个接口，不关心具体实现。这是第五章 IoC 思想在实战中的体现。

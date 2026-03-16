@@ -51,6 +51,13 @@ ID: SENSOR-001 | 位置: Living Room
 更新温度: 24.200000°C
 -->
 
+```bash
+=== 设备状态监控 ===
+ID: SENSOR-001 | 位置: Living Room
+状态: 在线(true) | 温度: 23.500000°C | 湿度: 45%
+更新温度: 24.200000°C
+```
+
 **代码解析**：
 - `let deviceId: String = "SENSOR-001"`：显式声明类型为 `String`，并赋予不可变值。
 - `let location = "Living Room"`：省略类型标注，编译器自动推断为 `String`。

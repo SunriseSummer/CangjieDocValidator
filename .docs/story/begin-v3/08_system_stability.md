@@ -51,6 +51,10 @@ main() {
 ⚠️ 警告: 设备无响应
 -->
 
+```bash
+⚠️ 警告: 设备无响应
+```
+
 **代码解析**：
 - `func getDeviceStatus(id: String): Option<String>`：函数返回类型是 `Option<String>`，明确告知调用者"结果可能为空"。这比返回 `null` 更安全，因为调用者看到 `Option` 类型时就知道必须处理空值情况。
 - `return None`：返回"无值"——表示设备离线，没有状态可返回。
@@ -105,6 +109,13 @@ main() {
 初始化流程结束
 -->
 
+```bash
+正在初始化云服务...
+❌ 严重错误: 云端连接超时
+🔄 正在切换至离线本地模式...
+初始化流程结束
+```
+
 **代码解析**：
 - `throw Exception("云端连接超时")`：创建并抛出一个异常对象，携带错误描述信息。异常会中断当前函数的执行，沿调用栈向上传播，直到被某个 `catch` 块捕获。
 - `try { connectToCloud() }`：将可能抛出异常的调用包在 `try` 块中。
@@ -155,6 +166,10 @@ main() {
 执行: 设定温控 -> 26°C
 -->
 
+```bash
+执行: 设定温控 -> 26°C
+```
+
 **代码解析**：
 - `enum VoiceCommand { | TurnOn(String) | SetTemp(Int64) | QueryStatus }`：定义携带关联数据的枚举。`|` 分隔每个构造器，类似数学中"或"的含义。
 - `match (cmd) { case TurnOn(dev) => ... case SetTemp(t) => ... case QueryStatus => ... }`：对 `cmd` 进行模式匹配。`case SetTemp(t)` 不仅匹配了类型，还将携带的整数值绑定到变量 `t`，一步完成类型检查和数据解构。
@@ -185,6 +200,12 @@ main() {
     initSensor("温度计")
     initSensor("")  // 未捕获异常 → 系统崩溃！
 }
+```
+
+```bash
+传感器 温度计 已就绪
+# 未捕获异常导致程序崩溃（运行时错误）
+# An exception has occurred: 传感器名称不能为空
 ```
 
 这就是为什么每个关键路径都需要容错保护。

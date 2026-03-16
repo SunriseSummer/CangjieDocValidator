@@ -108,6 +108,12 @@ IoC: 注册服务 [cache]
 Controller 调用 DB: SELECT * FROM users
 -->
 
+```bash
+IoC: 注册服务 [db]
+IoC: 注册服务 [cache]
+Controller 调用 DB: SELECT * FROM users
+```
+
 **代码解析：**
 
 - `container.register("db", DatabaseService())`：将 `DatabaseService` 的实例以名称 `"db"` 注册到容器中。容器持有实例的引用，后续所有解析调用都将返回同一个实例（单例行为）。

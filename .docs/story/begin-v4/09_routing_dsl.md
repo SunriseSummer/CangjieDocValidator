@@ -108,6 +108,12 @@ Registered: /api/info
 Registered: /api/login
 -->
 
+```bash
+Macro: 正在扫描注解并生成路由表...
+Registered: /api/info
+Registered: /api/login
+```
+
 **代码解析：**
 
 - `class Router { func add(...) { println("Registered: ...") } }`：简化版路由器，不实际存储路由，仅打印注册记录，便于验证宏生成代码的执行效果。

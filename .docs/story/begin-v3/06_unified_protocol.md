@@ -90,6 +90,12 @@ Hue: 发送 Zigbee 开启指令
 Mi: 发送 Wi-Fi 开启指令
 -->
 
+```bash
+--- 一键全开 ---
+Hue: 发送 Zigbee 开启指令
+Mi: 发送 Wi-Fi 开启指令
+```
+
 **代码解析**：
 - `func masterSwitch(device: Switchable, state: Bool)`：参数 `device` 的类型是接口 `Switchable`，这意味着任何实现了该接口的对象都可以被传入。
 - `device.on()` 和 `device.off()`：运行时仓颉会根据 `device` 的实际类型（`PhilipsHue` 或 `XiaomiPlug`）调用对应的具体实现。这正是多态的运作机制。
@@ -131,6 +137,10 @@ main() {
 <!-- expected_output:
 [2024-01-01 12:00:00] 系统异常重启
 -->
+
+```bash
+[2024-01-01 12:00:00] 系统异常重启
+```
 
 **代码解析**：
 - `extend String { func withTime(): String { ... } }`：为 `String` 类型添加了一个新方法 `withTime()`，返回带时间戳前缀的新字符串。

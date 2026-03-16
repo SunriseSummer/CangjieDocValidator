@@ -100,6 +100,11 @@ main() {
 [404] 404 Not Found
 -->
 
+```bash
+[200] Welcome to Index Page
+[404] 404 Not Found
+```
+
 **代码解析：**
 
 - `var routes = HashMap<String, Handler>()`：路由表用 `HashMap` 实现，键为路径字符串，值为对应的处理函数。`HashMap` 的哈希查找保证了 O(1) 的分发速度。

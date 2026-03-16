@@ -59,6 +59,12 @@ main() {
 - AC-001 (Air Conditioner)
 -->
 
+```bash
+客厅设备清单:
+- L-001 (Main Light)
+- AC-001 (Air Conditioner)
+```
+
 **代码解析**：
 - `HashMap<String, ArrayList<String>>()`：创建一个空 `HashMap`，键类型为 `String`，值类型为 `ArrayList<String>`。尖括号内的类型参数告诉编译器"这个 Map 里存什么类型"。
 - `roomDevices["Living Room"] = livingList`：用下标语法 `[key] = value` 向 Map 中插入或更新键值对，语法直观。
@@ -115,6 +121,11 @@ main() {
 配置项 [SSID] = MySmartHome_5G
 -->
 
+```bash
+配置项 [TimeoutMS] = 5000
+配置项 [SSID] = MySmartHome_5G
+```
+
 **代码解析**：
 - `struct ConfigItem<T> where T <: ToString`：声明一个带类型参数 `T` 的泛型结构体。`where` 子句增加了约束：`T` 必须实现 `ToString` 接口。
 - `let value: T`：字段类型使用类型参数 `T`，将在实例化时确定具体类型。
@@ -158,6 +169,11 @@ main() {
 缓存记录数: 3
 平均温度: 23.633333
 -->
+
+```bash
+缓存记录数: 3
+平均温度: 23.633333
+```
 
 **代码解析**：
 - `let history = ArrayList<Float64>()`：创建一个空的浮点数动态列表，类型参数 `<Float64>` 指定列表中只能存放 `Float64` 类型的值。

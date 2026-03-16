@@ -91,6 +91,17 @@ main() {
 配置加载: Port=80, DB=sqlite
 -->
 
+```bash
+正在加载配置: config.json ...
+读取成功: {"port": 8080, "db": "mysql"}
+配置加载: Port=8080, DB=mysql
+----------------
+正在加载配置: missing.yaml ...
+配置加载失败: FileNotFound: missing.yaml
+回退到默认配置
+配置加载: Port=80, DB=sqlite
+```
+
 **代码解析：**
 
 - `struct AppConfig` 的字段使用默认值（`port = 80`，`dbType = "sqlite"`）：仓颉 `struct` 支持字段默认值，`AppConfig()` 无参构造时自动使用这些默认值，无需额外的"默认配置工厂函数"。

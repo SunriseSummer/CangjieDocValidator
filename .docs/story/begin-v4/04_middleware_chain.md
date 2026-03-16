@@ -152,6 +152,17 @@ main() {
 [Log] End Request (Status: 403)
 -->
 
+```bash
+=== 测试 /home ===
+[Log] Start Request: /home
+==> 执行业务逻辑...
+[Log] End Request (Status: 200)
+=== 测试 /admin ===
+[Log] Start Request: /admin
+[Auth] 权限不足！拦截请求。
+[Log] End Request (Status: 403)
+```
+
 **代码解析：**
 
 - **`/home` 请求**：日志中间件先打印"Start"，然后调用 `next()` 交给鉴权中间件；鉴权中间件发现路径合法，再次调用 `next()` 交给业务处理；业务处理完成后，控制权依次返回——日志中间件打印"End"。这就是完整的洋葱穿透路径。
