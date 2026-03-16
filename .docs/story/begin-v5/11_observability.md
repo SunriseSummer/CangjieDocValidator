@@ -12,6 +12,8 @@
 
 <!-- check:run project=observability -->
 ```cangjie
+import std.time.*
+
 enum LogLevel {
     | Info
     | Warn
@@ -33,21 +35,23 @@ func log(level: LogLevel, message: String) {
 <!-- check:run project=observability -->
 ```cangjie
 func timeBlock(name: String, action: () -> Unit) {
+    let start = DateTime.now()
     action()
-    println("${name} 耗时: 121 ms")
+    let end = DateTime.now()
+    let duration = end - start
+    let durationMs = duration.toMilliseconds()
+    println("${name} 耗时: ${durationMs} ms")
 }
 
 main() {
     timeBlock("路线计算") {
         log(Info, "计算路线中...")
+        sleep(Duration.millisecond * 120)
     }
 }
 ```
 
-<!-- expected_output:
-[INFO] 计算路线中...
-路线计算 耗时: 121 ms
--->
+> 说明：`duration` 为时间差对象，转换方法以标准库为准，示例使用毫秒输出以便指标统计。
 
 ## 工程化提示
 
