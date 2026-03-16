@@ -351,7 +351,7 @@ main() {
 <!-- expected_output:
 moonshot 配置: apiKey=sk-xxx,endpoint=https://api.moonshot.cn/v1
 gpt-4 配置: apiKey=,endpoint=https://api.default.com
-找到配置，长度: 51 字节
+找到配置，长度: 49 字节
 -->
 
 ## 5. Role 枚举与命令系统

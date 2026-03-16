@@ -166,7 +166,7 @@ Lambda 可以直接用于数组操作等场景：
 <!-- check:run -->
 ```cangjie
 func applyToAll(items: Array<String>, transform: (String) -> String): Array<String> {
-    var result = Array<String>(items.size, item: "")
+    var result = Array<String>(items.size, repeat: "")
     for (i in 0..items.size) {
         result[i] = transform(items[i])
     }
@@ -390,7 +390,8 @@ main() {
 {"role": "assistant", "content": "你好，我是 AI 助手"}
 
 清洗后: 请帮我写一个 'Hello World'
-请求体长度: 111 字节
+
+请求体长度: 166 字节
 消息数: 2
 -->
 
