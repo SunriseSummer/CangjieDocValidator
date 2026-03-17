@@ -58,7 +58,7 @@ AIChatPro v1.0.0 启动中...
 <!-- check:run -->
 ```cangjie
 main() {
-    let toolName = "AIChatPro"   // 不可变，类型自动 String
+    let toolName = "AIChatPro"   // 不可变，类型推断为 String
     var modelName = "Kimi"  // 可变，类型推断为 String
 
     println("工具: ${toolName}")
