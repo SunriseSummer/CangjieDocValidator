@@ -1,0 +1,5 @@
+target/
+build/
+cjpm.lock
+*.o
+*.a
