@@ -59,23 +59,23 @@ AIChatPro v1.0.0 启动中...
 ```cangjie
 main() {
     let toolName = "AIChatPro"   // 不可变，类型自动 String
-    var modelName = "kimi-k2.5"  // 可变，类型推断为 String
+    var modelName = "KIMI"  // 可变，类型推断为 String
 
     println("工具: ${toolName}")
     println("模型: ${version}")
 
-    modelName = "glm-5"          // 切换当前模型
+    modelName = "GLM"          // 切换当前模型
     println("当前模型: ${version}")
 }
 ```
 
 <!-- expected_output:
 工具: AIChatPro
-模型: kimi-k2.5
-当前模型: glm-5
+模型: KIMI
+当前模型: GLM
 -->
 
-请注意第三行输出：`modelName` 被重新赋值为 `"glm-5"`，而 `toolName` 作为 `let` 绑定，一旦赋值便不可更改——如果你尝试 `toolName = "Other"`，编译器会直接拒绝。这种"编译期保护"机制，在大型项目中价值巨大。
+请注意第三行输出：`modelName` 被重新赋值为 `"GLM"`，而 `toolName` 作为 `let` 绑定，一旦赋值便不可更改——如果你尝试 `toolName = "Other"`，编译器会直接拒绝。这种"编译期保护"机制，在大型项目中价值巨大。
 
 在实际开发中，AI 模型的参数配置往往需要精确的类型控制。仓颉支持显式类型标注，这在类型不能被推断、或者你希望代码更具自文档性时尤为有用：
 
@@ -85,7 +85,7 @@ main() {
     let maxTokens: Int64 = 4096
     let temperature: Float64 = 0.7
     let streaming: Bool = true
-    let modelName: String = "kimi-k2.5"
+    let modelName: String = "Kimi"
 
     println("最大 Token: ${maxTokens}")
     println("流式输出: ${streaming}")
@@ -96,7 +96,7 @@ main() {
 <!-- expected_output:
 最大 Token: 4096
 流式输出: true
-模型: kimi-k2.5
+模型: Kimi
 -->
 
 > **类型推断规则**：整数字面量默认推断为 `Int64`，浮点数默认推断为 `Float64`，布尔值为 `Bool`，字符串为 `String`。大多数情况下无需手动标注类型。
@@ -211,7 +211,7 @@ func printWelcome(model: String) {
 
 main() {
     printBanner("1.0.0")
-    printWelcome("moonshot-v1-8k")
+    printWelcome("Kimi")
     println("AIChatPro 已就绪，请开始对话。")
 }
 ```
@@ -221,7 +221,7 @@ main() {
      AIChatPro  v1.0.0
   多模型 AI 对话命令行工具
 ==============================
-当前模型: moonshot-v1-8k
+当前模型: Kimi
 输入 /help 查看可用命令
 AIChatPro 已就绪，请开始对话。
 -->
