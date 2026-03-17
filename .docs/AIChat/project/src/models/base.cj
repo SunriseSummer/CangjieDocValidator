@@ -1,11 +1,10 @@
 /**
  * BaseChatModel 接口
  *
- * 定义 AI 聊天模型的统一接口，所有具体模型（KimiModel、GlmModel 等）
+ * 定义 AI 聊天模型的统一接口，所有具体模型（KimiModel、GlmModel、MinimaxModel）
  * 都需要实现此接口。这体现了面向接口编程的策略模式：
  * - chat()：发送请求并将响应写入字符队列
- * - getName()：获取模型名称
- * - getModelId()：获取模型标识符
+ * - getName()：获取模型名称标识
  */
 package aichat.models
 
@@ -23,5 +22,5 @@ import aichat.stream.CharQueue
 public interface BaseChatModel {
     func chat(request: ChatRequest, queue: CharQueue, mtx: Mutex): Unit
     func getName(): String
-    func getModelId(): String
 }
+

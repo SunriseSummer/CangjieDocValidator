@@ -1,57 +1,82 @@
 /**
  * 配置类型定义
  *
- * 定义 AIChatPro 项目中所有配置相关的数据类型，包括：
- * - ModelConfig：AI 模型配置信息（名称、API 地址、模型标识）
- * - StreamSettings：流式输出设置（刷新间隔、历史容量）
- * - AppConfig：应用全局配置
+ * 定义 AIChatPro 项目中所有配置相关的数据类型：
+ * - ModelConfig：AI 模型配置（API Key、基础 URL、GroupId）
+ * - StreamSettings：流式输出设置（自适应间隔控制）
+ * - AppConfig：应用全局配置（默认模型、模型列表、流式设置）
+ *
+ * 参考 Cangjie-Examples/AIChatPro 项目实现，
+ * 所有配置类使用 class（引用类型）以支持运行时修改并序列化到 JSON。
  */
 package aichat.config
 
-/**
- * AI 模型配置结构体
- *
- * 使用 struct（值类型），因为配置信息一旦创建后不可变，
- * 适合用值语义来传递和复制。
- */
-public struct ModelConfig {
-    public let displayName: String       // 模型显示名称（如 "Kimi"）
-    public let apiUrl: String            // API 接口地址
-    public let defaultModelId: String    // 默认模型标识符（如 "moonshot-v1-8k"）
+import std.collection.HashMap
 
-    public init(displayName: String, apiUrl: String, defaultModelId: String) {
-        this.displayName = displayName
-        this.apiUrl = apiUrl
-        this.defaultModelId = defaultModelId
+/**
+ * AI 模型配置类
+ *
+ * 存储单个模型的连接信息，包括：
+ * - apiKey：模型的 API 密钥
+ * - baseUrl：API 基础地址（如 https://api.moonshot.cn/v1）
+ * - groupId：部分模型（如 Minimax）需要的分组标识
+ */
+public class ModelConfig {
+    public var apiKey: String = ""
+    public var baseUrl: String = ""
+    public var groupId: String = ""
+
+    public init() {}
+
+    public init(apiKey: String, baseUrl: String, groupId!: String = "") {
+        this.apiKey = apiKey
+        this.baseUrl = baseUrl
+        this.groupId = groupId
     }
 }
 
 /**
- * 流式输出设置结构体
+ * 流式输出设置类
  *
- * 控制流式显示的行为参数：
- * - displayIntervalMs：无数据时的轮询休眠间隔（毫秒），过短浪费 CPU，过长影响体验
- * - maxHistorySize：对话历史最大消息数，防止内存无限增长
+ * 控制流式显示的自适应行为：
+ * - baseIntervalMs：基础轮询间隔（毫秒），队列较空时使用
+ * - burstThreshold：突发阈值，队列字符超过此值时切换到快速模式
+ * - catchupIntervalMs：快速模式间隔（毫秒），用于追赶大量积压字符
  */
-public struct StreamSettings {
-    public let displayIntervalMs: Int64
-    public let maxHistorySize: Int64
+public class StreamSettings {
+    public var baseIntervalMs: Int64 = 20
+    public var burstThreshold: Int64 = 50
+    public var catchupIntervalMs: Int64 = 5
 
-    public init(displayIntervalMs!: Int64 = 30, maxHistorySize!: Int64 = 20) {
-        this.displayIntervalMs = displayIntervalMs
-        this.maxHistorySize = maxHistorySize
+    public init() {}
+
+    public init(baseIntervalMs: Int64, burstThreshold: Int64, catchupIntervalMs: Int64) {
+        this.baseIntervalMs = baseIntervalMs
+        this.burstThreshold = burstThreshold
+        this.catchupIntervalMs = catchupIntervalMs
     }
 }
 
 /**
  * 应用全局配置类
  *
- * 使用 class（引用类型），因为全局配置需要在多个模块间共享引用。
+ * 汇总所有配置项，初始化时预置三个国产大模型：
+ * - kimi（月之暗面 Moonshot AI）
+ * - glm（智谱 AI）
+ * - minimax（MiniMax）
+ *
+ * 配置信息可通过 ConfigManager 从 JSON 文件加载或保存。
  */
 public class AppConfig {
-    public let streamSettings: StreamSettings  // 流式输出配置
+    public var defaultModel: String = "kimi"                                        // 默认使用的模型
+    public var models: HashMap<String, ModelConfig> = HashMap<String, ModelConfig>() // 模型名 -> 配置
+    public var streamSettings: StreamSettings = StreamSettings()                    // 流式输出设置
 
-    public init(streamSettings!: StreamSettings = StreamSettings()) {
-        this.streamSettings = streamSettings
+    public init() {
+        // 预置支持的模型及其默认 API 地址
+        models.add("kimi", ModelConfig("", "https://api.moonshot.cn/v1"))
+        models.add("glm", ModelConfig("", "https://open.bigmodel.cn/api/paas/v4"))
+        models.add("minimax", ModelConfig("", "https://api.minimax.chat/v1", groupId: ""))
     }
 }
+

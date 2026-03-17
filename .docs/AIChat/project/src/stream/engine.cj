@@ -4,50 +4,48 @@
  * 在独立线程中以轮询方式从 CharQueue 中取出字符并逐个打印，
  * 实现"边接收边输出"的打字机效果。
  *
- * displayIntervalMs 控制无数据时的休眠间隔：
- * - 间隔过短：浪费 CPU 资源
- * - 间隔过长：用户感到输出卡顿
- * 默认 30ms 是一个兼顾响应灵敏度与 CPU 占用的折中值。
+ * 支持自适应速率控制：
+ * - 队列积压超过 burstThreshold 时，切换到 catchupIntervalMs（快速追赶模式）
+ * - 正常状态使用 baseIntervalMs（舒适阅读速度）
  */
 package aichat.stream
 
-import std.sync.*
+import std.sync.Mutex
+import aichat.config.StreamSettings
 
 public class StreamEngine {
-    private let queue: CharQueue           // 字符缓冲队列
-    private let mtx: Mutex                 // 互斥锁（与 CharQueue 共享）
-    private let displayIntervalMs: Int64   // 无数据时的轮询间隔（毫秒）
+    private let queue: CharQueue            // 字符缓冲队列
+    private let settings: StreamSettings    // 流式输出设置
+    private let mtx: Mutex                  // 互斥锁
 
-    public init(queue: CharQueue, mtx: Mutex, displayIntervalMs!: Int64 = 30) {
+    public init(queue: CharQueue, settings: StreamSettings, mtx: Mutex) {
         this.queue = queue
+        this.settings = settings
         this.mtx = mtx
-        this.displayIntervalMs = displayIntervalMs
     }
 
     /**
-     * 启动显示线程
+     * 启动显示循环（在当前线程运行）
      *
-     * 使用 spawn 创建新线程，持续从队列中取出字符并打印，
-     * 直到队列标记为已完成且所有字符都已消费。
-     * 返回 Future<Unit>，调用方可通过 get() 等待显示完成。
+     * 持续从队列中取出字符并打印，直到队列标记为已完成且所有字符都已消费。
+     * 根据队列积压情况自适应调节轮询间隔。
      */
-    public func startDisplay(): Future<Unit> {
-        spawn {
-            while (!queue.isFinished()) {
-                var hasOutput = false
-                var ch = queue.poll()
-                // 使用 while-let 模式匹配，持续取出字符直到队列为空
-                while (let Some(c) <- ch) {
-                    print(c.toString())
-                    hasOutput = true
-                    ch = queue.poll()
-                }
-                // 队列暂时为空但未结束，短暂休眠后继续轮询
-                if (!hasOutput) {
-                    sleep(Duration.millisecond * displayIntervalMs)
-                }
+    public func run(): Unit {
+        while (!queue.isFinished()) {
+            // 根据队列积压量自适应调节间隔
+            let queueSize = queue.size()
+            let interval = if (queueSize > settings.burstThreshold) {
+                settings.catchupIntervalMs  // 积压多，快速追赶
+            } else {
+                settings.baseIntervalMs     // 正常速度
             }
-            println("")  // 输出完成后换行
+
+            if (let Some(ch) <- queue.poll()) {
+                print(ch)
+            } else {
+                sleep(Duration.millisecond * interval)
+            }
         }
     }
 }
+

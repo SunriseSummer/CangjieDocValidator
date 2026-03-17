@@ -73,6 +73,18 @@ public class CharQueue {
         }
     }
 
+    /** 获取已收集内容（getCollected 的别名，与参考项目保持一致） */
+    public func getCollectedContent(): String {
+        return getCollected()
+    }
+
+    /** 判断队列是否为空 */
+    public func isEmpty(): Bool {
+        synchronized(mtx) {
+            return queue.size == 0
+        }
+    }
+
     /** 重置队列状态，用于开始新一轮对话 */
     public func clear(): Unit {
         synchronized(mtx) {

@@ -4,10 +4,15 @@ AIChatPro 自动化测试脚本
 
 启动模拟服务器，然后运行 AIChatPro 发送测试消息，验证：
 1. 程序能正常启动并显示横幅
-2. /help 命令正常工作
+2. /help 命令正常工作（包含新增的 /switch、/status 命令）
 3. 发送消息能获得模拟 AI 的流式回复
 4. /clear 命令正常工作
 5. /exit 命令能正常退出
+6. /switch 命令能切换模型
+7. /status 命令能显示当前状态
+8. 多轮对话正常工作
+9. config.json 配置文件自动生成
+10. 多模型对话（切换到 glm 后继续对话）
 
 使用方式：
     # 先确保已执行 source envsetup.sh 并 cjpm build
@@ -20,8 +25,8 @@ import subprocess
 import time
 import sys
 import os
+import json
 import signal
-import threading
 
 
 # 测试配置
@@ -61,6 +66,7 @@ def run_aichat_test(commands, timeout=30):
     """
     env = os.environ.copy()
     env["KIMI_API_KEY"] = "test-mock-key"
+    env["GLM_API_KEY"] = "test-glm-key"
     env["MOCK_API_URL"] = f"http://127.0.0.1:{MOCK_SERVER_PORT}/v1"
 
     # 构建输入字符串
@@ -105,6 +111,8 @@ def test_help_command():
     checks = [
         ("显示横幅", "AIChatPro" in stdout),
         ("显示帮助信息", "/help" in stdout and "/exit" in stdout),
+        ("包含 /switch 命令", "/switch" in stdout),
+        ("包含 /status 命令", "/status" in stdout),
         ("正常退出", "再见" in stdout),
     ]
 
@@ -233,10 +241,188 @@ def test_multi_turn():
     return passed
 
 
+def test_switch_command():
+    """测试 /switch 命令切换模型"""
+    print("\n" + "=" * 50)
+    print("[测试 6] /switch 命令切换模型")
+    print("=" * 50)
+
+    stdout, stderr, rc = run_aichat_test(["/switch glm", "/status", "/exit"], timeout=20)
+
+    passed = True
+    checks = [
+        ("切换成功提示", "已切换到模型" in stdout and "glm" in stdout),
+        ("状态显示 glm", "glm" in stdout),
+        ("正常退出", "再见" in stdout),
+    ]
+
+    for name, result in checks:
+        status = "✅ 通过" if result else "❌ 失败"
+        print(f"  {status}: {name}")
+        if not result:
+            passed = False
+
+    if not passed:
+        print(f"  [输出]: {stdout[:500]}")
+
+    return passed
+
+
+def test_status_command():
+    """测试 /status 命令"""
+    print("\n" + "=" * 50)
+    print("[测试 7] /status 命令")
+    print("=" * 50)
+
+    stdout, stderr, rc = run_aichat_test(["/status", "/exit"], timeout=20)
+
+    passed = True
+    checks = [
+        ("显示当前模型", "当前模型" in stdout),
+        ("显示对话历史", "对话历史" in stdout),
+        ("显示 API Key 状态", "API Key" in stdout),
+        ("正常退出", "再见" in stdout),
+    ]
+
+    for name, result in checks:
+        status = "✅ 通过" if result else "❌ 失败"
+        print(f"  {status}: {name}")
+        if not result:
+            passed = False
+
+    if not passed:
+        print(f"  [输出]: {stdout[:500]}")
+
+    return passed
+
+
+def test_switch_invalid_model():
+    """测试切换到不存在的模型"""
+    print("\n" + "=" * 50)
+    print("[测试 8] 切换到不存在的模型")
+    print("=" * 50)
+
+    stdout, stderr, rc = run_aichat_test(["/switch fake_model", "/exit"], timeout=20)
+
+    passed = True
+    checks = [
+        ("提示未知模型", "未知模型" in stdout),
+        ("正常退出", "再见" in stdout),
+    ]
+
+    for name, result in checks:
+        status = "✅ 通过" if result else "❌ 失败"
+        print(f"  {status}: {name}")
+        if not result:
+            passed = False
+
+    if not passed:
+        print(f"  [输出]: {stdout[:500]}")
+
+    return passed
+
+
+def test_config_json():
+    """测试 config.json 配置文件自动生成"""
+    print("\n" + "=" * 50)
+    print("[测试 9] config.json 配置文件")
+    print("=" * 50)
+
+    # 查找可能生成的 config.json
+    # 由于 getExecutablePath 可能返回 cjpm 的路径或项目路径
+    # 我们检查是否有 config.json 被生成
+    stdout, stderr, rc = run_aichat_test(["/exit"], timeout=20)
+
+    passed = True
+
+    # 查找 config.json 文件
+    possible_paths = [
+        os.path.join(PROJECT_DIR, "config.json"),
+        os.path.join(PROJECT_DIR, "target", "release", "bin", "config.json"),
+    ]
+    
+    config_found = False
+    config_path = None
+    for p in possible_paths:
+        if os.path.exists(p):
+            config_found = True
+            config_path = p
+            break
+
+    # 也search recursively for config.json
+    if not config_found:
+        for root, dirs, files in os.walk(PROJECT_DIR):
+            if "config.json" in files:
+                config_path = os.path.join(root, "config.json")
+                config_found = True
+                break
+
+    checks = [
+        ("config.json 已生成", config_found),
+    ]
+
+    if config_found and config_path:
+        try:
+            with open(config_path, "r", encoding="utf-8") as f:
+                config_data = json.load(f)
+            checks.append(("包含 default_model 字段", "default_model" in config_data))
+            checks.append(("包含 models 字段", "models" in config_data))
+            checks.append(("包含 kimi 模型", "kimi" in config_data.get("models", {})))
+            checks.append(("包含 glm 模型", "glm" in config_data.get("models", {})))
+            checks.append(("包含 minimax 模型", "minimax" in config_data.get("models", {})))
+            checks.append(("包含 stream_settings", "stream_settings" in config_data))
+            print(f"  [配置文件路径]: {config_path}")
+        except Exception as e:
+            checks.append(("配置文件可解析", False))
+            print(f"  [解析错误]: {e}")
+
+    for name, result in checks:
+        status = "✅ 通过" if result else "❌ 失败"
+        print(f"  {status}: {name}")
+        if not result:
+            passed = False
+
+    return passed
+
+
+def test_glm_chat():
+    """测试切换到 GLM 后进行对话"""
+    print("\n" + "=" * 50)
+    print("[测试 10] GLM 模型对话")
+    print("=" * 50)
+
+    stdout, stderr, rc = run_aichat_test(["/switch glm", "你好", "/exit"], timeout=30)
+
+    passed = True
+    checks = [
+        ("切换到 glm", "已切换到模型" in stdout),
+        ("显示 AI 回复", "AI>" in stdout),
+        ("正常退出", "再见" in stdout),
+    ]
+
+    for name, result in checks:
+        status = "✅ 通过" if result else "❌ 失败"
+        print(f"  {status}: {name}")
+        if not result:
+            passed = False
+
+    if not passed:
+        print(f"  [输出]: {stdout[:500]}")
+        if stderr:
+            print(f"  [stderr]: {stderr[:300]}")
+
+    return passed
+
+
 def main():
     print("=" * 60)
     print("  AIChatPro 自动化测试")
     print("=" * 60)
+
+    # 清理可能存在的旧 config.json
+    for root, dirs, files in os.walk(PROJECT_DIR):
+        if "config.json" in files:
+            os.remove(os.path.join(root, "config.json"))
 
     # 启动模拟服务器
     mock_proc = start_mock_server()
@@ -249,6 +435,11 @@ def main():
         results.append(("未知命令", test_unknown_command()))
         results.append(("模拟对话", test_chat_with_mock()))
         results.append(("多轮对话", test_multi_turn()))
+        results.append(("switch 命令", test_switch_command()))
+        results.append(("status 命令", test_status_command()))
+        results.append(("无效模型切换", test_switch_invalid_model()))
+        results.append(("config.json", test_config_json()))
+        results.append(("GLM 模型对话", test_glm_chat()))
     finally:
         # 停止模拟服务器
         print("\n[测试] 停止模拟服务器...")
@@ -283,3 +474,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

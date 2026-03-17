@@ -1,15 +1,28 @@
 /**
  * 配置管理器
  *
- * ConfigManager 集中管理所有 AI 模型的配置信息：
- * - API Key 管理：设置、查询各模型的密钥
- * - 模型注册：预置支持的模型（Kimi、GLM、Minimax）的 URL 和标识
- * - 模型切换：在多个模型之间切换，并进行合法性校验
- * - 配置验证：启动时检查当前模型是否已配置 API Key（快速失败策略）
+ * ConfigManager 负责：
+ * - 从 JSON 配置文件（config.json）加载配置
+ * - 将配置保存回 JSON 文件
+ * - 管理各模型的 API Key、基础 URL、GroupId
+ * - 支持运行时动态保存 API Key
+ *
+ * 配置文件位于可执行文件所在目录，格式示例：
+ * {
+ *   "default_model": "kimi",
+ *   "models": {
+ *     "kimi": { "api_key": "sk-xxx", "base_url": "https://api.moonshot.cn/v1" },
+ *     "glm": { "api_key": "", "base_url": "https://open.bigmodel.cn/api/paas/v4" },
+ *     "minimax": { "api_key": "", "base_url": "https://api.minimax.chat/v1", "group_id": "" }
+ *   },
+ *   "stream_settings": { "base_interval_ms": 20, "burst_threshold": 50, "catchup_interval_ms": 5 }
+ * }
  */
 package aichat.config
 
-import std.collection.HashMap
+import stdx.encoding.json.*
+import std.fs.*
+import std.env.*
 
 /**
  * 配置错误异常
@@ -23,96 +36,225 @@ public class ConfigError <: Exception {
 /**
  * 配置管理器类
  *
- * 使用 HashMap 存储各模型的 API Key、基础 URL 和模型标识符，
- * 通过 currentModel 跟踪当前激活的模型。
+ * 启动时自动从 config.json 加载配置，若文件不存在则创建默认配置。
+ * 支持指定配置文件路径（用于测试）。
  */
 public class ConfigManager {
-    private let apiKeys: HashMap<String, String> = HashMap<String, String>()    // 模型名 -> API Key
-    private let baseUrls: HashMap<String, String> = HashMap<String, String>()   // 模型名 -> API 基础 URL
-    private let modelIds: HashMap<String, String> = HashMap<String, String>()   // 模型名 -> 模型标识符
-    private var currentModel: String = "kimi"  // 当前选中的模型，默认 Kimi
+    private let configPath: Path         // 配置文件路径
+    public var config: AppConfig         // 全局配置对象
 
     /**
-     * 初始化：预置支持的模型列表
-     *
-     * 目前支持三个国产大模型：
-     * - kimi（月之暗面 Moonshot AI）
-     * - glm（智谱 AI）
-     * - minimax（MiniMax）
+     * 默认构造：配置文件位于可执行文件所在目录的 config.json
      */
     public init() {
-        baseUrls.add("kimi", "https://api.moonshot.cn/v1")
-        baseUrls.add("glm", "https://open.bigmodel.cn/api/paas/v4")
-        baseUrls.add("minimax", "https://api.minimax.chat/v1")
-
-        modelIds.add("kimi", "moonshot-v1-8k")
-        modelIds.add("glm", "glm-4")
-        modelIds.add("minimax", "abab6.5-chat")
+        let exePath = getExecutablePath()
+        let exeDir = exePath.parent
+        this.configPath = exeDir.join("config.json")
+        this.config = AppConfig()
+        loadOrCreate()
     }
 
-    /** 设置指定模型的 API Key，空值将抛出 ConfigError */
-    public func setApiKey(model: String, key: String): Unit {
-        if (key.isEmpty()) {
-            throw ConfigError("API Key 不能为空 (model: ${model})")
+    /**
+     * 指定配置文件路径（用于测试或自定义部署）
+     */
+    public init(configPath: Path) {
+        this.configPath = configPath
+        this.config = AppConfig()
+        loadOrCreate()
+    }
+
+    /**
+     * 加载或创建配置文件
+     *
+     * 若 config.json 存在则加载，否则写入默认配置。
+     */
+    private func loadOrCreate(): Unit {
+        if (exists(configPath)) {
+            loadFromFile()
+        } else {
+            saveDefaultConfig()
         }
-        apiKeys.add(model, key)
     }
 
-    /** 获取指定模型的 API Key，未配置则返回空字符串 */
-    public func getApiKey(model: String): String {
-        apiKeys.get(model) ?? ""
+    /**
+     * 从 JSON 文件加载配置
+     *
+     * 解析各字段：default_model、models（含 api_key/base_url/group_id）、stream_settings。
+     * 加载失败时回退到默认配置。
+     */
+    private func loadFromFile(): Unit {
+        try {
+            let data = File.readFrom(configPath)
+            let jsonStr = String.fromUtf8(data)
+            let jv = JsonValue.fromStr(jsonStr)
+            let obj = jv.asObject()
+
+            // 读取默认模型
+            if (let Some(defaultModel) <- obj.get("default_model")) {
+                config.defaultModel = defaultModel.asString().getValue()
+            }
+
+            // 读取各模型配置
+            if (let Some(modelsObj) <- obj.get("models")) {
+                let modelsMap = modelsObj.asObject().getFields()
+                config.models.clear()
+
+                for ((key, modelValue) in modelsMap) {
+                    let modelObj = modelValue.asObject()
+                    let modelConfig = ModelConfig()
+
+                    if (let Some(apiKeyValue) <- modelObj.get("api_key")) {
+                        modelConfig.apiKey = apiKeyValue.asString().getValue()
+                    }
+                    if (let Some(baseUrlValue) <- modelObj.get("base_url")) {
+                        modelConfig.baseUrl = baseUrlValue.asString().getValue()
+                    }
+                    if (let Some(groupIdValue) <- modelObj.get("group_id")) {
+                        modelConfig.groupId = groupIdValue.asString().getValue()
+                    }
+
+                    config.models.add(key, modelConfig)
+                }
+            }
+
+            // 读取流式设置
+            if (let Some(settingsObj) <- obj.get("stream_settings")) {
+                let settingsMap = settingsObj.asObject()
+
+                if (let Some(baseInterval) <- settingsMap.get("base_interval_ms")) {
+                    config.streamSettings.baseIntervalMs = baseInterval.asInt().getValue()
+                }
+                if (let Some(burstThreshold) <- settingsMap.get("burst_threshold")) {
+                    config.streamSettings.burstThreshold = burstThreshold.asInt().getValue()
+                }
+                if (let Some(catchupInterval) <- settingsMap.get("catchup_interval_ms")) {
+                    config.streamSettings.catchupIntervalMs = catchupInterval.asInt().getValue()
+                }
+            }
+        } catch (e: Exception) {
+            eprintln("[系统] 加载配置失败: ${e}，使用默认配置")
+            saveDefaultConfig()
+        }
     }
 
-    /** 覆盖指定模型的 API 基础 URL（用于测试或自定义部署） */
-    public func setBaseUrl(model: String, url: String): Unit {
-        baseUrls.add(model, url)
+    /** 写入默认配置到文件 */
+    private func saveDefaultConfig(): Unit {
+        saveToFile()
     }
 
-    /** 获取指定模型的 API 基础 URL */
-    public func getBaseUrl(model: String): String {
-        baseUrls.get(model) ?? ""
+    /**
+     * 将当前配置保存到 JSON 文件
+     *
+     * 序列化 AppConfig 为格式化 JSON 并写入 config.json。
+     */
+    public func saveToFile(): Unit {
+        try {
+            let root = JsonObject()
+            root.put("default_model", JsonString(config.defaultModel))
+
+            // 序列化各模型配置
+            let modelsObj = JsonObject()
+            for ((name, modelConfig) in config.models) {
+                let modelObj = JsonObject()
+                modelObj.put("api_key", JsonString(modelConfig.apiKey))
+                modelObj.put("base_url", JsonString(modelConfig.baseUrl))
+                if (!modelConfig.groupId.isEmpty()) {
+                    modelObj.put("group_id", JsonString(modelConfig.groupId))
+                }
+                modelsObj.put(name, modelObj)
+            }
+            root.put("models", modelsObj)
+
+            // 序列化流式设置
+            let settingsObj = JsonObject()
+            settingsObj.put("base_interval_ms", JsonInt(config.streamSettings.baseIntervalMs))
+            settingsObj.put("burst_threshold", JsonInt(config.streamSettings.burstThreshold))
+            settingsObj.put("catchup_interval_ms", JsonInt(config.streamSettings.catchupIntervalMs))
+            root.put("stream_settings", settingsObj)
+
+            let jsonStr = root.toJsonString()
+            File.writeTo(configPath, jsonStr.toArray())
+        } catch (e: Exception) {
+            eprintln("[系统] 保存配置失败: ${e}")
+        }
     }
 
-    /** 获取指定模型的模型标识符 */
-    public func getModelId(model: String): String {
-        modelIds.get(model) ?? model
+    /**
+     * 保存 API Key 并持久化到配置文件
+     *
+     * 用户在 REPL 中输入 API Key 时调用，自动写回 config.json。
+     */
+    public func saveApiKey(modelName: String, apiKey: String): Unit {
+        if (let Some(modelConfig) <- config.models.get(modelName)) {
+            modelConfig.apiKey = apiKey
+            saveToFile()
+            println("[系统] ${modelName} 的 API Key 已保存到 config.json")
+        } else {
+            eprintln("[系统] 未找到模型: ${modelName}")
+        }
     }
 
     /** 获取当前选中的模型名称 */
-    public func getCurrentModel(): String { currentModel }
+    public func getCurrentModel(): String {
+        return config.defaultModel
+    }
 
     /**
      * 切换当前模型
      *
-     * 仅允许切换到预置的合法模型，否则抛出 ConfigError。
+     * 仅允许切换到已注册的模型，返回 true 表示成功。
      */
-    public func setCurrentModel(name: String): Unit {
-        let valid = ["kimi", "glm", "minimax"]
-        var found = false
-        for (m in valid) {
-            if (m == name) { found = true; break }
+    public func setCurrentModel(modelName: String): Bool {
+        if (config.models.contains(modelName)) {
+            config.defaultModel = modelName
+            return true
         }
-        if (!found) {
-            throw ConfigError("不支持的模型: '${name}'，可选: kimi, glm, minimax")
-        }
-        currentModel = name
+        return false
     }
 
-    /** 检查指定模型是否已配置 API Key */
-    public func hasApiKey(model: String): Bool {
-        let key = apiKeys.get(model) ?? ""
-        return !key.isEmpty()
+    /** 获取指定模型的 API Key，未配置则返回空字符串 */
+    public func getApiKey(modelName: String): String {
+        if (let Some(modelConfig) <- config.models.get(modelName)) {
+            return modelConfig.apiKey
+        }
+        return ""
     }
 
-    /**
-     * 验证当前配置是否可用
-     *
-     * 在启动时调用，确保当前模型的 API Key 已配置。
-     * 采用"快速失败"策略，尽早暴露配置问题。
-     */
-    public func validate(): Unit {
-        if (!hasApiKey(currentModel)) {
-            throw ConfigError("当前模型 '${currentModel}' 的 API Key 未配置，请设置环境变量")
+    /** 获取指定模型的 API 基础 URL */
+    public func getBaseUrl(modelName: String): String {
+        if (let Some(modelConfig) <- config.models.get(modelName)) {
+            return modelConfig.baseUrl
+        }
+        return ""
+    }
+
+    /** 获取指定模型的 GroupId（Minimax 等模型需要） */
+    public func getGroupId(modelName: String): String {
+        if (let Some(modelConfig) <- config.models.get(modelName)) {
+            return modelConfig.groupId
+        }
+        return ""
+    }
+
+    /** 覆盖指定模型的 API 基础 URL（用于测试或自定义部署） */
+    public func setBaseUrl(modelName: String, url: String): Unit {
+        if (let Some(modelConfig) <- config.models.get(modelName)) {
+            modelConfig.baseUrl = url
         }
     }
 }
+
+/**
+ * 获取当前可执行文件的路径
+ *
+ * 使用 std.env.getCommand() 获取启动命令，
+ * 配置文件 config.json 将存放在可执行文件同目录下。
+ */
+func getExecutablePath(): Path {
+    let cmd = getCommand()
+    if (!cmd.isEmpty()) {
+        return Path(cmd)
+    }
+    return Path(".")
+}
+

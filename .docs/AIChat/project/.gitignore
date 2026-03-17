@@ -1,5 +1,6 @@
 target/
 build/
 cjpm.lock
+config.json
 *.o
 *.a
