@@ -24,6 +24,8 @@
 | `stdx.encoding.json` | JSON 序列化与反序列化 |
 | `stdx.encoding.json.stream` | 流式 JSON 读写（JsonWriter/JsonReader） |
 
+`stdx` 扩展库为仓颉提供了网络通信与数据序列化等生产级能力，是构建网络应用不可或缺的基础设施。AIChatPro 需要以上全部四个包的协同配合：HTTP 负责传输、TLS 保障安全、JSON 承载数据、流式读写提升性能。理解它们各自的职责与协作方式，是掌握仓颉网络编程的关键。
+
 在 `cjpm.toml` 中添加依赖：
 
 <!-- check:build_only -->
@@ -41,9 +43,13 @@ main() {
 }
 ```
 
+以上四条 `import` 语句是通往 HTTP 通信世界的入口。代码中实例化 `JsonObject()` 并非多余——它验证了 JSON 模块已正确链接并可供使用。在后续章节中，这些模块将贯穿 AIChatPro 的每一个网络交互环节。
+
 ---
 
 ## 2. HTTP 客户端
+
+HTTP 是 AIChatPro 与 AI 服务之间的桥梁。每一次 AI 对话都始于一个携带 JSON 载荷的 HTTP POST 请求，终于一条流式推送的响应。理解 HTTP 客户端的构建与使用，是实现真实网络交互的第一步。
 
 ### 2.1 ClientBuilder 与请求构建
 
@@ -86,6 +92,8 @@ main() {
     println("POST URL: ${postReq.url}")
 }
 ```
+
+上述代码展示了经典的 **Builder 模式**——`ClientBuilder` 和 `HttpRequestBuilder` 通过方法链实现了清晰、可读的链式配置。设计上，Client 是可复用的长期对象（内含连接池），而 Request 则是每次调用时按需构建的一次性对象。请注意 `Authorization: "Bearer sk-xxxx"` 这一请求头——这是几乎所有 AI API 采用的标准 Bearer Token 认证方式。
 
 ### 2.2 发送请求与读取响应
 
@@ -140,6 +148,8 @@ main() {
 }
 ```
 
+值得注意的是 `readBodyString` 的实现方式：它通过循环调用 `body.read(buf)` 逐块读取数据，而非一次性读完。这是因为 `InputStream` 不支持随机访问，网络数据以分块方式到达，每次 `read` 返回当前可用的字节数。这种"缓冲区循环读取"模式在 AIChatPro 的整个网络层中反复出现，是处理流式数据的基本范式。
+
 ---
 
 ## 3. TLS 配置
@@ -173,9 +183,13 @@ main() {
 }
 ```
 
+这里体现了 TLS 配置中的一个重要权衡：`TrustAll` 模式跳过证书验证，在开发调试阶段十分便捷，但会使连接暴露于中间人攻击的风险之下。在生产环境中，务必使用 `Default` 模式进行完整的证书链验证，确保与 AI 服务之间的通信安全可靠。
+
 ---
 
 ## 4. JSON 构建与解析
+
+AI API 的语言是 JSON。每一个请求都是一个包含模型名称、消息数组和参数的 JSON 对象；每一个响应都携带 `choices` 数组，其中的 `delta.content` 字段承载着模型生成的文本片段。熟练掌握 JSON 的构建与解析，是与 AI 服务对话的必备技能。
 
 ### 4.1 构建 AI 请求 JSON
 
@@ -228,6 +242,8 @@ main() {
 }
 -->
 
+仓颉的 JSON 对象 API 提供了一套类型安全的树形构建方式——`JsonObject`、`JsonArray`、`JsonString`、`JsonBool`、`JsonFloat` 各司其职，组合成任意嵌套的 JSON 结构。调用 `toJsonString()` 即可生成格式化的输出字符串。这种方式直观易读，非常适合构建结构相对固定的中小型 JSON 载荷。
+
 ### 4.2 使用 JsonWriter 流式构建
 
 `JsonWriter` 适合构建大型 JSON，避免中间对象分配：
@@ -270,6 +286,8 @@ main() {
     println("包含 messages: ${json.contains("messages")}")
 }
 ```
+
+与对象 API 不同，`JsonWriter` 采用流式写入方式，直接将数据输出到缓冲区，无需构建中间对象树。对于较大的 JSON 载荷，这种方式在内存效率上更具优势。在后续的 AIChatPro 实现中，`KimiModel` 正是使用 `JsonWriter` 来构建请求体的。
 
 ### 4.3 解析 AI 流式响应 JSON
 
@@ -321,11 +339,13 @@ main() {
 你好！我是 AI 助手。有什么可以帮你？
 -->
 
+上述 `extractContent` 函数展示了一个典型的嵌套提取模式：从 JSON 根对象出发，依次进入 `choices[0]` → `delta` → `content`，逐层剥离直至取得目标文本。这一路径 `choices[0].delta.content` 正是 OpenAI 兼容格式的标准结构，国内绝大多数 AI API（如 Kimi、GLM、MiniMax）均遵循这一约定。
+
 ---
 
 ## 5. SSE 流式解析
 
-Server-Sent Events（SSE）是 AI 流式响应的标准格式，每行形如：
+Server-Sent Events（SSE）是一种服务器向客户端单向推送数据的协议。在 AI 流式响应场景中，服务器将模型生成的每个 token 封装为以 `data: ` 为前缀的文本行，每行包含一个 JSON 片段。流的末尾以 `data: [DONE]` 标记终止。正是这种逐 token 推送的机制，让用户能够看到 AI "逐字打出"回答的效果。SSE 的格式简单直观，每行形如：
 
 ```
 data: {"choices":[{"delta":{"content":"你"}}]}
@@ -392,7 +412,11 @@ main() {
 }
 ```
 
+`parseStream` 的解析策略体现了网络编程中的一个核心技巧：将接收到的字节累积到缓冲区，按换行符切分为行，处理所有完整的行，并将最后一个可能不完整的行保留到下一轮循环。这种方式正确处理了网络数据包与逻辑行之间的边界错位问题，确保即使一行 SSE 数据被分成多个 TCP 包到达，也能完整无误地解析。
+
 ---
+
+我们至此已逐一学习了构建 AIChatPro 所需的每一块积木——HTTP 请求发送、TLS 安全配置、JSON 构建与解析、SSE 流式解析。是时候将它们组装成一个完整的、可以真正与 AI 对话的终端应用了。下面的每个文件都归属于特定的仓颉子包，遵循仓颉模块系统的组织规范。
 
 ## 6. 完整项目实现
 
@@ -418,6 +442,8 @@ src/
 └── repl/
     └── runner.cj            # ReplRunner (package aichat.repl)
 ```
+
+项目采用 `aichat.config`、`aichat.models`、`aichat.stream`、`aichat.utils`、`aichat.repl` 的包命名约定，每个子包承担单一且明确的职责。这种结构不仅使代码的归属一目了然，也便于未来独立扩展某个模块而不影响其他部分。
 
 每个子包职责单一，相互之间通过 `import` 引用。下面我们逐一实现每个文件。
 
@@ -459,6 +485,8 @@ public class AppConfig {
     }
 }
 ```
+
+`ModelConfig` 以结构体的形式封装了每个 AI 模型的核心配置——显示名称、API 地址和默认模型标识符。`StreamSettings` 则控制流式输出的显示刷新间隔和对话历史容量，这两个参数直接影响用户体验。
 
 ### 6.2 ConfigManager
 
@@ -534,6 +562,8 @@ public class ConfigManager {
 }
 ```
 
+`ConfigManager` 将 API 密钥管理和模型切换逻辑集中到一处，并通过 `validate()` 方法在启动时进行前置校验，尽早暴露配置错误。这种"快速失败"策略避免了运行时因缺少 API Key 而产生的难以排查的网络异常。
+
 ### 6.3 数据模型类型
 
 <!-- check:build_only project=aichat file=src/models/types.cj -->
@@ -601,6 +631,8 @@ public class ConversationHistory {
 }
 ```
 
+`ChatMessage` 和 `ConversationHistory` 共同构成了对话数据模型。`ConversationHistory` 采用滚动窗口策略——当消息数量达到上限时，自动移除最早的消息对，从而防止对话历史无限增长导致内存溢出或 API 请求超出 token 限制。
+
 ### 6.4 BaseChatModel 接口
 
 <!-- check:build_only project=aichat file=src/models/base.cj -->
@@ -616,6 +648,8 @@ public interface BaseChatModel {
     func getModelId(): String
 }
 ```
+
+这正是第 6 章中设计的 `BaseChatModel` 接口在完整项目中的落地形式。`chat` 方法的签名包含 `ChatRequest`、`CharQueue` 和 `Mutex` 三个参数，分别承载请求数据、流式输出通道和线程同步锁——体现了接口设计中"面向协作"的思想。
 
 ### 6.5 CharQueue（字符缓冲队列）
 
@@ -680,6 +714,8 @@ public class CharQueue {
 }
 ```
 
+`CharQueue` 是网络线程（生产者）与显示线程（消费者）之间的线程安全桥梁，正是第 9 章并发设计中的核心组件。所有对内部队列的读写操作均在 `synchronized(mtx)` 保护下进行，确保跨线程访问的数据一致性。
+
 ### 6.6 StreamEngine（流式显示引擎）
 
 <!-- check:build_only project=aichat file=src/stream/engine.cj -->
@@ -718,6 +754,8 @@ public class StreamEngine {
     }
 }
 ```
+
+`StreamEngine` 在独立线程中以轮询方式从 `CharQueue` 中取出字符并逐个打印。`displayIntervalMs` 参数控制了无数据时的休眠间隔，在响应灵敏度与 CPU 占用之间取得平衡——间隔过短浪费 CPU，过长则让用户感到输出卡顿。
 
 ### 6.7 SSE 解析器
 
@@ -772,6 +810,8 @@ public class SseParser {
     }
 }
 ```
+
+`SseParser` 将本章前半部分构建的 SSE 行解析逻辑和 JSON delta 提取逻辑封装为项目级组件，供所有模型实现共享调用。
 
 ### 6.8 KimiModel 实现
 
@@ -876,6 +916,8 @@ public class KimiModel <: BaseChatModel {
 }
 ```
 
+`KimiModel` 是整个项目中将所有技术要素融为一体的核心实现：它使用 `JsonWriter` 高效构建请求 JSON，通过 HTTP Client 将请求发送到 Kimi API，再借助 `SseParser` 逐行解析流式响应，并将提取的文本片段注入 `CharQueue` 供显示线程消费。错误处理覆盖了 API Key 缺失、HTTP 状态码异常和网络异常三种典型场景。
+
 ### 6.9 ReplRunner（REPL 交互循环）
 
 <!-- check:build_only project=aichat file=src/repl/runner.cj -->
@@ -973,6 +1015,8 @@ public class ReplRunner {
 }
 ```
 
+`ReplRunner` 是用户直接面对的交互界面——它读取用户输入、分发斜杠命令、并协调整个聊天流程。在 `sendMessage` 方法中，它同时启动网络线程和显示线程，利用 `StreamEngine` 实现"边接收边输出"的流畅体验。
+
 ### 6.10 主入口
 
 <!-- check:build_only project=aichat file=src/main.cj -->
@@ -1017,6 +1061,8 @@ main(): Unit {
     repl.run()
 }
 ```
+
+主入口将一切串联起来：从环境变量加载 API Key、创建 `ConfigManager`、实例化具体的模型实现，最终启动 REPL 循环。这种"配置 → 组装 → 运行"的三段式结构清晰地分离了关注点，也为未来添加更多模型或命令行参数留下了扩展空间。
 
 ---
 
