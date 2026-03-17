@@ -53,29 +53,29 @@ AIChatPro v1.0.0 启动中...
 
 ## 2. 变量：let 与 var
 
-在构建 AIChatPro 时，有些值一旦确定就不应改变（比如工具名称），有些则需要随运行时状态更新（比如版本号、当前模型）。仓颉用两个关键字精确地表达了这种区分：`let` 声明**不可变**绑定，`var` 声明**可变**变量。这一设计鼓励你优先使用不可变量，让程序状态更容易推理、更不容易出错。
+在构建 AIChatPro 时，有些值一旦确定就不应改变（比如工具名称），有些则需要随运行时状态更新（比如当前模型）。仓颉用两个关键字精确地表达了这种区分：`let` 声明**不可变**绑定，`var` 声明**可变**变量。这一设计鼓励你优先使用不可变量，让程序状态更容易推理、更不容易出错。
 
 <!-- check:run -->
 ```cangjie
 main() {
-    let toolName = "AIChatPro"   // 不可变，类型推断为 String
-    var version = "1.0.0"        // 可变，类型推断为 String
+    let toolName = "AIChatPro"   // 不可变，类型自动 String
+    var modelName = "kimi-k2.5"  // 可变，类型推断为 String
 
     println("工具: ${toolName}")
-    println("版本: ${version}")
+    println("模型: ${version}")
 
-    version = "1.0.1"            // 更新版本号
-    println("升级后版本: ${version}")
+    modelName = "glm-5"          // 切换当前模型
+    println("当前模型: ${version}")
 }
 ```
 
 <!-- expected_output:
 工具: AIChatPro
-版本: 1.0.0
-升级后版本: 1.0.1
+模型: kimi-k2.5
+当前模型: glm-5
 -->
 
-请注意第三行输出：`version` 被重新赋值为 `"1.0.1"`，而 `toolName` 作为 `let` 绑定，一旦赋值便不可更改——如果你尝试 `toolName = "Other"`，编译器会直接拒绝。这种"编译期保护"机制，在大型项目中价值巨大。
+请注意第三行输出：`modelName` 被重新赋值为 `"glm-5"`，而 `toolName` 作为 `let` 绑定，一旦赋值便不可更改——如果你尝试 `toolName = "Other"`，编译器会直接拒绝。这种"编译期保护"机制，在大型项目中价值巨大。
 
 在实际开发中，AI 模型的参数配置往往需要精确的类型控制。仓颉支持显式类型标注，这在类型不能被推断、或者你希望代码更具自文档性时尤为有用：
 
