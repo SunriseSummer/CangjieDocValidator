@@ -196,7 +196,7 @@ def test_chat_with_mock():
         if not result:
             passed = False
 
-    if not passed or True:  # 始终打印输出用于调试
+    if not passed:
         print(f"  [输出预览]: {stdout[:600]}")
         if stderr:
             print(f"  [stderr]: {stderr[:300]}")

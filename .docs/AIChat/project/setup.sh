@@ -28,9 +28,11 @@ echo "==============================="
 if [ ! -d "${SDK_DIR}/cangjie" ]; then
     echo "[1/3] 下载仓颉 SDK..."
     mkdir -p "${SDK_DIR}"
-    wget -q "${SDK_URL}" -O /tmp/cangjie-sdk.tar.gz
-    tar xzf /tmp/cangjie-sdk.tar.gz -C "${SDK_DIR}"
-    rm -f /tmp/cangjie-sdk.tar.gz
+    local sdk_tmp
+    sdk_tmp="$(mktemp /tmp/cangjie-sdk-XXXXXX.tar.gz)"
+    wget -q "${SDK_URL}" -O "${sdk_tmp}"
+    tar xzf "${sdk_tmp}" -C "${SDK_DIR}"
+    rm -f "${sdk_tmp}"
     echo "  ✅ SDK 安装完成"
 else
     echo "[1/3] SDK 已安装，跳过"
@@ -44,9 +46,11 @@ STDX_STATIC="${STDX_DIR}/linux_x86_64_cjnative/static/stdx"
 if [ ! -d "${STDX_STATIC}" ]; then
     echo "[2/3] 下载 STDX 扩展库..."
     mkdir -p "${STDX_DIR}"
-    wget -q "${STDX_URL}" -O /tmp/cangjie-stdx.zip
-    unzip -o -q /tmp/cangjie-stdx.zip -d "${STDX_DIR}"
-    rm -f /tmp/cangjie-stdx.zip
+    local stdx_tmp
+    stdx_tmp="$(mktemp /tmp/cangjie-stdx-XXXXXX.zip)"
+    wget -q "${STDX_URL}" -O "${stdx_tmp}"
+    unzip -o -q "${stdx_tmp}" -d "${STDX_DIR}"
+    rm -f "${stdx_tmp}"
     echo "  ✅ STDX 安装完成"
 else
     echo "[2/3] STDX 已安装，跳过"
