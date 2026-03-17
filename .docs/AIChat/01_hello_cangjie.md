@@ -30,7 +30,7 @@ Hello, Cangjie!
 *   `println` 输出一行文字并自动换行；`print` 则不换行。
 *   仓颉字符串天然支持 UTF-8，同等对待各国文字——这对于我们后续处理 AI 的多语言回复至关重要。
 
-两行代码，零配置，输出直达终端。如果你用过 Java，可能还在回忆 `public static void main(String[] args)` 的拼写；仓颉已经跑完了。
+两行代码，零配置，输出直达终端。如果你用过 Java，可能还在回忆 `public static void main(String[] args)` 的拼写，仓颉已经跑完了。
 
 接下来，让我们试试 `print` 与 `println` 的配合——这正是 AIChatPro 中"流式输出"效果的雏形：
 
