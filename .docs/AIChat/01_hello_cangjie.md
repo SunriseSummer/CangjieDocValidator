@@ -59,7 +59,7 @@ AIChatPro v1.0.0 启动中...
 ```cangjie
 main() {
     let toolName = "AIChatPro"   // 不可变，类型自动 String
-    var modelName = "KIMI"  // 可变，类型推断为 String
+    var modelName = "Kimi"  // 可变，类型推断为 String
 
     println("工具: ${toolName}")
     println("模型: ${version}")
@@ -71,7 +71,7 @@ main() {
 
 <!-- expected_output:
 工具: AIChatPro
-模型: KIMI
+模型: Kimi
 当前模型: GLM
 -->
 
