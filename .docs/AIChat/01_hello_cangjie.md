@@ -85,7 +85,7 @@ main() {
     let maxTokens: Int64 = 4096
     let temperature: Float64 = 0.7
     let streaming: Bool = true
-    let modelName: String = "moonshot-v1-8k"
+    let modelName: String = "kimi-k2.5"
 
     println("最大 Token: ${maxTokens}")
     println("流式输出: ${streaming}")
@@ -96,7 +96,7 @@ main() {
 <!-- expected_output:
 最大 Token: 4096
 流式输出: true
-模型: moonshot-v1-8k
+模型: kimi-k2.5
 -->
 
 > **类型推断规则**：整数字面量默认推断为 `Int64`，浮点数默认推断为 `Float64`，布尔值为 `Bool`，字符串为 `String`。大多数情况下无需手动标注类型。
