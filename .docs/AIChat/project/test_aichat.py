@@ -195,6 +195,7 @@ def test_chat_with_mock():
         ("使用自定义 URL", "自定义 API URL" in stdout),
         ("显示 AI 回复", "AI>" in stdout),
         ("回复包含内容", len(stdout) > 100),
+        ("中文内容正确（无乱码）", "模拟" in stdout or "助手" in stdout or "服务" in stdout),
         ("正常退出", "再见" in stdout),
     ]
 
@@ -397,6 +398,7 @@ def test_glm_chat():
     checks = [
         ("切换到 glm", "已切换到模型" in stdout),
         ("显示 AI 回复", "AI>" in stdout),
+        ("中文内容正确（无乱码）", "模拟" in stdout or "助手" in stdout or "服务" in stdout),
         ("正常退出", "再见" in stdout),
     ]
 
@@ -408,6 +410,38 @@ def test_glm_chat():
 
     if not passed:
         print(f"  [输出]: {stdout[:500]}")
+        if stderr:
+            print(f"  [stderr]: {stderr[:300]}")
+
+    return passed
+
+
+def test_chinese_long_response():
+    """测试长中文回复（关键词：仓颉）是否正确显示"""
+    print("\n" + "=" * 50)
+    print("[测试 11] 长中文回复（无乱码验证）")
+    print("=" * 50)
+
+    stdout, stderr, rc = run_aichat_test(["仓颉", "/exit"], timeout=30)
+
+    passed = True
+    # 仓颉关键词应触发包含"华为"、"编程语言"等中文的回复
+    checks = [
+        ("显示 AI 回复", "AI>" in stdout),
+        ("包含'华为'", "华为" in stdout),
+        ("包含'编程语言'", "编程语言" in stdout),
+        ("中文无乱码", "高性能" in stdout or "安全" in stdout or "静态类型" in stdout),
+        ("正常退出", "再见" in stdout),
+    ]
+
+    for name, result in checks:
+        status = "✅ 通过" if result else "❌ 失败"
+        print(f"  {status}: {name}")
+        if not result:
+            passed = False
+
+    if not passed:
+        print(f"  [输出预览]: {stdout[:600]}")
         if stderr:
             print(f"  [stderr]: {stderr[:300]}")
 
@@ -440,6 +474,7 @@ def main():
         results.append(("无效模型切换", test_switch_invalid_model()))
         results.append(("config.json", test_config_json()))
         results.append(("GLM 模型对话", test_glm_chat()))
+        results.append(("长中文回复", test_chinese_long_response()))
     finally:
         # 停止模拟服务器
         print("\n[测试] 停止模拟服务器...")

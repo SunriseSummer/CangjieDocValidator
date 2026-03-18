@@ -10,14 +10,19 @@
  * - parseStream()：从字节流中逐行解析 SSE 事件
  * - extractDelta()：从单条 JSON 中提取 delta.content 文本
  *
- * 解析策略：将接收到的字节累积到缓冲区，按换行符切分为行，
- * 处理所有完整行，保留最后一个可能不完整的行到下一轮循环。
- * 这正确处理了网络数据包与逻辑行之间的边界错位问题。
+ * 解析策略：在字节级别按换行符（0x0A）分割，只在完整行上进行
+ * UTF-8 → String 转换。由于换行符是单字节 ASCII 字符，在 UTF-8 编码中
+ * 不会出现在多字节字符内部，因此按换行字节分割总是安全的，
+ * 不会打断中文等多字节字符。
+ *
+ * 这修复了旧版本中 String.fromUtf8(buf[0..bytesRead]) 在网络读取边界处
+ * 分割多字节 UTF-8 字符导致中文显示乱码的问题。
  */
 package aichat.utils
 
 import stdx.encoding.json.*
 import std.io.InputStream
+import std.collection.ArrayList
 
 public class SseParser {
     /**
@@ -27,34 +32,58 @@ public class SseParser {
      * @param onData  每解析到一条有效数据时调用的回调函数
      *
      * 解析逻辑：
-     * 1. 循环读取字节到缓冲区
-     * 2. 将字节转为字符串并累积到 pending
-     * 3. 按 "\n" 分割为行
-     * 4. 处理所有完整行（最后一行可能不完整，留到下轮）
-     * 5. 识别 "data: " 前缀的行，忽略 [DONE] 终止标记
+     * 1. 循环读取原始字节
+     * 2. 逐字节扫描，按换行字节（0x0A）分割为行
+     * 3. 只在找到完整行后才进行 UTF-8 → String 转换
+     * 4. 识别 "data: " 前缀的行，忽略 [DONE] 终止标记
+     *
+     * 关键：不在 read() 返回后直接对原始字节做 String.fromUtf8()，
+     * 而是先在字节级别找到行边界，再对完整行做转换。
+     * 这避免了多字节 UTF-8 字符被 read() 边界切断导致中文乱码。
      */
     public static func parseStream(body: InputStream, onData: (String) -> Unit): Unit {
-        let buf = Array<UInt8>(4096, repeat: 0)
-        var pending = ""
+        let readBuf = Array<UInt8>(4096, repeat: 0)
+        let lineBuf = ArrayList<UInt8>()
 
-        var bytesRead = body.read(buf)
+        var bytesRead = body.read(readBuf)
         while (bytesRead > 0) {
-            // 将读取的字节追加到待处理缓冲区
-            pending = pending + String.fromUtf8(buf[0..bytesRead])
-            let lines = pending.split("\n")
-            // 处理除最后一行外的所有完整行
-            for (i in 0..(lines.size - 1)) {
-                let line = lines[i].trimAscii()
-                if (line.startsWith("data: ")) {
-                    let data = line[6..line.size]
-                    if (data != "[DONE]" && !data.isEmpty()) {
-                        onData(data)
+            for (i in 0..bytesRead) {
+                if (readBuf[i] == UInt8(10)) {
+                    // 找到换行字节，处理已累积的一行
+                    if (lineBuf.size > 0) {
+                        handleSseLine(lineBuf, onData)
                     }
+                    lineBuf.clear()
+                } else {
+                    lineBuf.add(readBuf[i])
                 }
             }
-            // 保留最后一个可能不完整的行
-            pending = lines[lines.size - 1]
-            bytesRead = body.read(buf)
+            bytesRead = body.read(readBuf)
+        }
+
+        // 处理流末尾可能残留的数据
+        if (lineBuf.size > 0) {
+            handleSseLine(lineBuf, onData)
+        }
+    }
+
+    /**
+     * 将字节列表转换为字符串并作为 SSE 数据行处理
+     *
+     * 此时 lineBuf 包含一个完整行的所有字节（不含换行符），
+     * 因此 String.fromUtf8 不会遇到被截断的多字节字符。
+     */
+    private static func handleSseLine(lineBytes: ArrayList<UInt8>, onData: (String) -> Unit): Unit {
+        let arr = Array<UInt8>(lineBytes.size, repeat: 0)
+        for (i in 0..lineBytes.size) {
+            arr[i] = lineBytes[i]
+        }
+        let line = String.fromUtf8(arr).trimAscii()
+        if (line.startsWith("data: ")) {
+            let data = line[6..line.size]
+            if (data != "[DONE]" && !data.isEmpty()) {
+                onData(data)
+            }
         }
     }
 

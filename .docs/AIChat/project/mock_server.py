@@ -134,6 +134,9 @@ class MockAIHandler(BaseHTTPRequestHandler):
         self.send_header("Connection", "keep-alive")
         self.end_headers()
 
+        # 检查是否启用字节分割模式（用于测试 UTF-8 边界处理）
+        byte_split = self.headers.get("X-Byte-Split", "") == "true"
+
         # 将回复文本分成小片段，模拟逐 token 输出
         chunks = []
         i = 0
@@ -156,9 +159,20 @@ class MockAIHandler(BaseHTTPRequestHandler):
                 }]
             }
             line = f"data: {json.dumps(sse_data, ensure_ascii=False)}\n\n"
-            self.wfile.write(line.encode("utf-8"))
-            self.wfile.flush()
-            time.sleep(0.02)  # 模拟 token 生成延迟
+            line_bytes = line.encode("utf-8")
+
+            if byte_split:
+                # 字节分割模式：每 7 字节写一次并刷新，故意在多字节
+                # UTF-8 字符中间截断（中文字符占 3 字节，7 不是 3 的倍数）
+                for bi in range(0, len(line_bytes), 7):
+                    end = min(bi + 7, len(line_bytes))
+                    self.wfile.write(line_bytes[bi:end])
+                    self.wfile.flush()
+                    time.sleep(0.005)
+            else:
+                self.wfile.write(line_bytes)
+                self.wfile.flush()
+                time.sleep(0.02)  # 模拟 token 生成延迟
 
         # 发送完成标记
         finish_data = {
