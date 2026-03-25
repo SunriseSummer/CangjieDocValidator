@@ -72,7 +72,10 @@ public class SseParser {
                         callback(data)
                     }
                 }
-            } catch (_: Exception) {}
+            } catch (_: Exception) {
+                // 流末尾的残留字节可能是不完整的 UTF-8 序列（网络截断），
+                // 此时无法形成有效的 SSE 数据行，静默忽略即可。
+            }
         }
     }
 
