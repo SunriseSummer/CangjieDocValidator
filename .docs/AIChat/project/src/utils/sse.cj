@@ -7,16 +7,12 @@
  *   data: [DONE]
  *
  * 本解析器提供两个核心功能：
- * - parseStream()：从字节流中逐行解析 SSE 事件
+ * - parseStream()：从响应流中按事件边界解析 SSE 数据
  * - extractDelta()：从单条 JSON 中提取 delta.content 文本
  *
- * 解析策略：在字节级别按换行符（0x0A）分割，只在完整行上进行
- * UTF-8 → String 转换。由于换行符是单字节 ASCII 字符，在 UTF-8 编码中
- * 不会出现在多字节字符内部，因此按换行字节分割总是安全的，
- * 不会打断中文等多字节字符。
- *
- * 这修复了旧版本中 String.fromUtf8(buf[0..bytesRead]) 在网络读取边界处
- * 分割多字节 UTF-8 字符导致中文显示乱码的问题。
+ * 解析策略：在字节级别累积原始数据，按 "data: " 和 "\n\n" 标记
+ * 搜索完整的 SSE 事件。只对完整事件做 UTF-8 → String 转换，
+ * 避免在多字节字符中间截断导致中文显示乱码。
  */
 package aichat.utils
 
@@ -28,63 +24,67 @@ public class SseParser {
     /**
      * 从输入流中解析 SSE 事件
      *
-     * @param body    HTTP 响应体的输入流
-     * @param onData  每解析到一条有效数据时调用的回调函数
+     * @param body      HTTP 响应体的输入流
+     * @param callback  每解析到一条有效数据时调用的回调函数
      *
      * 解析逻辑：
-     * 1. 循环读取原始字节
-     * 2. 逐字节扫描，按换行字节（0x0A）分割为行
-     * 3. 只在找到完整行后才进行 UTF-8 → String 转换
-     * 4. 识别 "data: " 前缀的行，忽略 [DONE] 终止标记
-     *
-     * 关键：不在 read() 返回后直接对原始字节做 String.fromUtf8()，
-     * 而是先在字节级别找到行边界，再对完整行做转换。
-     * 这避免了多字节 UTF-8 字符被 read() 边界切断导致中文乱码。
+     * 1. 在字节级别累积原始数据，按换行字节(0x0A)分割为行
+     * 2. 对完整行做 UTF-8 → String 转换（换行字节是单字节 ASCII，
+     *    不会出现在多字节 UTF-8 字符内部，因此按换行分割不会打断中文字符）
+     * 3. 识别 "data: " 前缀的行，忽略 [DONE] 终止标记
+     * 4. 空行（SSE 事件分隔符）自动跳过
      */
-    public static func parseStream(body: InputStream, onData: (String) -> Unit): Unit {
-        let readBuf = Array<UInt8>(4096, repeat: 0)
+    public static func parseStream(body: InputStream, callback: (String) -> Unit): Unit {
+        let buf = Array<UInt8>(4096, repeat: 0)
         let lineBuf = ArrayList<UInt8>()
 
-        var bytesRead = body.read(readBuf)
-        while (bytesRead > 0) {
-            for (i in 0..bytesRead) {
-                if (readBuf[i] == UInt8(10)) {
+        var len = body.read(buf)
+        while (len > 0) {
+            for (i in 0..len) {
+                if (buf[i] == UInt8(10)) {
                     // 找到换行字节，处理已累积的一行
                     if (lineBuf.size > 0) {
-                        handleSseLine(lineBuf, onData)
+                        let arr = toArray(lineBuf)
+                        let line = String.fromUtf8(arr).trimAscii()
+                        if (line.startsWith("data: ")) {
+                            let data = line[6..line.size]
+                            if (data != "[DONE]" && !data.isEmpty()) {
+                                callback(data)
+                            }
+                        }
                     }
                     lineBuf.clear()
                 } else {
-                    lineBuf.add(readBuf[i])
+                    lineBuf.add(buf[i])
                 }
             }
-            bytesRead = body.read(readBuf)
+            len = body.read(buf)
         }
 
         // 处理流末尾可能残留的数据
         if (lineBuf.size > 0) {
-            handleSseLine(lineBuf, onData)
+            let arr = toArray(lineBuf)
+            try {
+                let line = String.fromUtf8(arr).trimAscii()
+                if (line.startsWith("data: ")) {
+                    let data = line[6..line.size]
+                    if (data != "[DONE]" && !data.isEmpty()) {
+                        callback(data)
+                    }
+                }
+            } catch (_: Exception) {}
         }
     }
 
     /**
-     * 将字节列表转换为字符串并作为 SSE 数据行处理
-     *
-     * 此时 lineBuf 包含一个完整行的所有字节（不含换行符），
-     * 因此 String.fromUtf8 不会遇到被截断的多字节字符。
+     * 将 ArrayList<UInt8> 转换为 Array<UInt8>
      */
-    private static func handleSseLine(lineBytes: ArrayList<UInt8>, onData: (String) -> Unit): Unit {
-        let arr = Array<UInt8>(lineBytes.size, repeat: 0)
-        for (i in 0..lineBytes.size) {
-            arr[i] = lineBytes[i]
+    private static func toArray(list: ArrayList<UInt8>): Array<UInt8> {
+        let arr = Array<UInt8>(list.size, repeat: 0)
+        for (i in 0..list.size) {
+            arr[i] = list[i]
         }
-        let line = String.fromUtf8(arr).trimAscii()
-        if (line.startsWith("data: ")) {
-            let data = line[6..line.size]
-            if (data != "[DONE]" && !data.isEmpty()) {
-                onData(data)
-            }
-        }
+        return arr
     }
 
     /**
@@ -100,6 +100,7 @@ public class SseParser {
         try {
             let jv = JsonValue.fromStr(jsonStr)
             let obj = jv.asObject()
+
             if (let Some(choices) <- obj.get("choices")) {
                 let arr = choices.asArray()
                 if (arr.size() > 0) {

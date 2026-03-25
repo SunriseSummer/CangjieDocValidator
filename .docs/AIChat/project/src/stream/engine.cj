@@ -7,6 +7,9 @@
  * 支持自适应速率控制：
  * - 队列积压超过 burstThreshold 时，切换到 catchupIntervalMs（快速追赶模式）
  * - 正常状态使用 baseIntervalMs（舒适阅读速度）
+ *
+ * 注意：使用 print(flush: true) 确保每个字符立即刷新到终端，
+ * 避免中文等多字节 UTF-8 字符被 stdout 缓冲区在字节边界处截断导致乱码。
  */
 package aichat.stream
 
@@ -14,9 +17,9 @@ import std.sync.Mutex
 import aichat.config.StreamSettings
 
 public class StreamEngine {
-    private let queue: CharQueue            // 字符缓冲队列
-    private let settings: StreamSettings    // 流式输出设置
-    private let mtx: Mutex                  // 互斥锁
+    private let queue: CharQueue
+    private let settings: StreamSettings
+    private let mtx: Mutex
 
     public init(queue: CharQueue, settings: StreamSettings, mtx: Mutex) {
         this.queue = queue
@@ -32,16 +35,15 @@ public class StreamEngine {
      */
     public func run(): Unit {
         while (!queue.isFinished()) {
-            // 根据队列积压量自适应调节间隔
             let queueSize = queue.size()
             let interval = if (queueSize > settings.burstThreshold) {
-                settings.catchupIntervalMs  // 积压多，快速追赶
+                settings.catchupIntervalMs
             } else {
-                settings.baseIntervalMs     // 正常速度
+                settings.baseIntervalMs
             }
 
             if (let Some(ch) <- queue.poll()) {
-                print(ch)
+                print(ch.toString(), flush: true)
             } else {
                 sleep(Duration.millisecond * interval)
             }
