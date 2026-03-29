@@ -1,0 +1,10 @@
+[package]
+  cjc-version = "1.0.5"
+  name = "aichat"
+  version = "1.0.0"
+  output-type = "executable"
+
+[dependencies]
+
+[target.x86_64-unknown-linux-gnu.bin-dependencies]
+  path-option = ["/home/runner/.cache/cangjie-doc-validator/cangjie-stdx/linux_x86_64_cjnative/static/stdx"]
